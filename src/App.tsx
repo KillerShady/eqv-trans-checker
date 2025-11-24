@@ -1,9 +1,9 @@
 import './App.css'
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "./state/store.ts";
-import {updateConstants, updateFunctions, updatePredicates} from "./state/slices/languageSlice.ts"
 import {transSequenceAdded, transSequenceRemoved, formulaAdded, formulaRemoved, formulaModified,
         selectTransSequences, selectTransformations, selectFormulaByID} from "./state/slices/mainTaskSlice.ts";
+import LanguageComponent from "./LanguageComponent.tsx";
 
 function FormulaBox({ TransId, id, canRemove }: { TransId: number; id: number, canRemove: boolean }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
@@ -58,64 +58,6 @@ function MainTaskBox() {
     )
 }
 
-function LangBox() {
-    const consts: string = useSelector((state: RootState) => state.language.constants);
-    const preds: string = useSelector((state: RootState) => state.language.predicates);
-    const funcs: string = useSelector((state: RootState) => state.language.functions);
-
-    const dispatch = useDispatch();
-
-    return (
-        <>
-            <div className="language">
-                <h3>Language ℒ</h3>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓒<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-constants"
-                               value={consts}
-                               onChange={e => dispatch(updateConstants(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓟<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-predicates"
-                               value={preds}
-                               onChange={e => dispatch(updatePredicates(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓕<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-functions"
-                               value={funcs}
-                               onChange={e => dispatch(updateFunctions(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
-
 export default  function App() {
     //const [language, setLanguage] = useState(["", "", ""]);
 
@@ -127,7 +69,7 @@ export default  function App() {
 
     return (
         <div className="app">
-            <LangBox />
+            <LanguageComponent />
             <MainTaskBox />
         </div>
     )
