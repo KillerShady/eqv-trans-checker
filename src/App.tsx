@@ -13,7 +13,7 @@ function FormulaBox({ TransId, id, canRemove }: { TransId: number; id: number, c
     return (
         <div className="line-box">
             <p>henlo :3 {id}</p>
-            <div className="row">
+            <div className="tmp_row">
                 {formula.prevFormula !== null && <span>    &lt;==&gt;    </span>}
                 <input type="text" value={formula.formula}
                        onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
@@ -59,14 +59,6 @@ function MainTaskBox() {
 }
 
 export default  function App() {
-    //const [language, setLanguage] = useState(["", "", ""]);
-
-    /*function changeLanguage(text, index) {
-        let newLanguage = [...language];
-        newLanguage[index] = text;
-        setLanguage(newLanguage);
-    }*/
-
     return (
         <div className="app">
             <LanguageComponent />

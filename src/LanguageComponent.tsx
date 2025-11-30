@@ -1,67 +1,63 @@
 import {
-    selectConstantsText, selectFunctionsText,
+    selectConstantsError,
+    selectConstantsText, selectFunctionsError, selectFunctionsText, selectPredicatesError,
     selectPredicatesText,
     updateConstants,
     updateFunctions,
     updatePredicates
 } from "./state/slices/languageSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
+import {Card} from "react-bootstrap";
+import LanguageInput from "./LanguageInput.tsx";
 
 
 export default function LanguageComponent() {
     const constantsText: string = useSelector(selectConstantsText);
     const predicatesText: string = useSelector(selectPredicatesText);
     const functionsText: string = useSelector(selectFunctionsText);
+    const constantsError  = useSelector(selectConstantsError);
+    const predicatesError = useSelector(selectPredicatesError);
+    const functionsError = useSelector(selectFunctionsError);
+    console.log(constantsError, predicatesError, functionsError);
 
     const dispatch = useDispatch();
 
     return (
-        <>
-            <div className="language">
-                <h3>Language ℒ</h3>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓒<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-constants"
-                               value={constantsText}
-                               onChange={e => dispatch(updateConstants(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓟<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-predicates"
-                               value={predicatesText}
-                               onChange={e => dispatch(updatePredicates(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="form-group">
-                        <div className="preprend">
-                            <div className="input-group-text">𝓕<sub>𝓛</sub> = {"{"}</div>
-                        </div>
-                        <input type="text"
-                               id="input-functions"
-                               value={functionsText}
-                               onChange={e => dispatch(updateFunctions(e.target.value))}></input>
-                        <div className="append">
-                            <div className="input-group-text">{"}"}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </>
+        <Card>
+            <Card.Body>
+                <LanguageInput
+                    label={"Individual constants"}
+                    prefix={"𝓒𝓛 = {"}
+                    suffix={"}"}
+                    text={constantsText}
+                    onChange={e =>
+                        dispatch(updateConstants(e.target.value))
+                    }
+                    error={constantsError.error}
+                />
+
+                <LanguageInput
+                    label={"Predicate symbols"}
+                    prefix={"𝓟𝓛 = {"}
+                    suffix={"}"}
+                    text={predicatesText}
+                    onChange={e =>
+                        dispatch(updatePredicates(e.target.value))
+                    }
+                    error={predicatesError.error}
+                />
+
+                <LanguageInput
+                    label={"Function symbols"}
+                    prefix={"𝓕𝓛 = {"}
+                    suffix={"}"}
+                    text={functionsText}
+                    onChange={e =>
+                        dispatch(updateFunctions(e.target.value))
+                    }
+                    error={functionsError.error}
+                />
+            </Card.Body>
+        </Card>
     )
 }
