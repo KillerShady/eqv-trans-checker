@@ -1,10 +1,10 @@
 import {Form, InputGroup} from "react-bootstrap";
-import type {ChangeEvent} from "react";
+import type {ChangeEvent, ReactNode} from "react";
 
 interface Props {
     label: string;
-    prefix: string;
-    suffix: string;
+    prefix: ReactNode;
+    suffix: ReactNode;
     text: string;
     onChange(event: ChangeEvent<HTMLInputElement>): void;
     error?: Error;
