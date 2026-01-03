@@ -6,6 +6,7 @@ import {
     parseFunctions,
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
+import {Language, Term} from "../../model"
 
 interface LanguageState {
     constants: string;
@@ -172,27 +173,6 @@ export const selectLanguage = createSelector(
         const predicates = new Map(preds.map(({ name, arity }) => [name, arity]))
         const functions = new Map(funcs.map(({ name, arity }) => [name, arity]))
 
-        return {
-            isConstant: (symbol: string): boolean => constants.has(symbol),
-            isPredicate: (symbol: string): boolean => predicates.has(symbol),
-            isFunction: (symbol: string): boolean => functions.has(symbol),
-            isVariable: (symbol: string): boolean => !constants.has(symbol) && !predicates.has(symbol) && !functions.has(symbol),
-            checkFunctionArity: (symbol: string,
-                                 args: Term[],
-                                 ee: { expected: (arg0: string) => void}): void => {
-                const arity = functions.get(symbol);
-                if (arity !== args.length) {
-                    ee.expected(arity + " argument" + (arity == 1 ? "" : "s") + " to " + symbol);
-                }
-            },
-            checkPredicateArity: (symbol: string,
-                                  args: Term[],
-                                  ee: { expected: (arg0: string) => void}): void => {
-                const arity = predicates.get(symbol);
-                if (arity !== args.length) {
-                    ee.expected(arity + " argument" + (arity == 1 ? "" : "s") + " to " + symbol);
-                }
-            },
-        }
+        return new Language(constants, predicates, functions);
     }
 );

@@ -1,5 +1,8 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSelector, createSlice} from "@reduxjs/toolkit";
 import type {RootState} from "../store.ts"
+import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
+import {selectLanguage} from "./languageSlice.ts";
+import {getFactories} from "../../model";
 
 interface transformationState {
     id: number,
@@ -10,7 +13,7 @@ interface formulaState {
     id: number,
     formula: string,
     operation: string,
-    prevFormula: number|null,
+    prevFormula: number,
 }
 
 interface MainTaskState {
@@ -25,7 +28,7 @@ const initialState: MainTaskState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
-    formulas: {0: {id: 0, formula: "", operation: '', prevFormula: null}},
+    formulas: {0: {id: 0, formula: "", operation: '', prevFormula: NaN}},
     formulasKey: 1,
 }
 
@@ -75,10 +78,27 @@ export const {transSequenceAdded, transSequenceRemoved, formulaAdded, formulaRem
 export default MainTaskSlice.reducer;
 
 export const selectTransSequences = (state: RootState) =>
-    state.mainTask.transSequences
+    state.mainTask.transSequences;
 export const selectTransformations = (state: RootState, id: number) =>
-    state.mainTask.transformations[id].formulas
+    state.mainTask.transformations[id].formulas;
 export const selectFormulaByID = (state: RootState, id: number) =>
-    state.mainTask.formulas[id]
+    state.mainTask.formulas[id];
 
-
+export const selectParsedFormula = createSelector(
+    [selectFormulaByID, selectLanguage],
+    (formula, language) => {
+        try {
+            const parsed = parseFormulaWithPrecedence(
+                formula.formula,
+                language.getParserLanguage(),
+                getFactories(language)
+            );
+            return {parsed: parsed};
+        } catch (error) {
+            if (error instanceof Error || error instanceof SyntaxError) {
+                return {error: error};
+            }
+            throw error;
+        }
+    }
+)

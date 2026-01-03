@@ -25,7 +25,10 @@ export default function LanguageComponent() {
     const dispatch = useDispatch();
 
     return (
-        <Card>
+        <Card className="mb-3 mt-3">
+            <Card.Header as="h4">
+                Language <InlineMath>{String.raw`\mathcal{L}`}</InlineMath>
+            </Card.Header>
             <Card.Body>
                 <LanguageInput
                     label={"Individual constants"}

@@ -21,10 +21,10 @@ export default function LanguageInput({
     return (
         <>
             {label != "" && (<Form.Label> {label} </Form.Label>)}
-            <InputGroup>
-                <InputGroup.Text id="basic-addon1">{prefix}</InputGroup.Text>
+            <InputGroup className="mb-3">
+                <InputGroup.Text>{prefix}</InputGroup.Text>
                 <Form.Control value={text} onChange={onChange} isInvalid={!!error} />
-                <InputGroup.Text id="basic-addon2">{suffix}</InputGroup.Text>
+                <InputGroup.Text>{suffix}</InputGroup.Text>
                 {error && <Form.Control.Feedback type="invalid"> {error.message} </Form.Control.Feedback>}
             </InputGroup>
         </>
