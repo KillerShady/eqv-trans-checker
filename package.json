@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fmfi-uk-1-ain-412/js-fol-parser": "^0.7.1",
+    "@fortawesome/free-solid-svg-icons": "^7.1.0",
+    "@fortawesome/react-fontawesome": "^3.1.1",
     "@reduxjs/toolkit": "^2.9.2",
     "bootstrap": "^5.3.8",
     "react": "^19.1.1",

@@ -1,5 +1,6 @@
 import {Form, InputGroup} from "react-bootstrap";
 import type {ChangeEvent, ReactNode} from "react";
+import ErrorFeedback from "./ErrorFeedback.tsx";
 
 interface Props {
     label: string;
@@ -25,7 +26,7 @@ export default function LanguageInput({
                 <InputGroup.Text>{prefix}</InputGroup.Text>
                 <Form.Control value={text} onChange={onChange} isInvalid={!!error} />
                 <InputGroup.Text>{suffix}</InputGroup.Text>
-                {error && <Form.Control.Feedback type="invalid"> {error.message} </Form.Control.Feedback>}
+                <ErrorFeedback error={error} text={text}></ErrorFeedback>
             </InputGroup>
         </>
     );

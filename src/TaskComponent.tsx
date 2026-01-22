@@ -8,7 +8,9 @@ export default function TaskComponent() {
 
     return (
         <Card className="mb-3 mt-3">
-            {tasks.map((task, index) => <TransformationComponent key={task} id={task} index={index} />)}
+            <Card.Body>
+                {tasks.map((task, index) => <TransformationComponent key={task} id={task} index={index} canRemove={tasks.length > 1} />)}
+            </Card.Body>
         </Card>
     )
 }

@@ -28,7 +28,7 @@ const initialState: MainTaskState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
-    formulas: {0: {id: 0, formula: "", operation: '', prevFormula: NaN}},
+    formulas: {0: {id: 0, formula: "", operation: 'Operation', prevFormula: NaN}},
     formulasKey: 1,
 }
 
@@ -39,7 +39,7 @@ const MainTaskSlice = createSlice({
         "transSequenceAdded": (state, action) => {
             state.transSequences.splice(state.transSequences.indexOf(action.payload)+1, 0, state.transSequenceKey);
             state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: '', prevFormula: NaN};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: 'Operation', prevFormula: NaN};
             state.transSequenceKey++;
             state.formulasKey++;
         },
@@ -49,7 +49,7 @@ const MainTaskSlice = createSlice({
             delete state.transformations[action.payload];
         },
         "formulaAdded": (state, action) => {
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: "", prevFormula: action.payload.prevFormula};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: "Operation", prevFormula: action.payload.prevFormula};
             const formulas = state.transformations[action.payload.transformation].formulas;
             const index = formulas.indexOf(action.payload.prevFormula);
             if (index < formulas.length - 1) {
