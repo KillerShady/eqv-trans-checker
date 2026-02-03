@@ -3,6 +3,8 @@ import type {RootState} from "../store.ts"
 import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {selectLanguage} from "./languageSlice.ts";
 import {getFactories} from "../../model";
+import TransformationChecker from "../../error checkers/TransformationChecker.ts";
+import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
 
 interface transformationState {
     id: number,
@@ -102,3 +104,23 @@ export const selectParsedFormula = createSelector(
         }
     }
 )
+
+export const selectTransformationError = createSelector(
+    [(state, prevId) => selectParsedFormula(state, prevId),
+     (state, _prevId, id) => selectParsedFormula(state, id),
+     (state, _prevId, id) => selectFormulaByID(state, id).operation],
+    (original, transformed, operation) => {
+        if (!original.parsed || !transformed.parsed) return {}
+        const result = selectErrorChecker(operation).checkForError(original.parsed, transformed.parsed);
+        if (result.isEquivalent()) return {};
+        if (result.isIdentical()) {
+            return {error: new Error("Formula is identical to previous formula!")};
+        }
+        return {error: result.errors[0]};
+    }
+)
+
+function selectErrorChecker(operation: string): TransformationChecker {
+    if (operation === "formulaAdded") { /* shush error, i know */ }
+    return new ImplicationEliminationChecker();
+}

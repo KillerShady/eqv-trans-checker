@@ -1,5 +1,5 @@
 import {useSelector} from "react-redux";
-import {selectTransSequences} from "./state/slices/mainTaskSlice.ts";
+import {selectTransSequences} from "../state/slices/mainTaskSlice.ts";
 import {Card} from "react-bootstrap";
 import TransformationComponent from "./TransformationComponent.tsx";
 

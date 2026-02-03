@@ -6,7 +6,7 @@ import {
     parseFunctions,
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
-import {Language, Term} from "../../model"
+import {Language} from "../../model"
 
 interface LanguageState {
     constants: string;

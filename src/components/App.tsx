@@ -1,4 +1,4 @@
-import './App.css'
+import '../App.css'
 import LanguageComponent from "./LanguageComponent.tsx";
 import TaskComponent from "./TaskComponent.tsx";
 
