@@ -137,7 +137,7 @@ const getFunctionsError = (functions: string) => {
 export const selectSymbolsClash = createSelector(
     [selectParsedConstants, selectParsedPredicates, selectParsedFunctions],
     (constants, preds, funcs) => {
-        let constantsClash, predicatesClash, functionsClash: Error;
+        let constantsClash, predicatesClash, functionsClash: Error | undefined;
         const predicates = new Set(preds.map((element) => element.name));
         const functions = new Set(funcs.map((element) => element.name));
 

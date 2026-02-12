@@ -26,12 +26,20 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
         <InputGroup className="mb-3">
             {!isNaN(formula.prevFormula) && <InputGroup.Text>&lt;==&gt;</InputGroup.Text>}
             <Form.Control value={formula.formula} isInvalid={!!(error.error ?? transformationError.error)} onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
-            <DropdownButton variant="secondary" title={formula.operation} onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
+            {!isNaN(formula.prevFormula) &&
+             <DropdownButton variant="secondary" title={formula.operation} onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
                 <Dropdown.Item eventKey={"Operation"}>---</Dropdown.Item>
-                <Dropdown.Item eventKey={"OP 1"}>OP 1</Dropdown.Item>
-                <Dropdown.Item eventKey={"OP 2"}>OP 2</Dropdown.Item>
-                <Dropdown.Item eventKey={"OP 3"}>OP 3</Dropdown.Item>
-            </DropdownButton>
+                <Dropdown.Item eventKey={"Association"}>Association</Dropdown.Item>
+                <Dropdown.Item eventKey={"Commutativity"}>Commutativity</Dropdown.Item>
+                <Dropdown.Item eventKey={"DeMorgan"}>DeMorgan</Dropdown.Item>
+                <Dropdown.Item eventKey={"DeMorganQUANT"}>DeMorganQUANT</Dropdown.Item>
+                <Dropdown.Item eventKey={"Distributivity"}>Distributivity</Dropdown.Item>
+                <Dropdown.Item eventKey={"DistributivityQUANT"}>DistributivityQUANT</Dropdown.Item>
+                <Dropdown.Item eventKey={"DoubleNEG"}>DoubleNEG</Dropdown.Item>
+                <Dropdown.Item eventKey={"RemoveIMPL"}>RemoveIMPL</Dropdown.Item>
+                 <Dropdown.Item eventKey={"RenameVAR"}>RenameVAR</Dropdown.Item>
+             </DropdownButton>
+            }
             <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>+</Button>
             <Button variant="outline-danger" disabled={!canRemove} onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
                 <FontAwesomeIcon icon={faTrash} />

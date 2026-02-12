@@ -5,6 +5,15 @@ import {selectLanguage} from "./languageSlice.ts";
 import {getFactories} from "../../model";
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
 import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
+import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
+import AssociationChecker from "../../error checkers/AssociationChecker.ts";
+import commutativityDisjunction from "../../error checkers/CommutativityChecker.ts";
+import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
+import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
+import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
+import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
+import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
+import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
 
 interface transformationState {
     id: number,
@@ -111,16 +120,28 @@ export const selectTransformationError = createSelector(
      (state, _prevId, id) => selectFormulaByID(state, id).operation],
     (original, transformed, operation) => {
         if (!original.parsed || !transformed.parsed) return {}
-        const result = selectErrorChecker(operation).checkForError(original.parsed, transformed.parsed);
+        const checker = selectErrorChecker(operation);
+        if (!checker) return {error: new Error("Operation was not selected!")}
+        const result = checker.checkForError(original.parsed, transformed.parsed);
         if (result.isEquivalent()) return {};
         if (result.isIdentical()) {
             return {error: new Error("Formula is identical to previous formula!")};
         }
-        return {error: result.errors[0]};
+        console.log(result.errors.length);
+        return {error: result.errors[result.errors.length - 1]};
     }
 )
 
-function selectErrorChecker(operation: string): TransformationChecker {
-    if (operation === "formulaAdded") { /* shush error, i know */ }
-    return new ImplicationEliminationChecker();
+function selectErrorChecker(operation: string): TransformationChecker | undefined {
+    switch (operation) {
+        case "Association": return new AssociationChecker();
+        case "Commutativity": return new CommutativityChecker();
+        case "DeMorgan": return new DeMorganChecker();
+        case "DeMorganQUANT": return new DeMorganQuantifierChecker();
+        case "Distributivity": return new DistributivityChecker();
+        case "DistributivityQUANT": return new DistributivityQuantifierChecker();
+        case "DoubleNEG": return new DoubleNegationEliminationChecker();
+        case "RemoveIMPL": return new ImplicationEliminationChecker();
+        case "RenameVAR": return new RenamingVariablesChecker();
+    }
 }

@@ -17,7 +17,7 @@ export default function TransformationComponent({ index, id, canRemove }: { inde
             <Card className="mb-3 mt-3">
                 <Card.Header as="h4">
                     <Row>
-                        <Col>Transformation Sequence {index}</Col>
+                        <Col>Transformation Sequence {index+1}</Col>
                         <Col xs="auto">
                             <Button variant="outline-danger" disabled={!canRemove} onClick={() => dispatch(transSequenceRemoved(id))}>
                                 <FontAwesomeIcon icon={faTrash} />

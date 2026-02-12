@@ -43,6 +43,7 @@ export class TransformationCheckerResult {
         this.anyEquivalent = this.anyEquivalent || other.anyEquivalent;
         this.allErrors = this.allErrors && other.allErrors;
     }
+
 }
 
 abstract class TransformationChecker {
@@ -77,7 +78,7 @@ abstract class TransformationChecker {
     }
 
     protected checkChildren(original: Expression, transformed: Expression): TransformationCheckerResult {
-        const result: TransformationCheckerResult = new TransformationCheckerResult([], false, false);
+        const result: TransformationCheckerResult = this.identicalResult();
 
         if ((original instanceof Conjunction && transformed instanceof Conjunction) ||
             (original instanceof Disjunction && transformed instanceof Disjunction) ||
@@ -98,6 +99,16 @@ abstract class TransformationChecker {
         }
 
         return result;
+    }
+
+    public identicalResult() {
+        return new TransformationCheckerResult([], false, false);
+    }
+    public equivalentResult() {
+        return new TransformationCheckerResult([], true, false);
+    }
+    public errorResult(message: string) {
+        return new TransformationCheckerResult([new Error(message)], false, true);
     }
 
     abstract checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult;

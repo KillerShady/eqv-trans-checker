@@ -2,21 +2,30 @@ import type Expression from "../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
 import {Disjunction, Implication, Negation} from "../model";
 
-
 class ImplicationEliminationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
-        if (original instanceof Implication &&
-            transformed instanceof Disjunction &&
-            transformed.subLeft instanceof Negation) {
+        if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subLeft, transformed.subLeft.subFormula);
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
-            if (result.isEquivalentOrIdentical()) return new TransformationCheckerResult([], true, false);
+            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            return result;
+        } else if ((this.checkRequisites(transformed, original))) {
+            const result = this.checkForError(transformed.subLeft, original.subLeft.subFormula);
+            if (result.isNotError()) result.combine(this.checkForError(transformed.subRight, original.subRight));
+            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }
-        return new TransformationCheckerResult([new Error(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Remove Implication rule!"
-        )], false, true);
+        return this.errorResult(
+            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Implication Elimination rule!"
+        );
     }
+
+    checkRequisites(original: Expression, transformed: Expression): boolean {
+        return (original instanceof Implication &&
+                transformed instanceof Disjunction &&
+                transformed.subLeft instanceof Negation);
+    }
+
 }
 
 export default ImplicationEliminationChecker;
