@@ -7,7 +7,6 @@ import TransformationChecker from "../../error checkers/TransformationChecker.ts
 import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
 import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
 import AssociationChecker from "../../error checkers/AssociationChecker.ts";
-import commutativityDisjunction from "../../error checkers/CommutativityChecker.ts";
 import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
 import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
 import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";

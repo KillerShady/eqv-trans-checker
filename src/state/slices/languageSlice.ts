@@ -170,8 +170,8 @@ export const selectLanguage = createSelector(
     [selectParsedConstants, selectParsedPredicates, selectParsedFunctions],
     (consts, preds, funcs) => {
         const constants = new Set(consts);
-        const predicates = new Map(preds.map(({ name, arity }) => [name, arity]))
-        const functions = new Map(funcs.map(({ name, arity }) => [name, arity]))
+        const predicates = new Map(preds.map(({ name, arity }) => [name, arity]));
+        const functions = new Map(funcs.map(({ name, arity }) => [name, arity]));
 
         return new Language(constants, predicates, functions);
     }

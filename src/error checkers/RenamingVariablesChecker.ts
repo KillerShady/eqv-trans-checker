@@ -15,37 +15,52 @@ class RenamingVariablesChecker extends TransformationChecker {
     }
 
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
-        console.log(original.constructor.name + ": " + transformed.constructor.name);
         if ((original instanceof UniversalQuant && transformed instanceof UniversalQuant) ||
             (original instanceof ExistentialQuant && transformed instanceof ExistentialQuant)) {
-            if (this.renaming.has(original.variableName)) {
-                if (this.renaming.get(original.variableName) === transformed.variableName) {
-                    return this.equivalentResult();
-                } else {
-                    return this.errorResult(
-                        "Expected " + this.renaming.get(original.variableName) + ", found " + transformed.variableName
-                    );
-                }
-            } else {
-                this.renaming.set(original.variableName, transformed.variableName);
-                const result = this.checkForError(original.subFormula, transformed.subFormula);
-                this.renaming.delete(original.variableName);
-                return result;
-            }
+            return this.checkQuant(original, transformed);
         } else if (original instanceof Variable &&
                    transformed instanceof Variable) {
-            if (this.renaming.has(original.name) &&
-                this.renaming.get(original.name) !== transformed.name) {
-                return this.errorResult(
-                    "Expected " + this.renaming.get(original.name) + ", found " + transformed.name
-                );
-            }
-            return this.equivalentResult();
+            return this.checkVariables(original, transformed);
         }
-        console.log("unknown");
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Renaming Variables rule!"
         );
+    }
+
+    private checkQuant(original: QuantifiedFormula, transformed: QuantifiedFormula) {
+        let previousTransformed: string | undefined;
+        if (this.renaming.has(original.variableName)) {
+            previousTransformed = this.renaming.get(original.variableName);
+        }
+        this.renaming.set(original.variableName, transformed.variableName);
+        const result = this.checkForError(original.subFormula, transformed.subFormula);
+        if (previousTransformed) {
+            this.renaming.set(original.variableName, previousTransformed);
+        } else {
+            this.renaming.delete(original.variableName);
+        }
+        return result;
+    }
+
+    private checkVariables(original: Variable, transformed: Variable) {
+        if (this.renaming.has(original.name)) {
+            if (this.renaming.get(original.name) === transformed.name) {
+                return original.name === transformed.name ?
+                    this.identicalResult() :
+                    this.equivalentResult();
+            }
+            return this.errorResult(
+                "Expected " + this.renaming.get(original.name) + ", found " + transformed.name + "!"
+            );
+        }
+        if (new Set(this.renaming.values()).has(transformed.name)) {
+            return this.errorResult(
+                "Free variable " + original.name + " cannot be changed to a bound variable " + transformed.name + "!"
+            );
+        }
+        return original.name === transformed.name ?
+            this.identicalResult() :
+            this.equivalentResult();
     }
 
 }
