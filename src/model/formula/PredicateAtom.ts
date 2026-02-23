@@ -97,6 +97,16 @@ class PredicateAtom extends Formula {
   //     this.terms.map((term) => term.substitute(from, to, bound))
   //   );
   // }
+
+  equals(other: Formula): boolean {
+    if (! (other instanceof PredicateAtom) ||
+        this.terms.length !== other.terms.length ||
+        this.name !== other.name) return false;
+    for (let i = 0; i < this.terms.length; i++) {
+      if (!this.terms[i].equals(other.terms[i])) return false;
+    }
+    return true;
+  }
 }
 
 export default PredicateAtom;

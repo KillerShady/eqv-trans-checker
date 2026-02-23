@@ -1,44 +1,54 @@
-import {describe, expect, it} from "vitest";
+import {describe, it} from "vitest";
 import ImplicationEliminationChecker from "../error checkers/ImplicationEliminationChecker.ts";
-import {parse} from "./testUtils.ts";
+import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
 
 describe("Implication Elimination Checker", () => {
     const checker = new ImplicationEliminationChecker();
 
-    describe("Reverse Direction", () => {
+    testIdentical(checker);
+
+    describe("Standard Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y(cat(y) → loves(x, y))"),
-                parse("∃x∀y(¬cat(y) ∨ loves(x, y))"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker, 
+                "∃x∀y(cat(y) → loves(x, y))",
+                "∃x∀y(¬cat(y) ∨ loves(x, y))"
+            );
+            testEquivalent(checker,
+                "∃x∀y(cat(y) → (cat(x) → loves(x, y)))",
+                "∃x∀y(¬cat(y) ∨ (¬cat(x) ∨ loves(x, y)))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y(cat(y) → loves(x, y))"),
-                parse("∃x∀y(cat(y) ∨ loves(x, y))"),
-            ).isError()).toBe(true);
-            //expect(checker.checkForError(
-            //    parse("∃x∀y(cat(y) → loves(x, y))"),
-            //    parse("∃x∀y(cat(y) ∨ loves(x, y))"),
+            testError(checker,
+                "∃x∀y(cat(y) → loves(x, y))",
+                "∃x∀y(cat(y) ∨ loves(x, y))"
+            );
+            //testEquivalent(checker, 
+            //    "∃x∀y(cat(y) → loves(x, y))",
+            //    "∃x∀y(cat(y) ∨ loves(x, y))",
             //).errors[0].message).toBe("cat(y) → loves(x, y) and cat(y)  ∨  loves(x, y) are not equivalent according to the Implication Elimination rule!");
         });
     });
 
-    describe("Standard Direction", () => {
+    describe("Reverse Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y(¬cat(y) ∨ loves(x, y))"),
-                parse("∃x∀y(cat(y) → loves(x, y))"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker, 
+                "∃x∀y(¬cat(y) ∨ loves(x, y))",
+                "∃x∀y(cat(y) → loves(x, y))"
+            );
+            testEquivalent(checker,
+                "∃x∀y(¬cat(y) ∨ (¬cat(x) ∨ loves(x, y)))",
+                "∃x∀y(cat(y) → (cat(x) → loves(x, y)))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y(cat(y) ∨ loves(x, y))"),
-                parse("∃x∀y(cat(y) → loves(x, y))"),
-            ).isError()).toBe(true);
-            //expect(checker.checkForError(
-            //    parse("∃x∀y(cat(y) → loves(x, y))"),
-            //    parse("∃x∀y(cat(y) ∨ loves(x, y))"),
+            testError(checker,
+                "∃x∀y(cat(y) ∨ loves(x, y))",
+                "∃x∀y(cat(y) → loves(x, y))"
+            );
+            //testEquivalent(checker, 
+            //    "∃x∀y(cat(y) → loves(x, y))",
+            //    "∃x∀y(cat(y) ∨ loves(x, y))",
             //).errors[0].message).toBe("cat(y) → loves(x, y) and cat(y)  ∨  loves(x, y) are not equivalent according to the Implication Elimination rule!");
         });
     });

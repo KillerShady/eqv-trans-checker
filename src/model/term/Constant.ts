@@ -1,6 +1,7 @@
 import Structure, { type DomainElement, type Valuation } from "../Structure.ts";
 import type { Symbol } from "../Language.ts";
 import Term from "./Term.ts";
+import {Variable} from "../index.ts";
 
 /**
  * Constant
@@ -49,6 +50,10 @@ class Constant extends Term {
 
   getVariables(): Set<Symbol> {
     return new Set();
+  }
+
+  equals(other: Term): boolean {
+    return other instanceof Variable && this.name === other.name;
   }
 }
 

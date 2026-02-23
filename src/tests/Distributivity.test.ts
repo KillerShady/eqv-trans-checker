@@ -1,89 +1,99 @@
-import {describe, expect, it} from "vitest";
-import {parse} from "./testUtils.ts";
+import {describe, it} from "vitest";
+import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
 import DistributivityChecker from "../error checkers/DistributivityChecker.ts";
 
 describe("Distributivity Checker", () => {
     const checker = new DistributivityChecker();
 
+    testIdentical(checker);
+
     describe("Standard Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))"),
-            ).isEquivalent()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker, 
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))"
+            );
+            testEquivalent(checker, 
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))"
+            );
+            testEquivalent(checker,
+                "∃x∀y(cat(x) ∧ (cat(y) ∨ ∀a∀b∀z(cat(a) ∧ (cat(b) ∨ cat(z))) ))",
+                "∃x∀y((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ ∀a∀b∀z((cat(a) ∧ cat(b)) ∨ (cat(a) ∧ cat(z)))))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))"
+            );
 
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
+            );
 
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
+            );
         });
     });
 
     describe("Reverse Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-            ).isEquivalent()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker, 
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))",
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
+            );
+            testEquivalent(checker, 
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))",
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
+            );
+            testEquivalent(checker,
+                "∃x∀y((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ ∀a∀b∀z((cat(a) ∧ cat(b)) ∨ (cat(a) ∧ cat(z)))))",
+                "∃x∀y(cat(x) ∧ (cat(y) ∨ ∀a∀b∀z(cat(a) ∧ (cat(b) ∨ cat(z))) ))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))",
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))",
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
+            );
 
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
+            );
 
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"),
-                parse("∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
+                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
+            );
+            testError(checker,
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
+                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
+            );
         });
     });
 

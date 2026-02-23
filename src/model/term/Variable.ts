@@ -52,6 +52,10 @@ class Variable extends Term {
   getVariables(): Set<Symbol> {
     return new Set([this.name]);
   }
+
+  equals(other: Term): boolean {
+    return other instanceof Variable && this.name === other.name;
+  }
 }
 
 export default Variable;

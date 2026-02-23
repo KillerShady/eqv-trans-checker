@@ -1,69 +1,79 @@
-import {describe, expect, it} from "vitest";
-import {parse} from "./testUtils.ts";
+import {describe, it} from "vitest";
+import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
 import DeMorganQuantifierChecker from "../error checkers/DeMorganQuantifierChecker.ts";
 
 describe("De Morgan Quantifier Checker", () => {
     const checker = new DeMorganQuantifierChecker();
 
+    testIdentical(checker);
+
     describe("Standard Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("¬∃x cat(x)"),
-                parse("∀x ¬cat(x)"),
-            ).isEquivalent()).toBe(true);
-            expect(checker.checkForError(
-                parse("¬∀x cat(x)"),
-                parse("∃x ¬cat(x)"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker, 
+                "¬∃x cat(x)",
+                "∀x ¬cat(x)"
+            );
+            testEquivalent(checker, 
+                "¬∀x cat(x)",
+                "∃x ¬cat(x)"
+            );
+            testEquivalent(checker,
+                "¬∃x (cat(x) ∧ ¬∃y cat(y))",
+                "∀x ¬(cat(x) ∧ ∀y ¬cat(y))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("¬∃x cat(x)"),
-                parse("∀x cat(x)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("¬∀x cat(x)"),
-                parse("∃x cat(x)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("¬∃x cat(x)"),
-                parse("∀x ¬cat(y)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("¬∀x cat(x)"),
-                parse("∃x ¬cat(y)"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "¬∃x cat(x)",
+                "∀x cat(x)"
+            );
+            testError(checker,
+                "¬∀x cat(x)",
+                "∃x cat(x)"
+            );
+            testError(checker,
+                "¬∃x cat(x)",
+                "∀x ¬cat(y)"
+            );
+            testError(checker,
+                "¬∀x cat(x)",
+                "∃x ¬cat(y)"
+            );
         });
     });
 
     describe("Reverse Direction", () => {
         it("Correct", () => {
-            expect(checker.checkForError(
-                parse("∀x ¬cat(x)"),
-                parse("¬∃x cat(x)"),
-            ).isEquivalent()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x ¬cat(x)"),
-                parse("¬∀x cat(x)"),
-            ).isEquivalent()).toBe(true);
+            testEquivalent(checker,
+                "∀x ¬cat(x)",
+                "¬∃x cat(x)"
+            );
+            testEquivalent(checker,
+                "∃x ¬cat(x)",
+                "¬∀x cat(x)"
+            );
+            testEquivalent(checker,
+                "∀x ¬(cat(x) ∧ ∀y ¬cat(y))",
+                "¬∃x (cat(x) ∧ ¬∃y cat(y))"
+            );
         });
         it("Incorrect", () => {
-            expect(checker.checkForError(
-                parse("∀x cat(x)"),
-                parse("¬∃x cat(x)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x cat(x)"),
-                parse("¬∀x cat(x)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∀x ¬cat(y)"),
-                parse("¬∃x cat(x)"),
-            ).isError()).toBe(true);
-            expect(checker.checkForError(
-                parse("∃x ¬cat(y)"),
-                parse("¬∀x cat(x)"),
-            ).isError()).toBe(true);
+            testError(checker,
+                "∀x cat(x)",
+                "¬∃x cat(x)"
+            );
+            testError(checker,
+                "∃x cat(x)",
+                "¬∀x cat(x)"
+            );
+            testError(checker,
+                "∀x ¬cat(y)",
+                "¬∃x cat(x)"
+            );
+            testError(checker,
+                "∃x ¬cat(y)",
+                "¬∀x cat(x)"
+            );
         });
     });
 

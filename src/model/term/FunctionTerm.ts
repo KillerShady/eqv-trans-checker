@@ -80,6 +80,15 @@ class FunctionTerm extends Term {
     );
     return vars;
   }
+
+  equals(other: Term): boolean {
+    if (! (other instanceof FunctionTerm) ||
+      this.name === other.name) return false;
+    for (let i = 0; i < this.terms.length; i++) {
+      if (!this.terms[i].equals(other.terms[i])) return false;
+    }
+    return true;
+  }
 }
 
 export default FunctionTerm;

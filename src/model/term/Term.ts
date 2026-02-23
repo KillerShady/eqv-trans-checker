@@ -15,6 +15,8 @@ abstract class Term extends Expression {
     structure: Structure,
     e: Map<Symbol, DomainElement>
   ): DomainElement;
+
+  abstract equals(other: Term): boolean;
 }
 
 export default Term;

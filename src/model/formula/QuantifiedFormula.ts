@@ -70,6 +70,17 @@ abstract class QuantifiedFormula extends Formula {
   getSubFormulas(): Formula[] {
     return [this.subFormula];
   }
+
+  equals(other: Formula): boolean {
+    if (this.constructor !== other.constructor ||
+        ! (other instanceof QuantifiedFormula) ||
+        this.variableName !== other.variableName ||
+        this.subFormulas.length !== other.subFormulas.length) return false;
+    for (let i = 0; i < this.subFormulas.length; i++) {
+      if (!this.subFormulas[i].equals(other.subFormulas[i])) return false;
+    }
+    return true;
+  }
 }
 
 export default QuantifiedFormula;
