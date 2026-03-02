@@ -2,7 +2,7 @@ import type Expression from "../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
 import {Conjunction, Disjunction} from "../model";
 
-class AssociationChecker extends TransformationChecker {
+class AssociativityChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subLeft, transformed.subLeft.subLeft);
@@ -35,4 +35,4 @@ class AssociationChecker extends TransformationChecker {
 
 }
 
-export default AssociationChecker;
+export default AssociativityChecker;

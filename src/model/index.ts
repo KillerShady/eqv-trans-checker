@@ -20,7 +20,7 @@ import type {ErrorExpected} from "@fmfi-uk-1-ain-412/js-fol-parser";
 import AlwaysTrue from "./formula/AlwaysTrue.ts";
 import AlwaysFalse from "./formula/AlwaysFalse.ts";
 
-export {Conjunction, Disjunction, EqualityAtom, Equivalence, ExistentialQuant, Formula, Implication,
+export {AlwaysTrue, AlwaysFalse, Conjunction, Disjunction, EqualityAtom, Equivalence, ExistentialQuant, Formula, Implication,
         Negation, PredicateAtom, QuantifiedFormula, UniversalQuant, Constant, FunctionTerm, Term,
         Variable, Expression, Structure, Language};
 
