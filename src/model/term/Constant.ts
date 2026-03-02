@@ -53,7 +53,7 @@ class Constant extends Term {
   }
 
   equals(other: Term): boolean {
-    return other instanceof Variable && this.name === other.name;
+    return other instanceof Constant && this.name === other.name;
   }
 }
 
