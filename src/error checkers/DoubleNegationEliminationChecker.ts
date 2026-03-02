@@ -10,7 +10,7 @@ class DoubleNegationEliminationChecker extends TransformationChecker {
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(transformed.subFormula.subFormula, original);
+            const result = this.checkForError(original, transformed.subFormula.subFormula);
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }

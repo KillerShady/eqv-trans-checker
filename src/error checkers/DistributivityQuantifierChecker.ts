@@ -10,8 +10,8 @@ class DistributivityQuantifierChecker extends TransformationChecker {
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(transformed.subFormula.subLeft, original.subLeft.subFormula)
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subFormula.subRight, original.subRight.subFormula));
+            const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft)
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }

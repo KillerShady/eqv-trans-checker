@@ -10,8 +10,8 @@ class ImplicationEliminationChecker extends TransformationChecker {
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if ((this.checkRequisites(transformed, original))) {
-            const result = this.checkForError(transformed.subLeft, original.subLeft.subFormula);
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subRight, original.subRight));
+            const result = this.checkForError(original.subLeft.subFormula, transformed.subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }

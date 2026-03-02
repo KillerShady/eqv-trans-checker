@@ -12,10 +12,10 @@ class DistributivityChecker extends TransformationChecker {
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(transformed.subLeft, original.subLeft.subLeft)
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subLeft, original.subRight.subLeft));
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subRight.subLeft, original.subLeft.subRight));
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subRight.subRight, original.subRight.subRight));
+            const result = this.checkForError(original.subLeft.subLeft, transformed.subLeft)
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight.subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }

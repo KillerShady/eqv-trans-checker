@@ -10,8 +10,8 @@ class CommutativityChecker extends TransformationChecker {
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(transformed.subLeft, original.subRight);
-            if (result.isNotError()) result.combine(this.checkForError(transformed.subRight, original.subLeft));
+            const result = this.checkForError(original.subRight, transformed.subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         }
