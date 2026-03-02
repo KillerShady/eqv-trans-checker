@@ -6,13 +6,17 @@ import {getFactories} from "../../model";
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
 import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
 import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
-import AssociationChecker from "../../error checkers/AssociationChecker.ts";
+import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
 import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
 import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
 import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
 import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
 import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
 import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
+import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
+import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
+import QuantifierEliminationPropositionalChecker
+    from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
 
 interface transformationState {
     id: number,
@@ -133,14 +137,17 @@ export const selectTransformationError = createSelector(
 
 function selectErrorChecker(operation: string): TransformationChecker | undefined {
     switch (operation) {
-        case "Association": return new AssociationChecker();
+        case "Association": return new AssociativityChecker();
         case "Commutativity": return new CommutativityChecker();
-        case "DeMorgan": return new DeMorganChecker();
+        case "DeMorganPROP": return new DeMorganChecker();
         case "DeMorganQUANT": return new DeMorganQuantifierChecker();
+        case "DeMorganCOMBINED": return new DeMorganCombinedChecker();
         case "Distributivity": return new DistributivityChecker();
         case "DistributivityQUANT": return new DistributivityQuantifierChecker();
         case "DoubleNEG": return new DoubleNegationEliminationChecker();
         case "RemoveIMPL": return new ImplicationEliminationChecker();
+        case "RemoveQUANTPROP": return new QuantifierEliminationPropositionalChecker();
+        case "RemoveQUANT": return new QuantifierEliminationChecker();
         case "RenameVAR": return new RenamingVariablesChecker();
     }
 }
