@@ -1,5 +1,9 @@
 import {describe, it} from "vitest";
-import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
+import {
+    testEquivalentTwoDirectional,
+    testErrorTwoDirectional,
+    testIdentical
+} from "./testUtils.ts";
 import DistributivityChecker from "../error checkers/DistributivityChecker.ts";
 
 describe("Distributivity Checker", () => {
@@ -7,92 +11,47 @@ describe("Distributivity Checker", () => {
 
     testIdentical(checker);
 
-    describe("Standard Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))"
-            );
-            testEquivalent(checker, 
-                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))"
-            );
-            testEquivalent(checker,
-                "∃x∀y(cat(x) ∧ (cat(y) ∨ ∀a∀b∀z(cat(a) ∧ (cat(b) ∨ cat(z))) ))",
-                "∃x∀y((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ ∀a∀b∀z((cat(a) ∧ cat(b)) ∨ (cat(a) ∧ cat(z)))))"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
+    it("Correct", () => {
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
+            "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))"
+        );
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
+            "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))"
+        );
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y(cat(x) ∧ (cat(y) ∨ ∀a∀b∀z(cat(a) ∧ (cat(b) ∨ cat(z))) ))",
+            "∃x∀y((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ ∀a∀b∀z((cat(a) ∧ cat(b)) ∨ (cat(a) ∧ cat(z)))))"
+        );
+    });
+    describe("Incorrect", () => {
+        it("Subtree not equivalent", () => {
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
                 "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
                 "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))"
             );
-
-            testError(checker,
+        });
+        it("Incorrect connective", () => {
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
                 "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
                 "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
             );
-
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
                 "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
                 "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
-            );
-        });
-    });
-
-    describe("Reverse Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ cat(z)))",
-                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
-            );
-            testEquivalent(checker, 
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(x) ∨ cat(z)))",
-                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
-            );
-            testEquivalent(checker,
-                "∃x∀y((cat(x) ∧ cat(y)) ∨ (cat(x) ∧ ∀a∀b∀z((cat(a) ∧ cat(b)) ∨ (cat(a) ∧ cat(z)))))",
-                "∃x∀y(cat(x) ∧ (cat(y) ∨ ∀a∀b∀z(cat(a) ∧ (cat(b) ∨ cat(z))) ))"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))",
-                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
-            );
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))",
-                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
-            );
-
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
-                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
-            );
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
-                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
-            );
-
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
-                "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))"
-            );
-            testError(checker,
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
-                "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))"
             );
         });
     });

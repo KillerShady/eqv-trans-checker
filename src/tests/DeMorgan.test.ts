@@ -1,5 +1,9 @@
 import {describe, it} from "vitest";
-import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
+import {
+    testEquivalentTwoDirectional,
+    testErrorTwoDirectional,
+    testIdentical
+} from "./testUtils.ts";
 import DeMorganChecker from "../error checkers/DeMorganChecker.ts";
 
 describe("De Morgan Checker", () => {
@@ -7,85 +11,51 @@ describe("De Morgan Checker", () => {
 
     testIdentical(checker);
 
-    describe("Standard Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "∃x∀y¬(cat(x) ∧ cat(y))", 
-                "∃x∀y(¬cat(x) ∨ ¬cat(y))"
-            );
-            testEquivalent(checker,
-                "∃x∀y¬(cat(x) ∨ cat(y))",
-                "∃x∀y(¬cat(x) ∧ ¬cat(y))"
-            );
-            testEquivalent(checker,
-                "∃x∀y¬(¬(cat(x) ∧ cat(y)) ∧ cat(y))",
-                "∃x∀y(¬(¬cat(x) ∨ ¬cat(y)) ∨ ¬cat(y))"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
+    it("Correct", () => {
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y¬(cat(x) ∧ cat(y))",
+            "∃x∀y(¬cat(x) ∨ ¬cat(y))"
+        );
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y¬(cat(x) ∨ cat(y))",
+            "∃x∀y(¬cat(x) ∧ ¬cat(y))"
+        );
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y¬(¬(cat(x) ∧ cat(y)) ∧ cat(y))",
+            "∃x∀y(¬(¬cat(x) ∨ ¬cat(y)) ∨ ¬cat(y))"
+        );
+    });
+
+    describe("Incorrect", () => {
+        it("Not changing connective", () => {
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
                 "∃x∀y(¬cat(x) ∧ ¬cat(y))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
                 "∃x∀y(¬cat(x) ∨ ¬cat(y))"
             );
-
-            testError(checker,
+        });
+        it("Subtree not equivalent", () => {
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
                 "∃x∀y(¬cat(x) ∨ ¬cat(x))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
                 "∃x∀y(¬cat(x) ∧ ¬cat(x))"
             );
-
-            testError(checker,
+        });
+        it("Parent not equivalent", () => {
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
                 "(¬cat(x) ∨ ¬cat(y))"
             );
-            testError(checker,
+            testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
                 "(¬cat(x) ∧ ¬cat(y))"
             );
-        });
-    });
-
-    describe("Reverse Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "∃x∀y(¬cat(x) ∨ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∧ cat(y))");
-            testEquivalent(checker, 
-                "∃x∀y(¬cat(x) ∧ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∨ cat(y))");
-            testEquivalent(checker,
-                "∃x∀y(¬(¬cat(x) ∨ ¬cat(y)) ∨ ¬cat(y))",
-                "∃x∀y¬(¬(cat(x) ∧ cat(y)) ∧ cat(y))"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
-                "∃x∀y(¬cat(x) ∧ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∧ cat(y))");
-            testError(checker,
-                "∃x∀y(¬cat(x) ∨ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∨ cat(y))");
-
-            testError(checker,
-                "∃x∀y(¬cat(x) ∨ ¬cat(x))",
-                "∃x∀y¬(cat(x) ∧ cat(y))");
-            testError(checker,
-                "∃x∀y(¬cat(x) ∧ ¬cat(x))",
-                "∃x∀y¬(cat(x) ∨ cat(y))");
-
-            testError(checker,
-                "(¬cat(x) ∨ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∧ cat(y))");
-            testError(checker,
-                "(¬cat(x) ∧ ¬cat(y))",
-                "∃x∀y¬(cat(x) ∨ cat(y))");
         });
     });
 

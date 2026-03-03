@@ -1,5 +1,9 @@
 import {describe, it} from "vitest";
-import {testEquivalent, testError, testIdentical} from "./testUtils.ts";
+import {
+    testEquivalentTwoDirectional,
+    testErrorTwoDirectional,
+    testIdentical
+} from "./testUtils.ts";
 import DoubleNegationEliminationChecker from "../error checkers/DoubleNegationEliminationChecker.ts";
 
 describe("Double Negation Elimination Checker", () => {
@@ -7,50 +11,25 @@ describe("Double Negation Elimination Checker", () => {
 
     testIdentical(checker);
 
-    describe("Standard Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "¬¬cat(x)",
-                "cat(x)"
-            );
-            testEquivalent(checker,
-                "¬¬(¬¬cat(x))",
-                "cat(x)"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
-                "¬¬cat(x)",
-                "¬cat(x)"
-            );
-            testError(checker,
-                "¬¬cat(x)",
-                "∃x∀y(loves(x, y))"
-            );
-        });
+    it("Correct", () => {
+        testEquivalentTwoDirectional(checker,
+            "¬¬cat(x)",
+            "cat(x)"
+        );
+        testEquivalentTwoDirectional(checker,
+            "¬¬¬¬cat(x)",
+            "cat(x)"
+        );
     });
-
-    describe("Reverse Direction", () => {
-        it("Correct", () => {
-            testEquivalent(checker, 
-                "cat(x)",
-                "¬¬cat(x)"
-            );
-            testEquivalent(checker,
-                "cat(x)",
-                "¬¬(¬¬cat(x))"
-            );
-        });
-        it("Incorrect", () => {
-            testError(checker,
-                "¬cat(x)",
-                "¬¬cat(x)"
-            );
-            testError(checker,
-                "∃x∀y(loves(x, y))",
-                "¬¬cat(x)"
-            );
-        });
+    it("Incorrect", () => {
+        testErrorTwoDirectional(checker,
+            "¬¬cat(x)",
+            "¬cat(x)"
+        );
+        testErrorTwoDirectional(checker,
+            "¬¬cat(x)",
+            "∃x∀y(loves(x, y))"
+        );
     });
 
 });

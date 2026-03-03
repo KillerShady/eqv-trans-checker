@@ -5,7 +5,9 @@ import {testEquivalent, testError, testIdentical} from "./testUtils.ts"
 describe("Renaming Variables Checker", () => {
     const checker = new RenamingVariablesChecker();
 
-    describe("Correct transformations", () => {
+    testIdentical(checker);
+
+    describe("Correct", () => {
         it("Renaming free variables", () => {
             testEquivalent(checker, 
                 "cat(x)",
@@ -47,9 +49,7 @@ describe("Renaming Variables Checker", () => {
         });
     });
 
-    describe("Incorrect transformations", () => {
-        testIdentical(checker);
-
+    describe("Incorrect", () => {
         it("Changing free variable to bound", () => {
             testError(checker,
                 "∃x cat(y)",

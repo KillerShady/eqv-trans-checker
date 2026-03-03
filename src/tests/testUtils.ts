@@ -19,13 +19,38 @@ function parse(input: string): Formula {
 export function testEquivalent(checker: TransformationChecker, original: string, transformed: string) {
     expect(checker.checkForError(parse(original), parse(transformed)).isEquivalent()).toBe(true);
 }
-export function testError(checker: TransformationChecker, original: string, transformed: string, errorMessage: string|undefined = undefined) {
+export function testEquivalentTwoDirectional(checker: TransformationChecker, original: string, transformed: string) {
+    const parsedOriginal = parse(original);
+    const parsedTransformed = parse(transformed);
+
+    expect(checker.checkForError(parsedOriginal, parsedTransformed).isEquivalent()).toBe(true);
+    expect(checker.checkForError(parsedTransformed, parsedOriginal).isEquivalent()).toBe(true);
+}
+export function testError(checker: TransformationChecker,
+                          original: string, transformed: string,
+                          errorMessage: string|undefined = undefined) {
     const parsedOriginal = parse(original);
     const parsedTransformed = parse(transformed);
 
     expect(checker.checkForError(parsedOriginal, parsedTransformed).isError()).toBe(true);
-    if (errorMessage) {
+    if (errorMessage !== undefined) {
         expect(checker.checkForError(parsedOriginal, parsedTransformed).errors[0].message).toBe(errorMessage);
+    }
+}
+export function testErrorTwoDirectional(checker: TransformationChecker,
+                                        original: string, transformed: string,
+                                        errorMessage1: string|undefined = undefined,
+                                        errorMessage2: string|undefined = undefined) {
+    const parsedOriginal = parse(original);
+    const parsedTransformed = parse(transformed);
+
+    expect(checker.checkForError(parsedOriginal, parsedTransformed).isError()).toBe(true);
+    expect(checker.checkForError(parsedTransformed, parsedOriginal).isError()).toBe(true);
+    if (errorMessage1 !== undefined) {
+        expect(checker.checkForError(parsedOriginal, parsedTransformed).errors[0].message).toBe(errorMessage1);
+    }
+    if (errorMessage2 !== undefined) {
+        expect(checker.checkForError(parsedTransformed, parsedOriginal).errors[0].message).toBe(errorMessage2);
     }
 }
 export function testIdentical(checker: TransformationChecker) {
