@@ -24,6 +24,11 @@ describe("De Morgan Checker", () => {
             "∃x∀y¬(¬(cat(x) ∧ cat(y)) ∧ cat(y))",
             "∃x∀y(¬(¬cat(x) ∨ ¬cat(y)) ∨ ¬cat(y))"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y¬(cat(x) ∧ (¬cat(x) ∧ ¬cat(y)))",
+            "∃x∀y(¬cat(x) ∨ ¬¬(cat(x) ∨ cat(y)))"
+        );
     });
 
     describe("Incorrect", () => {

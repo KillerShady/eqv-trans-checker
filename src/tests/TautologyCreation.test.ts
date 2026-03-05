@@ -20,6 +20,11 @@ describe("Quantifier Elimination Checker", () => {
             "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∨ ¬(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x)))",
             "⊤"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "((cat(x) ∨ ¬cat(x)) ∧ ⊤)",
+            "(⊤ ∧ (cat(x) ∨ ¬cat(x)))"
+        );
     });
     describe("Incorrect", () => {
         it("Subtree not equivalent", () => {

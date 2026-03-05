@@ -24,6 +24,11 @@ describe("Distributivity Quantifier Checker", () => {
             "∃x(cat(x) ∨ ∃y (cat(y) ∨ ∀z cat(z)))",
             "(∃x cat(x) ∨ ∃x(∃y cat(y) ∨ ∃y∀z cat(z)))"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "∃x(cat(x) ∨ (∀y cat(y) ∧ ∀y cat(z)))",
+            "(∃x cat(x) ∨ ∃x∀y (cat(y) ∧ cat(z)))"
+        );
     });
     describe("Incorrect", () => {
         it("Subtree not equivalent", () => {

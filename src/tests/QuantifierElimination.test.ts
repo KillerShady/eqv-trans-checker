@@ -22,6 +22,16 @@ describe("Quantifier Elimination Checker", () => {
                 "cat(y) ∨ cat(z)"
             );
         });
+        it("Correct mixed direction", () => {
+            testEquivalentTwoDirectional(checker,
+                "∀x cat(y)",
+                "∃x cat(y)"
+            );
+            testEquivalentTwoDirectional(checker,
+                "∀x (cat(y) ∨ cat(z))",
+                "∃x cat(y) ∨ cat(z)"
+            );
+        });
         it("Correct", () => {
             testEquivalentTwoDirectional(checker,
                 "∃x cat(y)",

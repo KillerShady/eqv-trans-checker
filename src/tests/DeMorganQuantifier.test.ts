@@ -24,6 +24,11 @@ describe("De Morgan Quantifier Checker", () => {
             "¬∃x (cat(x) ∧ ¬∃y cat(y))",
             "∀x ¬(cat(x) ∧ ∀y ¬cat(y))"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "¬∃x (cat(x) ∧ ∀y ¬cat(y))",
+            "∀x ¬(cat(x) ∧ ¬∃y cat(y))"
+        );
     });
     describe("Incorrect", () => {
         it("Missing negation", () => {

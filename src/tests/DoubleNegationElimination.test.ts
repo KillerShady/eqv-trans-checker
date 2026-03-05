@@ -20,6 +20,11 @@ describe("Double Negation Elimination Checker", () => {
             "¬¬¬¬cat(x)",
             "cat(x)"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "¬¬(cat(x) ∧ cat(x))",
+            "(cat(x) ∧ ¬¬cat(x))"
+        );
     });
     it("Incorrect", () => {
         testErrorTwoDirectional(checker,

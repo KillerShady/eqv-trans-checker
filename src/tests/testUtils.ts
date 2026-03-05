@@ -23,7 +23,9 @@ export function testEquivalentTwoDirectional(checker: TransformationChecker, ori
     const parsedOriginal = parse(original);
     const parsedTransformed = parse(transformed);
 
+    // standard
     expect(checker.checkForError(parsedOriginal, parsedTransformed).isEquivalent()).toBe(true);
+    // reversed
     expect(checker.checkForError(parsedTransformed, parsedOriginal).isEquivalent()).toBe(true);
 }
 export function testError(checker: TransformationChecker,
@@ -44,11 +46,13 @@ export function testErrorTwoDirectional(checker: TransformationChecker,
     const parsedOriginal = parse(original);
     const parsedTransformed = parse(transformed);
 
+    // standard
     expect(checker.checkForError(parsedOriginal, parsedTransformed).isError()).toBe(true);
-    expect(checker.checkForError(parsedTransformed, parsedOriginal).isError()).toBe(true);
     if (errorMessage1 !== undefined) {
         expect(checker.checkForError(parsedOriginal, parsedTransformed).errors[0].message).toBe(errorMessage1);
     }
+    // reversed
+    expect(checker.checkForError(parsedTransformed, parsedOriginal).isError()).toBe(true);
     if (errorMessage2 !== undefined) {
         expect(checker.checkForError(parsedTransformed, parsedOriginal).errors[0].message).toBe(errorMessage2);
     }

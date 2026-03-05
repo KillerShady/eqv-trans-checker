@@ -20,6 +20,11 @@ describe("Implication Elimination Checker", () => {
             "∃x∀y(cat(y) → (cat(x) → loves(x, y)))",
             "∃x∀y(¬cat(y) ∨ (¬cat(x) ∨ loves(x, y)))"
         );
+
+        testEquivalentTwoDirectional(checker,
+            "∃x∀y(cat(y) → (¬cat(x) ∨ loves(x, y)))",
+            "∃x∀y(¬cat(y) ∨ (cat(x) → loves(x, y)))"
+        );
     });
     it("Incorrect", () => {
         testErrorTwoDirectional(checker,
