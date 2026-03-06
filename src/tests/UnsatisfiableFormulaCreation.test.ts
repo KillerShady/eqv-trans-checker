@@ -10,6 +10,53 @@ describe("Quantifier Elimination Checker", () => {
     const checker = new UnsatisfiableFormulaCreationChecker();
 
     testIdentical(checker);
+    describe("Correct", () => {
+        it("Correct negated formula", () => {
+            testEquivalentTwoDirectional(checker,
+                "cat(x) ∧ ¬cat(x)",
+                "⊥"
+            );
+            testEquivalentTwoDirectional(checker,
+                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∧ ¬(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x)))",
+                "⊥"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "((cat(x) ∧ ¬cat(x)) ∨ ⊥)",
+                "(⊥ ∨ (cat(x) ∧ ¬cat(x)))"
+            );
+        });
+        it("Correct negated Tautology", () => {
+            testEquivalentTwoDirectional(checker,
+                "¬⊤",
+                "⊥"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "(¬⊤ ∧ ⊥)",
+                "(⊥ ∧ ¬⊤)"
+            );
+        });
+        it("Correct AND Unsat", () => {
+            testEquivalentTwoDirectional(checker,
+                "cat(x) ∧ ⊥",
+                "⊥"
+            );
+            testEquivalentTwoDirectional(checker,
+                "⊥ ∧ cat(x)",
+                "⊥"
+            );
+            testEquivalentTwoDirectional(checker,
+                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∧ ⊥",
+                "⊥"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "((cat(x) ∧ ⊥) ∨ ⊥)",
+                "(⊥ ∨ (⊥ ∧ ¬cat(x)))"
+            );
+        });
+    });
 
     it("Correct", () => {
         testEquivalentTwoDirectional(checker,
@@ -31,7 +78,6 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "cat(x) ∧ ¬cat(y)",
                 "⊥",
-                "Cannot apply Unsatisfiable Formula Creation rule, because cat(x) and cat(y) are not identical!"
             );
         });
         it("Incorrect connector", () => {

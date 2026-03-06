@@ -1,39 +1,43 @@
 import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
 import type Expression from "../model/Expression.ts";
-import {Disjunction, Formula, Negation, AlwaysTrue} from "../model";
+import {Disjunction, Negation, AlwaysTrue, AlwaysFalse} from "../model";
 
 class TautologyCreationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
-        if (this.checkRequisites(original, transformed)) {
-            if (original.subLeft instanceof Negation) {
-                return this.formulasEqual(original.subLeft.subFormula, original.subRight);
-            }
-            return this.formulasEqual(original.subLeft, original.subRight.subFormula);
-        } else if (this.checkRequisites(transformed, original)) {
-            if (original.subLeft instanceof Negation) {
-                return this.formulasEqual(transformed.subLeft.subFormula, transformed.subRight);
-            }
-            return this.formulasEqual(transformed.subLeft, transformed.subRight.subFormula);
+        if (this.checkNegatedFormulaRequisites(original, transformed) ||
+            this.checkNegatedUnsatRequisites(original, transformed) ||
+            this.checkORTautologyRequisites(original, transformed) ||
+            this.checkNegatedFormulaRequisites(transformed, original) ||
+            this.checkNegatedUnsatRequisites(transformed, original) ||
+            this.checkORTautologyRequisites(transformed, original)) {
+                return this.equivalentResult()
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Tautology Creation rule!"
         );
     }
 
-    checkRequisites(original: Expression, transformed: Expression): boolean {
-        return (original instanceof Disjunction &&
-                (original.subRight instanceof Negation ||
-                 original.subLeft instanceof Negation) &&
-                transformed instanceof AlwaysTrue)
+    checkNegatedFormulaRequisites(original: Expression, transformed: Expression): boolean {
+        return original instanceof Disjunction &&
+               transformed instanceof AlwaysTrue &&
+               ((original.subLeft instanceof Negation &&
+                 this.checkEquivalent(original.subLeft.subFormula, original.subRight)) ||
+                (original.subRight instanceof Negation &&
+                 this.checkEquivalent(original.subRight.subFormula, original.subLeft)));
     }
-
-    formulasEqual(left: Formula, right: Formula): TransformationCheckerResult {
-        if (left.equals(right)) {
-            return this.equivalentResult()
-        }
-        return this.errorResult(
-            "Cannot apply Tautology Creation rule, because " + left + " and " + right + " are not identical!"
-        );
+    checkNegatedUnsatRequisites(original: Expression, transformed: Expression): boolean {
+        return original instanceof Negation &&
+               original.subFormula instanceof AlwaysFalse &&
+               transformed instanceof AlwaysTrue;
+    }
+    checkORTautologyRequisites(original: Expression, transformed: Expression): boolean {
+        return transformed instanceof AlwaysTrue &&
+               original instanceof Disjunction &&
+               (original.subLeft instanceof AlwaysTrue ||
+                original.subRight instanceof AlwaysTrue);
+    }
+    checkEquivalent(expression: Expression, other: Expression) {
+        return this.checkForError(expression, other).isEquivalentOrIdentical();
     }
 
 }
