@@ -17,6 +17,11 @@ import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecke
 import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
 import QuantifierEliminationPropositionalChecker
     from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
+import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
+import TautologyEliminationChecker from "../../error checkers/TautologyEliminationChecker.ts";
+import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
+import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
+import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
 
 interface transformationState {
     id: number,
@@ -137,7 +142,7 @@ export const selectTransformationError = createSelector(
 
 function selectErrorChecker(operation: string): TransformationChecker | undefined {
     switch (operation) {
-        case "Association": return new AssociativityChecker();
+        case "Associativity": return new AssociativityChecker();
         case "Commutativity": return new CommutativityChecker();
         case "DeMorganPROP": return new DeMorganChecker();
         case "DeMorganQUANT": return new DeMorganQuantifierChecker();
@@ -145,9 +150,14 @@ function selectErrorChecker(operation: string): TransformationChecker | undefine
         case "Distributivity": return new DistributivityChecker();
         case "DistributivityQUANT": return new DistributivityQuantifierChecker();
         case "DoubleNEG": return new DoubleNegationEliminationChecker();
+        case "RemoveFormula": return new FormulaEliminationChecker();
         case "RemoveIMPL": return new ImplicationEliminationChecker();
-        case "RemoveQUANTPROP": return new QuantifierEliminationPropositionalChecker();
         case "RemoveQUANT": return new QuantifierEliminationChecker();
+        case "RemoveQUANTPROP": return new QuantifierEliminationPropositionalChecker();
         case "RenameVAR": return new RenamingVariablesChecker();
+        case "CreateTRUE": return new TautologyCreationChecker();
+        case "RemoveTRUE": return new TautologyEliminationChecker();
+        case "CreateFALSE": return new UnsatisfiableFormulaCreationChecker();
+        case "RemoveFALSE": return new UnsatisfiableFormulaEliminationChecker();
     }
 }

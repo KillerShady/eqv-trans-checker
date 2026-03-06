@@ -29,7 +29,7 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
             {!isNaN(formula.prevFormula) &&
              <DropdownButton variant="secondary" title={formula.operation} onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
                 <Dropdown.Item eventKey={"Operation"}>---</Dropdown.Item>
-                <Dropdown.Item eventKey={"Association"}>Association</Dropdown.Item>
+                <Dropdown.Item eventKey={"Associativity"}>Associativity</Dropdown.Item>
                 <Dropdown.Item eventKey={"Commutativity"}>Commutativity</Dropdown.Item>
                 <Dropdown.Item eventKey={"DeMorganPROP"}>DeMorganPROP</Dropdown.Item>
                 <Dropdown.Item eventKey={"DeMorganQUANT"}>DeMorganQUANT</Dropdown.Item>
@@ -37,10 +37,15 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
                 <Dropdown.Item eventKey={"Distributivity"}>Distributivity</Dropdown.Item>
                 <Dropdown.Item eventKey={"DistributivityQUANT"}>DistributivityQUANT</Dropdown.Item>
                 <Dropdown.Item eventKey={"DoubleNEG"}>DoubleNEG</Dropdown.Item>
+                <Dropdown.Item eventKey={"RemoveFormula"}>RemoveFormula</Dropdown.Item>
                 <Dropdown.Item eventKey={"RemoveIMPL"}>RemoveIMPL</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveQUANTPROP"}>RemoveQUANTPROP</Dropdown.Item>
                 <Dropdown.Item eventKey={"RemoveQUANT"}>RemoveQUANT</Dropdown.Item>
+                <Dropdown.Item eventKey={"RemoveQUANTPROP"}>RemoveQUANTPROP</Dropdown.Item>
                 <Dropdown.Item eventKey={"RenameVAR"}>RenameVAR</Dropdown.Item>
+                <Dropdown.Item eventKey={"CreateTRUE"}>CreateTRUE</Dropdown.Item>
+                <Dropdown.Item eventKey={"RemoveTRUE"}>RemoveTRUE</Dropdown.Item>
+                <Dropdown.Item eventKey={"CreateFALSE"}>CreateFALSE</Dropdown.Item>
+                <Dropdown.Item eventKey={"RemoveFALSE"}>RemoveFALSE</Dropdown.Item>
              </DropdownButton>
             }
             <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>+</Button>
