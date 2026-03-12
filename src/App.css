@@ -1,14 +1,7 @@
-#root {
+/*#root {
     max-width: 1280px;
     margin: 0 auto;
     padding: 2rem;
-    text-align: center;
-    border: #1a1a1a 1px solid;
-}
-
-.language {
-    display: flex;
-    flex-direction: column;
     border: #1a1a1a 1px solid;
 }
 
@@ -17,7 +10,7 @@
     margin-top: 1rem;
 }
 
-.row {
+.tmp_row {
     display: flex;
     flex-direction: row;
     margin: 1rem;
@@ -58,4 +51,4 @@
 }
 .show-dropdown {
     content-visibility: visible;
-}
+}*/

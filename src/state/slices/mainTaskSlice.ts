@@ -1,5 +1,27 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSelector, createSlice} from "@reduxjs/toolkit";
 import type {RootState} from "../store.ts"
+import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
+import {selectLanguage} from "./languageSlice.ts";
+import {getFactories} from "../../model";
+import TransformationChecker from "../../error checkers/TransformationChecker.ts";
+import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
+import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
+import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
+import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
+import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
+import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
+import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
+import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
+import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
+import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
+import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
+import QuantifierEliminationPropositionalChecker
+    from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
+import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
+import TautologyEliminationChecker from "../../error checkers/TautologyEliminationChecker.ts";
+import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
+import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
+import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
 
 interface transformationState {
     id: number,
@@ -10,7 +32,7 @@ interface formulaState {
     id: number,
     formula: string,
     operation: string,
-    prevFormula: number|null,
+    prevFormula: number,
 }
 
 interface MainTaskState {
@@ -25,7 +47,7 @@ const initialState: MainTaskState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
-    formulas: {0: {id: 0, formula: "", operation: '', prevFormula: null}},
+    formulas: {0: {id: 0, formula: "", operation: 'Operation', prevFormula: NaN}},
     formulasKey: 1,
 }
 
@@ -36,7 +58,7 @@ const MainTaskSlice = createSlice({
         "transSequenceAdded": (state, action) => {
             state.transSequences.splice(state.transSequences.indexOf(action.payload)+1, 0, state.transSequenceKey);
             state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: '', prevFormula: NaN};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: 'Operation', prevFormula: NaN};
             state.transSequenceKey++;
             state.formulasKey++;
         },
@@ -46,7 +68,7 @@ const MainTaskSlice = createSlice({
             delete state.transformations[action.payload];
         },
         "formulaAdded": (state, action) => {
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: "", prevFormula: action.payload.prevFormula};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: "Operation", prevFormula: action.payload.prevFormula};
             const formulas = state.transformations[action.payload.transformation].formulas;
             const index = formulas.indexOf(action.payload.prevFormula);
             if (index < formulas.length - 1) {
@@ -75,10 +97,67 @@ export const {transSequenceAdded, transSequenceRemoved, formulaAdded, formulaRem
 export default MainTaskSlice.reducer;
 
 export const selectTransSequences = (state: RootState) =>
-    state.mainTask.transSequences
+    state.mainTask.transSequences;
 export const selectTransformations = (state: RootState, id: number) =>
-    state.mainTask.transformations[id].formulas
+    state.mainTask.transformations[id].formulas;
 export const selectFormulaByID = (state: RootState, id: number) =>
-    state.mainTask.formulas[id]
+    state.mainTask.formulas[id];
 
+export const selectParsedFormula = createSelector(
+    [selectFormulaByID, selectLanguage],
+    (formula, language) => {
+        try {
+            const parsed = parseFormulaWithPrecedence(
+                formula.formula,
+                language.getParserLanguage(),
+                getFactories(language)
+            );
+            return {parsed: parsed};
+        } catch (error) {
+            if (error instanceof Error || error instanceof SyntaxError) {
+                return {error: error};
+            }
+            throw error;
+        }
+    }
+)
 
+export const selectTransformationError = createSelector(
+    [(state, prevId) => selectParsedFormula(state, prevId),
+     (state, _prevId, id) => selectParsedFormula(state, id),
+     (state, _prevId, id) => selectFormulaByID(state, id).operation],
+    (original, transformed, operation) => {
+        if (!original.parsed || !transformed.parsed) return {}
+        const checker = selectErrorChecker(operation);
+        if (!checker) return {error: new Error("Operation was not selected!")}
+        const result = checker.checkForError(original.parsed, transformed.parsed);
+        if (result.isEquivalent()) return {};
+        if (result.isIdentical()) {
+            return {error: new Error("Formula is identical to previous formula!")};
+        }
+        console.log(result.errors.length);
+        return {error: result.errors[result.errors.length - 1]};
+    }
+)
+
+function selectErrorChecker(operation: string): TransformationChecker | undefined {
+    switch (operation) {
+        case "Associativity": return new AssociativityChecker();
+        case "Commutativity": return new CommutativityChecker();
+        case "DeMorganPROP": return new DeMorganChecker();
+        case "DeMorganQUANT": return new DeMorganQuantifierChecker();
+        case "DeMorganCOMBINED": return new DeMorganCombinedChecker();
+        case "Distributivity": return new DistributivityChecker();
+        case "DistributivityQUANT": return new DistributivityQuantifierChecker();
+        case "DoubleNEG": return new DoubleNegationEliminationChecker();
+        case "RemoveFormula": return new FormulaEliminationChecker();
+        case "RemoveIMPL": return new ImplicationEliminationChecker();
+        case "RemoveQUANT": return new QuantifierEliminationChecker();
+        case "RemoveQUANTPROP": return new QuantifierEliminationPropositionalChecker();
+        case "RenameVAR": return new RenamingVariablesChecker();
+        case "CreateTRUE": return new TautologyCreationChecker();
+        case "RemoveTRUE": return new TautologyEliminationChecker();
+        case "CreateFALSE": return new UnsatisfiableFormulaCreationChecker();
+        case "RemoveFALSE": return new UnsatisfiableFormulaEliminationChecker();
+    }
+}
