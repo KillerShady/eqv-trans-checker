@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
-import languageReducer from "./slices/languageSlice.ts";
-import mainTaskReducer from "./slices/mainTaskSlice.ts";
+import languageReducer from "../features/language/languageSlice.ts";
+import mainTaskReducer from "../features/mainTask/mainTaskSlice.ts";
 
 export const store = configureStore({
     reducer: {

@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
-import type {RootState} from "../state/store.ts";
-import {selectTransformations, transSequenceAdded, transSequenceRemoved} from "../state/slices/mainTaskSlice.ts";
+import type {RootState} from "../../state/store.ts";
+import {selectTransformations, transSequenceAdded, transSequenceRemoved} from "./mainTaskSlice.ts";
 import FormulaComponent from "./FormulaComponent.tsx";
 import {Button, Card, Col, Row} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

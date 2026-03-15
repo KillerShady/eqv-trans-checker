@@ -5,7 +5,7 @@ import {
     updateConstants,
     updateFunctions,
     updatePredicates
-} from "../state/slices/languageSlice.ts";
+} from "./languageSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
 import {Card} from "react-bootstrap";
 import { InlineMath } from "react-katex";

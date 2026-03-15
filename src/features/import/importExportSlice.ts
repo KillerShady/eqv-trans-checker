@@ -1,5 +1,5 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {AppDispatch, RootState} from "../state/store.ts";
+import type {AppDispatch, RootState} from "../../state/store.ts";
 
 interface ImportExportState {
     error: string;

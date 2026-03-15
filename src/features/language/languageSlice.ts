@@ -1,5 +1,5 @@
 import {createSelector, createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {RootState} from "../store.ts";
+import type {RootState} from "../../state/store.ts";
 import {
     parseConstants,
     parsePredicates,
@@ -7,7 +7,7 @@ import {
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {Language} from "../../model"
-import {importAppState} from "../../import/importExportSlice.ts";
+import {importAppState} from "../import/importExportSlice.ts";
 
 interface LanguageState {
     constants: string;

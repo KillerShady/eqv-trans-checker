@@ -1,8 +1,8 @@
-import '../App.css'
-import LanguageComponent from "./LanguageComponent.tsx";
-import TaskComponent from "./TaskComponent.tsx";
+import './App.css'
+import LanguageComponent from "./features/language/LanguageComponent.tsx";
+import TaskComponent from "./features/mainTask/TaskComponent.tsx";
 import {Container} from "react-bootstrap";
-import ImportExportComponent from "./ImportExportComponent.tsx";
+import ImportExportComponent from "./features/import/ImportExportComponent.tsx";
 
 export default function App() {
     return (

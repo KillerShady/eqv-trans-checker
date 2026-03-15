@@ -1,12 +1,12 @@
 import {useDispatch, useSelector} from "react-redux";
-import type {RootState} from "../state/store.ts";
+import type {RootState} from "../../state/store.ts";
 import {
     formulaAdded,
     formulaModified,
     formulaRemoved,
     selectFormulaByID,
     selectParsedFormula, selectTransformationError
-} from "../state/slices/mainTaskSlice.ts";
+} from "./mainTaskSlice.ts";
 import {Button, Dropdown, DropdownButton, Form, InputGroup} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";

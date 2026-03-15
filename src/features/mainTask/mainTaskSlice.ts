@@ -1,7 +1,7 @@
 import {createSelector, createSlice, type PayloadAction} from "@reduxjs/toolkit";
-import type {RootState} from "../store.ts"
+import type {RootState} from "../../state/store.ts"
 import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
-import {selectLanguage} from "./languageSlice.ts";
+import {selectLanguage} from "../language/languageSlice.ts";
 import {getFactories} from "../../model";
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
 import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
@@ -22,7 +22,7 @@ import TautologyEliminationChecker from "../../error checkers/TautologyEliminati
 import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
 import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
 import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
-import {importAppState} from "../../import/importExportSlice.ts";
+import {importAppState} from "../import/importExportSlice.ts";
 
 interface transformationState {
     id: number,

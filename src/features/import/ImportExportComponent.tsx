@@ -1,8 +1,8 @@
 import {Button, Stack, Form} from "react-bootstrap";
-import type {AppDispatch} from "../state/store.ts";
+import type {AppDispatch} from "../../state/store.ts";
 import {useDispatch} from "react-redux";
 import {type ChangeEvent, useRef} from "react";
-import {exportAppState, importAppState} from "../import/importExportSlice.ts";
+import {exportAppState, importAppState} from "./importExportSlice.ts";
 
 export default function ImportExportComponent() {
     const dispatch: AppDispatch = useDispatch();
