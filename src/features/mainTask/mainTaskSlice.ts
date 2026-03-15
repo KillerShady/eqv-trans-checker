@@ -23,6 +23,7 @@ import UnsatisfiableFormulaEliminationChecker from "../../error checkers/Unsatis
 import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
 import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
 import {importAppState} from "../import/importExportSlice.ts";
+import type {serializedAppState} from "../import/validationSchema.ts";
 
 interface transformationState {
     id: number,
@@ -93,7 +94,7 @@ const MainTaskSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(importAppState, (_state, action: PayloadAction<RootState>) => {
+        builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
             return action.payload.mainTask;
         })
     },

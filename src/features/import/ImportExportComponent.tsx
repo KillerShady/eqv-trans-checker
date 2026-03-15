@@ -3,6 +3,7 @@ import type {AppDispatch} from "../../state/store.ts";
 import {useDispatch} from "react-redux";
 import {type ChangeEvent, useRef} from "react";
 import {exportAppState, importAppState} from "./importExportSlice.ts";
+import {serializedAppStateSchema} from "./validationSchema.ts";
 
 export default function ImportExportComponent() {
     const dispatch: AppDispatch = useDispatch();
@@ -22,7 +23,8 @@ export default function ImportExportComponent() {
         reader.onload = (e) => {
             try {
                 const json = JSON.parse(e.target?.result?.toString() ?? "");
-                dispatch(importAppState(json));
+                const serializedAppState = serializedAppStateSchema.parse(json);
+                dispatch(importAppState(serializedAppState));
             } catch (err) {
                 console.error(err);
             } finally {

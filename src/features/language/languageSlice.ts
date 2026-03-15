@@ -8,6 +8,7 @@ import {
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {Language} from "../../model"
 import {importAppState} from "../import/importExportSlice.ts";
+import type {serializedAppState} from "../import/validationSchema.ts";
 
 interface LanguageState {
     constants: string;
@@ -54,7 +55,7 @@ const languageSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(importAppState, (_state, action: PayloadAction<RootState>) => {
+        builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
             return action.payload.language;
         })
     },

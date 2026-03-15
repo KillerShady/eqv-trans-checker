@@ -1,5 +1,6 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {AppDispatch, RootState} from "../../state/store.ts";
+import type {serializedAppState} from "./validationSchema.ts";
 
 interface ImportExportState {
     error: string;
@@ -14,7 +15,7 @@ const importExportSlice = createSlice({
     initialState,
     reducers: {
         // to be used by other slices with the use of extra reducers
-        "importAppState": (_state, _action: PayloadAction<RootState>) => {},
+        "importAppState": (_state, _action: PayloadAction<serializedAppState>) => {},
     },
 });
 
