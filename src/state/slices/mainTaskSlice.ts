@@ -1,4 +1,4 @@
-import {createSelector, createSlice} from "@reduxjs/toolkit";
+import {createSelector, createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {RootState} from "../store.ts"
 import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {selectLanguage} from "./languageSlice.ts";
@@ -22,6 +22,7 @@ import TautologyEliminationChecker from "../../error checkers/TautologyEliminati
 import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
 import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
 import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
+import {importAppState} from "../../import/importExportSlice.ts";
 
 interface transformationState {
     id: number,
@@ -32,7 +33,7 @@ interface formulaState {
     id: number,
     formula: string,
     operation: string,
-    prevFormula: number,
+    prevFormula?: number,
 }
 
 interface MainTaskState {
@@ -47,7 +48,7 @@ const initialState: MainTaskState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
-    formulas: {0: {id: 0, formula: "", operation: 'Operation', prevFormula: NaN}},
+    formulas: {0: {id: 0, formula: "", operation: 'Operation'}},
     formulasKey: 1,
 }
 
@@ -58,7 +59,7 @@ const MainTaskSlice = createSlice({
         "transSequenceAdded": (state, action) => {
             state.transSequences.splice(state.transSequences.indexOf(action.payload)+1, 0, state.transSequenceKey);
             state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: 'Operation', prevFormula: NaN};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: 'Operation'};
             state.transSequenceKey++;
             state.formulasKey++;
         },
@@ -91,7 +92,12 @@ const MainTaskSlice = createSlice({
             state.formulas[action.payload.id].operation = action.payload.operation;
         },
     },
-})
+    extraReducers: (builder) => {
+        builder.addCase(importAppState, (_state, action: PayloadAction<RootState>) => {
+            return action.payload.mainTask;
+        })
+    },
+});
 
 export const {transSequenceAdded, transSequenceRemoved, formulaAdded, formulaRemoved, formulaModified} = MainTaskSlice.actions;
 export default MainTaskSlice.reducer;

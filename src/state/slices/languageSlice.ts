@@ -1,4 +1,4 @@
-import {createSelector, createSlice} from "@reduxjs/toolkit";
+import {createSelector, createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {RootState} from "../store.ts";
 import {
     parseConstants,
@@ -7,6 +7,7 @@ import {
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {Language} from "../../model"
+import {importAppState} from "../../import/importExportSlice.ts";
 
 interface LanguageState {
     constants: string;
@@ -52,9 +53,14 @@ const languageSlice = createSlice({
             }
         },
     },
-})
+    extraReducers: (builder) => {
+        builder.addCase(importAppState, (_state, action: PayloadAction<RootState>) => {
+            return action.payload.language;
+        })
+    },
+});
 
-export const { updateConstants, updateFunctions, updatePredicates } = languageSlice.actions;
+export const {updateConstants, updateFunctions, updatePredicates} = languageSlice.actions;
 export default languageSlice.reducer;
 
 export const selectConstantsText = (state: RootState) =>
