@@ -56,6 +56,18 @@ const languageSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
+            const parsedConstants = getConstantsError(action.payload.language.constants);
+            if (parsedConstants.parsed) {
+                action.payload.language.parsedConstants = parsedConstants.parsed;
+            }
+            const parsedPredicates = getPredicatesError(action.payload.language.predicates);
+            if (parsedPredicates.parsed) {
+                action.payload.language.parsedPredicates = parsedPredicates.parsed;
+            }
+            const parsedFunctions = getFunctionsError(action.payload.language.functions);
+            if (parsedFunctions.parsed) {
+                action.payload.language.parsedFunctions = parsedFunctions.parsed;
+            }
             return action.payload.language;
         })
     },
@@ -92,7 +104,7 @@ export const selectFunctionsError = createSelector(
     (functions) => getFunctionsError(functions)
 )
 
-const getConstantsError = (constants: string) => {
+export const getConstantsError = (constants: string) => {
     try {
         const parsed = parseConstants(constants);
         parsed.forEach((element) => {
@@ -108,7 +120,7 @@ const getConstantsError = (constants: string) => {
         throw error;
     }
 }
-const getPredicatesError = (predicates: string) => {
+export const getPredicatesError = (predicates: string) => {
     try {
         const parsed = parsePredicates(predicates);
         parsed.forEach((element) => {
@@ -124,7 +136,7 @@ const getPredicatesError = (predicates: string) => {
         throw error;
     }
 }
-const getFunctionsError = (functions: string) => {
+export const getFunctionsError = (functions: string) => {
     try {
         const parsed = parseFunctions(functions);
         parsed.forEach((element) => {
