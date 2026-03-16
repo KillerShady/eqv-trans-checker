@@ -95,7 +95,32 @@ const MainTaskSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
-            return action.payload.mainTask;
+            const importedState: MainTaskState = action.payload.mainTask;
+
+            const seenTransformations = new Set(importedState.transSequences);
+            for (const key in importedState.transformations) {
+                if (! seenTransformations.has(parseInt(key))) {
+                    delete importedState.transformations[key];
+                }
+            }
+            importedState.transSequenceKey = Math.max(...importedState.transSequences)+1;
+
+            const seenFormulas = new Set<number>();
+            let maxFormulasKey = 0;
+            for (const transformation of Object.values(importedState.transformations)) {
+                for (const formula of transformation.formulas) {
+                    seenFormulas.add(formula);
+                    maxFormulasKey = Math.max(maxFormulasKey, formula);
+                }
+            }
+            for (const key in importedState.formulas) {
+                if (! seenFormulas.has(parseInt(key))) {
+                    delete importedState.formulas[key];
+                }
+            }
+            importedState.formulasKey = maxFormulasKey+1;
+
+            return importedState;
         })
     },
 });
