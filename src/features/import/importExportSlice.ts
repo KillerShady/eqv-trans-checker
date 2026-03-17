@@ -15,18 +15,26 @@ const importExportSlice = createSlice({
     initialState,
     reducers: {
         // to be used by other slices with the use of extra reducers
-        "importAppState": (_state, _action: PayloadAction<serializedAppState>) => {},
+        "importAppState": (state, _action: PayloadAction<serializedAppState>) => {
+            state.error = "";
+        },
+        "setError": (state, action: PayloadAction<string>) => {
+            state.error = action.payload;
+        },
+        "clearError": (state) => {
+            state.error = "";
+        },
     },
 });
 
-export const {importAppState} = importExportSlice.actions;
+export const {importAppState, setError, clearError} = importExportSlice.actions;
 export default importExportSlice.reducer;
 
 export const exportAppState =
     ()=> (_: AppDispatch, getState: () => RootState) => {
         const state = getState();
 
-        const json = JSON.stringify(state, null, 2);
+        const json = JSON.stringify(serializeState(state), null, 2);
         const blob = new Blob([json], { type: "application/json" });
         const downloadURL = URL.createObjectURL(blob);
 
@@ -37,3 +45,13 @@ export const exportAppState =
 
         URL.revokeObjectURL(downloadURL);
     };
+
+export const selectImportError = (state: RootState) =>
+    state.importExport.error;
+
+function serializeState(state: RootState) {
+    return {
+        "language": state.language,
+        "mainTask": state.mainTask,
+    }
+}
