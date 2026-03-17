@@ -6,6 +6,9 @@ class AlwaysTrue extends Formula {
     constructor() {
         super([], "", "");
     }
+    toString(): string {
+        return `⊤`;
+    }
     eval(_structure: Structure, _e: Valuation): boolean {
         throw new Error("Method not implemented.");
     }
