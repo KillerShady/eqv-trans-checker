@@ -17,6 +17,9 @@ class FormulaEliminationChecker extends TransformationChecker {
     }
 
     checkConjunction(conjunction: Conjunction, other: Expression) {
+        if (other instanceof AlwaysFalse) {
+            return (conjunction.subRight instanceof AlwaysFalse || conjunction.subLeft instanceof AlwaysFalse);
+        }
         if (this.checkEquivalent(conjunction.subLeft, other)) {
             if (this.checkEquivalent(conjunction.subRight, other)) {
                 return true;
@@ -31,6 +34,9 @@ class FormulaEliminationChecker extends TransformationChecker {
                 this.checkEquivalent(conjunction.subLeft.subRight, other));
     }
     checkDisjunction(disjunction: Disjunction, other: Expression) {
+        if (other instanceof AlwaysTrue) {
+            return (disjunction.subRight instanceof AlwaysTrue || disjunction.subLeft instanceof AlwaysTrue);
+        }
         if (this.checkEquivalent(disjunction.subLeft, other)) {
             if (this.checkEquivalent(disjunction.subRight, other)) {
                 return true;

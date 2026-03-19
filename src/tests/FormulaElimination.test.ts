@@ -33,6 +33,24 @@ describe("Tautology Elimination Checker", () => {
                 "(cat(y) ∨ cat(x)) ∧ cat(x)",
                 "cat(x)"
             );
+
+            testEquivalentTwoDirectional(checker,
+                "cat(x) ∧ ⊥",
+                "⊥"
+            );
+            testEquivalentTwoDirectional(checker,
+                "⊥ ∧ cat(x)",
+                "⊥"
+            );
+            testEquivalentTwoDirectional(checker,
+                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∧ ⊥",
+                "⊥"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "((cat(x) ∧ ⊥) ∨ ⊥)",
+                "(⊥ ∨ (⊥ ∧ ¬cat(x)))"
+            );
         });
         it("Correct disjunction", () => {
             testEquivalentTwoDirectional(checker,
@@ -54,6 +72,24 @@ describe("Tautology Elimination Checker", () => {
             testEquivalentTwoDirectional(checker,
                 "(cat(y) ∧ cat(x)) ∨ cat(x)",
                 "cat(x)"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "cat(x) ∨ ⊤",
+                "⊤"
+            );
+            testEquivalentTwoDirectional(checker,
+                "⊤ ∨ cat(x)",
+                "⊤"
+            );
+            testEquivalentTwoDirectional(checker,
+                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∨ ⊤",
+                "⊤"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "((cat(x) ∨ ⊤) ∧ ⊤)",
+                "(⊤ ∧ (⊤ ∨ ¬cat(x)))"
             );
         });
         it("Correct complex", () => {

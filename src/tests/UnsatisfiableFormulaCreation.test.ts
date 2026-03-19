@@ -37,43 +37,9 @@ describe("Quantifier Elimination Checker", () => {
                 "(⊥ ∧ ¬⊤)"
             );
         });
-        it("Correct AND Unsat", () => {
-            testEquivalentTwoDirectional(checker,
-                "cat(x) ∧ ⊥",
-                "⊥"
-            );
-            testEquivalentTwoDirectional(checker,
-                "⊥ ∧ cat(x)",
-                "⊥"
-            );
-            testEquivalentTwoDirectional(checker,
-                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∧ ⊥",
-                "⊥"
-            );
-
-            testEquivalentTwoDirectional(checker,
-                "((cat(x) ∧ ⊥) ∨ ⊥)",
-                "(⊥ ∨ (⊥ ∧ ¬cat(x)))"
-            );
-        });
     });
 
-    it("Correct", () => {
-        testEquivalentTwoDirectional(checker,
-            "cat(x) ∧ ¬cat(x)",
-            "⊥"
-        );
-        testEquivalentTwoDirectional(checker,
-            "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∧ ¬(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x)))",
-            "⊥"
-        );
-
-        testEquivalentTwoDirectional(checker,
-            "((cat(x) ∧ ¬cat(x)) ∨ ⊥)",
-            "(⊥ ∨ (cat(x) ∧ ¬cat(x)))"
-        );
-    });
-    describe("Standard Direction", () => {
+    describe("Incorrect", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "cat(x) ∧ ¬cat(y)",

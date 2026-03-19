@@ -6,10 +6,8 @@ class TautologyCreationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (this.checkNegatedFormulaRequisites(original, transformed) ||
             this.checkNegatedUnsatRequisites(original, transformed) ||
-            this.checkORTautologyRequisites(original, transformed) ||
             this.checkNegatedFormulaRequisites(transformed, original) ||
-            this.checkNegatedUnsatRequisites(transformed, original) ||
-            this.checkORTautologyRequisites(transformed, original)) {
+            this.checkNegatedUnsatRequisites(transformed, original)) {
                 return this.equivalentResult()
         }
         return this.errorResult(
@@ -29,12 +27,6 @@ class TautologyCreationChecker extends TransformationChecker {
         return original instanceof Negation &&
                original.subFormula instanceof AlwaysFalse &&
                transformed instanceof AlwaysTrue;
-    }
-    checkORTautologyRequisites(original: Expression, transformed: Expression): boolean {
-        return transformed instanceof AlwaysTrue &&
-               original instanceof Disjunction &&
-               (original.subLeft instanceof AlwaysTrue ||
-                original.subRight instanceof AlwaysTrue);
     }
     checkEquivalent(expression: Expression, other: Expression) {
         return this.checkForError(expression, other).isEquivalentOrIdentical();

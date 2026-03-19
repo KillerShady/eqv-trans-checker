@@ -38,25 +38,6 @@ describe("Quantifier Elimination Checker", () => {
                 "(⊤ ∧ ¬⊥)"
             );
         });
-        it("Correct OR tautology", () => {
-            testEquivalentTwoDirectional(checker,
-                "cat(x) ∨ ⊤",
-                "⊤"
-            );
-            testEquivalentTwoDirectional(checker,
-                "⊤ ∨ cat(x)",
-                "⊤"
-            );
-            testEquivalentTwoDirectional(checker,
-                "(∃x∀y(cat(y) →loves(x, y)) ∧ ∀x((cat(x)∨loves(x,kitty)) →loves(kitty, x))) ∨ ⊤",
-                "⊤"
-            );
-
-            testEquivalentTwoDirectional(checker,
-                "((cat(x) ∨ ⊤) ∧ ⊤)",
-                "(⊤ ∧ (⊤ ∨ ¬cat(x)))"
-            );
-        });
     });
 
     describe("Incorrect", () => {
