@@ -3,12 +3,17 @@ import type Expression from "../model/Expression.ts";
 import {Disjunction, Negation, AlwaysTrue, AlwaysFalse} from "../model";
 
 class TautologyCreationChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkNegatedFormulaRequisites(original, transformed) ||
             this.checkNegatedUnsatRequisites(original, transformed) ||
             this.checkNegatedFormulaRequisites(transformed, original) ||
             this.checkNegatedUnsatRequisites(transformed, original)) {
                 return this.equivalentResult()
+        }
+        if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Tautology Creation rule!"

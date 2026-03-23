@@ -43,20 +43,26 @@ describe("Quantifier Elimination Checker", () => {
     describe("Incorrect", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
-                "cat(x) ∨ ¬cat(y)",
-                "⊤",
+                "∃x∀y(cat(x) ∨ ¬cat(y))",
+                "∃x∀y ⊤",
+                "(cat(x)  ∨  ¬cat(y)) and ⊤ are not equivalent according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∨  ¬cat(y)) are not equivalent according to the Tautology Creation rule!"
             );
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
-                "cat(x) ∧ ¬cat(x)",
-                "⊤"
+                "∃x∀y(cat(x) ∧ ¬cat(x))",
+                "∃x∀y ⊤",
+                "(cat(x)  ∧  ¬cat(x)) and ⊤ are not equivalent according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∧  ¬cat(x)) are not equivalent according to the Tautology Creation rule!"
             );
         });
         it("Negation missing", () => {
             testErrorTwoDirectional(checker,
-                "cat(x) ∨ cat(x)",
-                "⊤"
+                "∃x∀y(cat(x) ∨ cat(x))",
+                "∃x∀y ⊤",
+                "(cat(x)  ∨  cat(x)) and ⊤ are not equivalent according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∨  cat(x)) are not equivalent according to the Tautology Creation rule!"
             );
         });
     });

@@ -3,7 +3,7 @@ import TransformationChecker, {TransformationCheckerResult} from "./Transformati
 import {Conjunction, Disjunction, Negation} from "../model";
 
 class DeMorganChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula);
             if (result.isNotError()) result.combine(this.checkForError(original.subFormula.subRight, transformed.subRight.subFormula));
@@ -14,6 +14,11 @@ class DeMorganChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
+        }
+        if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the De Morgan rule!"

@@ -35,21 +35,29 @@ describe("De Morgan Checker", () => {
         it("Not changing connective", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
-                "∃x∀y(¬cat(x) ∧ ¬cat(y))"
+                "∃x∀y(¬cat(x) ∧ ¬cat(y))",
+                "¬(cat(x)  ∧  cat(y)) and (¬cat(x)  ∧  ¬cat(y)) are not equivalent according to the De Morgan rule!",
+                "(¬cat(x)  ∧  ¬cat(y)) and ¬(cat(x)  ∧  cat(y)) are not equivalent according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
-                "∃x∀y(¬cat(x) ∨ ¬cat(y))"
+                "∃x∀y(¬cat(x) ∨ ¬cat(y))",
+                "¬(cat(x)  ∨  cat(y)) and (¬cat(x)  ∨  ¬cat(y)) are not equivalent according to the De Morgan rule!",
+                "(¬cat(x)  ∨  ¬cat(y)) and ¬(cat(x)  ∨  cat(y)) are not equivalent according to the De Morgan rule!"
             );
         });
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
-                "∃x∀y(¬cat(x) ∨ ¬cat(x))"
+                "∃x∀y(¬cat(x) ∨ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
-                "∃x∀y(¬cat(x) ∧ ¬cat(x))"
+                "∃x∀y(¬cat(x) ∧ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
         });
         it("Parent not equivalent", () => {

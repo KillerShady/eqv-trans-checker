@@ -33,14 +33,18 @@ describe("Unsatisfiable Formula Elimination Checker", () => {
     describe("Incorrect", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
-                "cat(x) ∨ ⊥",
-                "cat(y)"
+                "∃x∀y(cat(x) ∨ ⊥)",
+                "∃x∀y cat(y)",
+                "cat(x) and cat(y) are not equivalent according to the Tautology Creation rule!",
+                "cat(y) and cat(x) are not equivalent according to the Tautology Creation rule!"
             );
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
-            "cat(x) ∧ ⊥",
-                "cat(x)"
+                "∃x∀y(cat(x) ∧ ⊥)",
+                "∃x∀y cat(x)",
+                "(cat(x)  ∧  ⊥) and cat(x) are not equivalent according to the Tautology Creation rule!",
+                "cat(x) and (cat(x)  ∧  ⊥) are not equivalent according to the Tautology Creation rule!"
             );
         });
     });

@@ -9,12 +9,14 @@ class QuantifierEliminationChecker extends TransformationChecker {
         if (this.checkSameFunctor(original, transformed) &&
             ! (original instanceof Variable) &&
             ! (original instanceof QuantifiedFormula)) {
-            return this.checkChildren(original, transformed);
+            const childrenResults = this.checkChildren(original, transformed);
+            if (childrenResults.isEquivalentOrIdentical()) return childrenResults;
+            return this.checkTransformationApplied(original, transformed, childrenResults);
         }
-        return this.checkTransformationApplied(original, transformed);
+        return this.checkTransformationApplied(original, transformed, undefined);
     }
 
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (original instanceof QuantifiedFormula &&
             transformed instanceof QuantifiedFormula &&
             this.checkSameFunctor(original, transformed)) {
@@ -43,6 +45,9 @@ class QuantifierEliminationChecker extends TransformationChecker {
                 );
             }
             return this.identicalResult();
+        }
+        if (childrenResults) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Quantifier Elimination rule!"

@@ -130,17 +130,42 @@ describe("Tautology Elimination Checker", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "cat(x) ∧ cat(y)",
-                "cat(x)"
+                "cat(x)",
+                "(cat(x)  ∧  cat(y)) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and (cat(x)  ∧  cat(y)) are not equivalent according to the Association rule!"
+            );
+            testErrorTwoDirectional(checker,
+                "∃x∀y((cat(x) ∧ cat(y)) ∧ cat(x))",
+                "∃x∀y(cat(x) ∧ cat(x))",
+                "(cat(x)  ∧  cat(y)) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and (cat(x)  ∧  cat(y)) are not equivalent according to the Association rule!"
             );
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
                 "cat(x) ∧ (cat(x) ∧ cat(y))",
-                "cat(x)"
+                "cat(x)",
+                "(cat(x)  ∧  (cat(x)  ∧  cat(y))) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and (cat(x)  ∧  (cat(x)  ∧  cat(y))) are not equivalent according to the Association rule!"
             );
             testErrorTwoDirectional(checker,
+                "∃x∀y((cat(x) ∧ (cat(x) ∧ cat(y))) ∧ cat(x))",
+                "∃x∀y(cat(x) ∧ cat(x))",
+                "(cat(x)  ∧  (cat(x)  ∧  cat(y))) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and (cat(x)  ∧  (cat(x)  ∧  cat(y))) are not equivalent according to the Association rule!"
+            );
+
+            testErrorTwoDirectional(checker,
                 "(cat(x) ∨ cat(y)) ∨ cat(x)",
-                "cat(x)"
+                "cat(x)",
+                "((cat(x)  ∨  cat(y))  ∨  cat(x)) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and ((cat(x)  ∨  cat(y))  ∨  cat(x)) are not equivalent according to the Association rule!"
+            );
+            testErrorTwoDirectional(checker,
+                "∃x∀y(((cat(x) ∨ cat(y)) ∨ cat(x)) ∨ cat(x))",
+                "∃x∀y(cat(x) ∨ cat(x))",
+                "((cat(x)  ∨  cat(y))  ∨  cat(x)) and cat(x) are not equivalent according to the Association rule!",
+                "cat(x) and ((cat(x)  ∨  cat(y))  ∨  cat(x)) are not equivalent according to the Association rule!"
             );
         });
     });

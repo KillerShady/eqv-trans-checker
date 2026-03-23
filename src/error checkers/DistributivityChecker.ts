@@ -3,7 +3,7 @@ import TransformationChecker, {TransformationCheckerResult} from "./Transformati
 import {Conjunction, Disjunction} from "../model";
 
 class DistributivityChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subLeft, transformed.subLeft.subLeft)
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight.subLeft));
@@ -18,6 +18,10 @@ class DistributivityChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
+        } else if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Distributivity rule!"

@@ -4,7 +4,7 @@ import {
     ExistentialQuant,
     Expression,
     FunctionTerm, Implication, Negation,
-    PredicateAtom,
+    PredicateAtom, QuantifiedFormula,
     UniversalQuant, Variable
 } from "../model";
 
@@ -51,8 +51,9 @@ abstract class TransformationChecker {
         if (this.checkSameFunctor(original, transformed)) {
             const childrenResults = this.checkChildren(original, transformed);
             if (childrenResults.isEquivalentOrIdentical()) return childrenResults;
+            return this.checkTransformationApplied(original, transformed, childrenResults);
         }
-        return this.checkTransformationApplied(original, transformed);
+        return this.checkTransformationApplied(original, transformed, undefined);
     }
 
     protected checkSameFunctor(original: Expression, transformed: Expression): boolean {
@@ -78,27 +79,29 @@ abstract class TransformationChecker {
     }
 
     protected checkChildren(original: Expression, transformed: Expression): TransformationCheckerResult {
-        const result: TransformationCheckerResult = this.identicalResult();
-
         if ((original instanceof Conjunction && transformed instanceof Conjunction) ||
             (original instanceof Disjunction && transformed instanceof Disjunction) ||
             (original instanceof EqualityAtom && transformed instanceof EqualityAtom) ||
             (original instanceof Equivalence && transformed instanceof Equivalence) ||
             (original instanceof Implication && transformed instanceof Implication)) {
-            result.combine(this.checkForError(original.subLeft, transformed.subLeft));
+            const result = this.checkForError(original.subLeft, transformed.subLeft);
             result.combine(this.checkForError(original.subRight, transformed.subRight));
+            return result;
         } else if ((original instanceof ExistentialQuant && transformed instanceof ExistentialQuant) ||
                    (original instanceof Negation && transformed instanceof Negation) ||
                    (original instanceof UniversalQuant && transformed instanceof UniversalQuant)) {
-            result.combine(this.checkForError(original.subFormula, transformed.subFormula));
+            return this.checkForError(original.subFormula, transformed.subFormula);
         } else if ((original instanceof PredicateAtom && transformed instanceof PredicateAtom) ||
                    (original instanceof FunctionTerm && transformed instanceof FunctionTerm)) {
-            for (let i = 0; i < original.terms.length; i++) {
+            if (original.terms.length === 0) return this.identicalResult();
+            const result = this.checkForError(original.terms[0], transformed.terms[0])
+            for (let i = 1; i < original.terms.length; i++) {
                 result.combine(this.checkForError(original.terms[i], transformed.terms[i]));
             }
+            return result;
         }
 
-        return result;
+        return this.identicalResult();
     }
 
     public identicalResult() {
@@ -111,7 +114,11 @@ abstract class TransformationChecker {
         return new TransformationCheckerResult([new Error(message)], false, true);
     }
 
-    abstract checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult;
+    protected hasOneChild(expression: Expression): boolean {
+        return (expression instanceof Negation || expression instanceof QuantifiedFormula)
+    }
+
+    abstract checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult;
 }
 
 export default TransformationChecker;

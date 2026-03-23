@@ -34,29 +34,41 @@ describe("Distributivity Checker", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))"
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∨ (cat(y) ∧ cat(z)))",
+                "cat(x) and cat(y) are not equivalent according to the Distributivity rule!",
+                "cat(y) and cat(x) are not equivalent according to the Distributivity rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))"
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∧ (cat(y) ∨ cat(z)))",
+                "cat(x) and cat(y) are not equivalent according to the Distributivity rule!",
+                "cat(y) and cat(x) are not equivalent according to the Distributivity rule!"
             );
         });
         it("Incorrect connective", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
+                "(cat(x)  ∧  (cat(y)  ∨  cat(z))) and ((cat(x)  ∧  cat(y))  ∧  (cat(x)  ∧  cat(z))) are not equivalent according to the Distributivity rule!",
+                "((cat(x)  ∧  cat(y))  ∧  (cat(x)  ∧  cat(z))) and (cat(x)  ∧  (cat(y)  ∨  cat(z))) are not equivalent according to the Distributivity rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
+                "(cat(x)  ∨  (cat(y)  ∧  cat(z))) and ((cat(x)  ∨  cat(y))  ∨  (cat(x)  ∨  cat(z))) are not equivalent according to the Distributivity rule!",
+                "((cat(x)  ∨  cat(y))  ∨  (cat(x)  ∨  cat(z))) and (cat(x)  ∨  (cat(y)  ∧  cat(z))) are not equivalent according to the Distributivity rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∧ (cat(y) ∨ cat(z)))",
-                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))"
+                "∃x∀y∀z((cat(x) ∨ cat(y)) ∨ (cat(x) ∨ cat(z)))",
+                "(cat(x)  ∧  (cat(y)  ∨  cat(z))) and ((cat(x)  ∨  cat(y))  ∨  (cat(x)  ∨  cat(z))) are not equivalent according to the Distributivity rule!",
+                "((cat(x)  ∨  cat(y))  ∨  (cat(x)  ∨  cat(z))) and (cat(x)  ∧  (cat(y)  ∨  cat(z))) are not equivalent according to the Distributivity rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y∀z(cat(x) ∨ (cat(y) ∧ cat(z)))",
-                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))"
+                "∃x∀y∀z((cat(x) ∧ cat(y)) ∧ (cat(x) ∧ cat(z)))",
+                "(cat(x)  ∨  (cat(y)  ∧  cat(z))) and ((cat(x)  ∧  cat(y))  ∧  (cat(x)  ∧  cat(z))) are not equivalent according to the Distributivity rule!",
+                "((cat(x)  ∧  cat(y))  ∧  (cat(x)  ∧  cat(z))) and (cat(x)  ∨  (cat(y)  ∧  cat(z))) are not equivalent according to the Distributivity rule!"
             );
         });
     });

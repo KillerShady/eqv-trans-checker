@@ -56,34 +56,42 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x cat(x)",
                 "cat(x)",
+                "Cannot apply rule, because free variable x was found!",
                 "Cannot apply rule, because free variable x was found!"
             );
             testErrorTwoDirectional(checker,
                 "∀x cat(x)",
                 "cat(x)",
+                "Cannot apply rule, because free variable x was found!",
                 "Cannot apply rule, because free variable x was found!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(∃x cat(x) ∨ cat(x))",
                 "∃x cat(x) ∨ cat(x)",
+                "Cannot apply rule, because free variable x was found!",
                 "Cannot apply rule, because free variable x was found!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(∃x cat(x) ∨ cat(x))",
                 "∃x cat(x) ∨ cat(x)",
+                "Cannot apply rule, because free variable x was found!",
                 "Cannot apply rule, because free variable x was found!"
             );
         });
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "∃x cat(y)",
-                "cat(x)"
+                "cat(x)",
+                "y and x are not equivalent according to the Quantifier Elimination rule!",
+                "y and x are not equivalent according to the Quantifier Elimination rule!"
             );
         });
         it("Incorrect quantifier", () => {
             testErrorTwoDirectional(checker,
                 "∃x cat(y)",
-                "∀x cat(x)"
+                "∀x cat(x)",
+                "y and x are not equivalent according to the Quantifier Elimination rule!",
+                "x and y are not equivalent according to the Quantifier Elimination rule!"
             );
         });
     });

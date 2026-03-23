@@ -3,7 +3,7 @@ import type Expression from "../model/Expression.ts";
 import {AlwaysTrue, Conjunction} from "../model";
 
 class TautologyEliminationChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
             const result = original.subLeft instanceof AlwaysTrue ?
                 this.checkForError(original.subRight, transformed) :
@@ -16,6 +16,11 @@ class TautologyEliminationChecker extends TransformationChecker {
                 this.checkForError(original, transformed.subLeft);
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
+        }
+        if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Tautology Creation rule!"

@@ -61,55 +61,79 @@ describe("De Morgan Checker", () => {
         it("Not changing connective", () => {
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∧ cat(y))",
-                "∃x(¬cat(x) ∧ ¬cat(y))"
+                "∃x(¬cat(x) ∧ ¬cat(y))",
+                "Expected (cat(x)  ∧  cat(y)) to be a negation of (¬cat(x)  ∧  ¬cat(y))!",
+                "Expected (¬cat(x)  ∧  ¬cat(y)) to be a negation of (cat(x)  ∧  cat(y))!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∧ cat(y))",
-                "∀x(¬cat(x) ∧ ¬cat(y))"
+                "∀x(¬cat(x) ∧ ¬cat(y))",
+                "Expected (cat(x)  ∧  cat(y)) to be a negation of (¬cat(x)  ∧  ¬cat(y))!",
+                "Expected (¬cat(x)  ∧  ¬cat(y)) to be a negation of (cat(x)  ∧  cat(y))!"
             );
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∨ cat(y))",
-                "∃x(¬cat(x) ∨ ¬cat(y))"
+                "∃x(¬cat(x) ∨ ¬cat(y))",
+                "Expected (cat(x)  ∨  cat(y)) to be a negation of (¬cat(x)  ∨  ¬cat(y))!",
+                "Expected (¬cat(x)  ∨  ¬cat(y)) to be a negation of (cat(x)  ∨  cat(y))!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∨ cat(y))",
-                "∀x(¬cat(x) ∨ ¬cat(y))"
+                "∀x(¬cat(x) ∨ ¬cat(y))",
+                "Expected (cat(x)  ∨  cat(y)) to be a negation of (¬cat(x)  ∨  ¬cat(y))!",
+                "Expected (¬cat(x)  ∨  ¬cat(y)) to be a negation of (cat(x)  ∨  cat(y))!"
             );
         });
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∧ cat(y))",
-                "∃x(¬cat(x) ∨ ¬cat(x))"
+                "∃x(¬cat(x) ∨ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∧ cat(y))",
-                "∀x(¬cat(x) ∨ ¬cat(x))"
+                "∀x(¬cat(x) ∨ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∨ cat(y))",
-                "∃x(¬cat(x) ∧ ¬cat(x))"
+                "∃x(¬cat(x) ∧ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∨ cat(y))",
-                "∀x(¬cat(x) ∧ ¬cat(x))"
+                "∀x(¬cat(x) ∧ ¬cat(x))",
+                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
+                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
             );
         });
         it("Missing negation", () => {
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∧ cat(y))",
-                "∃x(¬cat(x) ∨ cat(y))"
+                "∃x(¬cat(x) ∨ cat(y))",
+                "Expected cat(y) to be a negation of cat(y)!",
+                "Expected cat(y) to be a negation of cat(y)!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∧ cat(y))",
-                "∀x(¬cat(x) ∨ cat(y))"
+                "∀x(¬cat(x) ∨ cat(y))",
+                "Expected cat(y) to be a negation of cat(y)!",
+                "Expected cat(y) to be a negation of cat(y)!"
             );
             testErrorTwoDirectional(checker,
                 "¬∀x(cat(x) ∨ cat(y))",
-                "∃x(¬cat(x) ∧ cat(y))"
+                "∃x(¬cat(x) ∧ cat(y))",
+                "Expected cat(y) to be a negation of cat(y)!",
+                "Expected cat(y) to be a negation of cat(y)!"
             );
             testErrorTwoDirectional(checker,
                 "¬∃x(cat(x) ∨ cat(y))",
-                "∀x(¬cat(x) ∧ cat(y))"
+                "∀x(¬cat(x) ∧ cat(y))",
+                "Expected cat(y) to be a negation of cat(y)!",
+                "Expected cat(y) to be a negation of cat(y)!"
             );
         });
     });

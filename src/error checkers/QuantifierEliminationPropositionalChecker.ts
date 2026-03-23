@@ -9,12 +9,14 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
         if (this.checkSameFunctor(original, transformed) &&
             ! (original instanceof Variable) &&
             ! (original instanceof QuantifiedFormula)) {
-            return this.checkChildren(original, transformed);
+            const childrenResults = this.checkChildren(original, transformed);
+            if (childrenResults.isEquivalentOrIdentical()) return childrenResults;
+            return this.checkTransformationApplied(original, transformed, childrenResults);
         }
-        return this.checkTransformationApplied(original, transformed);
+        return this.checkTransformationApplied(original, transformed, undefined);
     }
 
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisitesStandard(original, transformed)) {
             return this.performCheck(original.subFormula.subRight,
                                      original.subFormula.subLeft,
@@ -51,6 +53,11 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
         }
         if (this.checkSameFunctor(original, transformed)) {
             return this.checkChildren(original, transformed);
+        }
+        if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Propositional Quantifier Elimination rule!"

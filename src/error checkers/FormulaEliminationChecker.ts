@@ -1,15 +1,20 @@
 import type Expression from "../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
-import {Conjunction, Disjunction} from "../model";
+import {AlwaysFalse, AlwaysTrue, Conjunction, Disjunction} from "../model";
 
 class FormulaEliminationChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if ((original instanceof Conjunction && this.checkConjunction(original, transformed)) ||
             (original instanceof Disjunction && this.checkDisjunction(original, transformed)) ||
             (transformed instanceof Conjunction && this.checkConjunction(transformed, original)) ||
             (transformed instanceof Disjunction && this.checkDisjunction(transformed, original))
         ) {
             return this.equivalentResult();
+        }
+        if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Association rule!"

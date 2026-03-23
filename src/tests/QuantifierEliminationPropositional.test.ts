@@ -73,25 +73,34 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∨ cat(x))",
                 "∃x cat(x) ∨ cat(x)",
+                "Cannot apply rule, because free variable x was found!",
                 "Cannot apply rule, because free variable x was found!"
             );
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∨ cat(y))",
-                "∃x cat(x) ∧ cat(y)"
+                "∃x cat(x) ∧ cat(y)",
+                "∃x (cat(x)  ∨  cat(y)) and (∃x cat(x)  ∧  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!",
+                "(∃x cat(x)  ∧  cat(y)) and ∃x (cat(x)  ∨  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∧ cat(y))",
-                "∃x cat(x) ∨ cat(y)"
+                "∃x cat(x) ∨ cat(y)",
+                "∃x (cat(x)  ∧  cat(y)) and (∃x cat(x)  ∨  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!",
+                "(∃x cat(x)  ∨  cat(y)) and ∃x (cat(x)  ∧  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∨ cat(y))",
-                "∀x cat(x) ∧ cat(y)"
+                "∀x cat(x) ∧ cat(y)",
+                "∀x (cat(x)  ∨  cat(y)) and (∀x cat(x)  ∧  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!",
+                "(∀x cat(x)  ∧  cat(y)) and ∀x (cat(x)  ∨  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∧ cat(y))",
-                "∀x cat(x) ∨ cat(y)"
+                "∀x cat(x) ∨ cat(y)",
+                "∀x (cat(x)  ∧  cat(y)) and (∀x cat(x)  ∨  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!",
+                "(∀x cat(x)  ∨  cat(y)) and ∀x (cat(x)  ∧  cat(y)) are not equivalent according to the Propositional Quantifier Elimination rule!"
             );
         });
     });

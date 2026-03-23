@@ -3,7 +3,7 @@ import TransformationChecker, {TransformationCheckerResult} from "./Transformati
 import {Disjunction, Implication, Negation} from "../model";
 
 class ImplicationEliminationChecker extends TransformationChecker {
-    checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subLeft, transformed.subLeft.subFormula);
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
@@ -14,6 +14,11 @@ class ImplicationEliminationChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
+        }
+        if (childrenResults &&
+             (this.hasOneChild(original) ||
+              ! childrenResults.isAllError())) {
+            return childrenResults;
         }
         return this.errorResult(
             original.toString() + " and " + transformed.toString() + " are not equivalent according to the Implication Elimination rule!"
