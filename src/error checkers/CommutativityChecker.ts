@@ -16,7 +16,7 @@ class CommutativityChecker extends TransformationChecker {
             return result;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Commutativity rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Commutativity rule!"
         );
     }
 

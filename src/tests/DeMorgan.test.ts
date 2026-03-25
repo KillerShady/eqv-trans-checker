@@ -36,28 +36,28 @@ describe("De Morgan Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
                 "∃x∀y(¬cat(x) ∧ ¬cat(y))",
-                "¬(cat(x)  ∧  cat(y)) and (¬cat(x)  ∧  ¬cat(y)) are not equivalent according to the De Morgan rule!",
-                "(¬cat(x)  ∧  ¬cat(y)) and ¬(cat(x)  ∧  cat(y)) are not equivalent according to the De Morgan rule!"
+                "¬(cat(x)  ∧  cat(y)) and (¬cat(x)  ∧  ¬cat(y)) are neither equivalent nor identical according to the De Morgan rule!",
+                "(¬cat(x)  ∧  ¬cat(y)) and ¬(cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
                 "∃x∀y(¬cat(x) ∨ ¬cat(y))",
-                "¬(cat(x)  ∨  cat(y)) and (¬cat(x)  ∨  ¬cat(y)) are not equivalent according to the De Morgan rule!",
-                "(¬cat(x)  ∨  ¬cat(y)) and ¬(cat(x)  ∨  cat(y)) are not equivalent according to the De Morgan rule!"
+                "¬(cat(x)  ∨  cat(y)) and (¬cat(x)  ∨  ¬cat(y)) are neither equivalent nor identical according to the De Morgan rule!",
+                "(¬cat(x)  ∨  ¬cat(y)) and ¬(cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the De Morgan rule!"
             );
         });
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∧ cat(y))",
                 "∃x∀y(¬cat(x) ∨ ¬cat(x))",
-                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
-                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
+                "cat(y) and cat(x) are neither equivalent nor identical according to the De Morgan rule!",
+                "cat(x) and cat(y) are neither equivalent nor identical according to the De Morgan rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x∀y¬(cat(x) ∨ cat(y))",
                 "∃x∀y(¬cat(x) ∧ ¬cat(x))",
-                "cat(y) and cat(x) are not equivalent according to the De Morgan rule!",
-                "cat(x) and cat(y) are not equivalent according to the De Morgan rule!"
+                "cat(y) and cat(x) are neither equivalent nor identical according to the De Morgan rule!",
+                "cat(x) and cat(y) are neither equivalent nor identical according to the De Morgan rule!"
             );
         });
         it("Parent not equivalent", () => {

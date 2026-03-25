@@ -45,24 +45,24 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y(cat(x) ∨ ¬cat(y))",
                 "∃x∀y ⊤",
-                "(cat(x)  ∨  ¬cat(y)) and ⊤ are not equivalent according to the Tautology Creation rule!",
-                "⊤ and (cat(x)  ∨  ¬cat(y)) are not equivalent according to the Tautology Creation rule!"
+                "(cat(x)  ∨  ¬cat(y)) and ⊤ are neither equivalent nor identical according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∨  ¬cat(y)) are neither equivalent nor identical according to the Tautology Creation rule!"
             );
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y(cat(x) ∧ ¬cat(x))",
                 "∃x∀y ⊤",
-                "(cat(x)  ∧  ¬cat(x)) and ⊤ are not equivalent according to the Tautology Creation rule!",
-                "⊤ and (cat(x)  ∧  ¬cat(x)) are not equivalent according to the Tautology Creation rule!"
+                "(cat(x)  ∧  ¬cat(x)) and ⊤ are neither equivalent nor identical according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∧  ¬cat(x)) are neither equivalent nor identical according to the Tautology Creation rule!"
             );
         });
         it("Negation missing", () => {
             testErrorTwoDirectional(checker,
                 "∃x∀y(cat(x) ∨ cat(x))",
                 "∃x∀y ⊤",
-                "(cat(x)  ∨  cat(x)) and ⊤ are not equivalent according to the Tautology Creation rule!",
-                "⊤ and (cat(x)  ∨  cat(x)) are not equivalent according to the Tautology Creation rule!"
+                "(cat(x)  ∨  cat(x)) and ⊤ are neither equivalent nor identical according to the Tautology Creation rule!",
+                "⊤ and (cat(x)  ∨  cat(x)) are neither equivalent nor identical according to the Tautology Creation rule!"
             );
         });
     });

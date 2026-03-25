@@ -21,7 +21,7 @@ class DeMorganChecker extends TransformationChecker {
             return childrenResults;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the De Morgan rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the De Morgan rule!"
         );
     }
 

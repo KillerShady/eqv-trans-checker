@@ -35,28 +35,28 @@ describe("De Morgan Quantifier Checker", () => {
             testErrorTwoDirectional(checker,
                 "¬∃x cat(x)",
                 "∀x cat(x)",
-                "¬∃x cat(x) and ∀x cat(x) are not equivalent according to the De Morgan rule for Quantifiers!",
-                "∀x cat(x) and ¬∃x cat(x) are not equivalent according to the De Morgan rule for Quantifiers!"
+                "¬∃x cat(x) and ∀x cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!",
+                "∀x cat(x) and ¬∃x cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!"
             );
             testErrorTwoDirectional(checker,
                 "¬∀x cat(x)",
                 "∃x cat(x)",
-                "¬∀x cat(x) and ∃x cat(x) are not equivalent according to the De Morgan rule for Quantifiers!",
-                "∃x cat(x) and ¬∀x cat(x) are not equivalent according to the De Morgan rule for Quantifiers!"
+                "¬∀x cat(x) and ∃x cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!",
+                "∃x cat(x) and ¬∀x cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!"
             );
         });
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
                 "¬∃x cat(x)",
                 "∀x ¬cat(y)",
-                "cat(x) and cat(y) are not equivalent according to the De Morgan rule for Quantifiers!",
-                "cat(y) and cat(x) are not equivalent according to the De Morgan rule for Quantifiers!"
+                "cat(x) and cat(y) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!",
+                "cat(y) and cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!"
             );
             testErrorTwoDirectional(checker,
                 "¬∀x cat(x)",
                 "∃x ¬cat(y)",
-                "cat(x) and cat(y) are not equivalent according to the De Morgan rule for Quantifiers!",
-                "cat(y) and cat(x) are not equivalent according to the De Morgan rule for Quantifiers!"
+                "cat(x) and cat(y) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!",
+                "cat(y) and cat(x) are neither equivalent nor identical according to the De Morgan rule for Quantifiers!"
             );
         });
     });

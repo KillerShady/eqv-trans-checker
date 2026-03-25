@@ -60,7 +60,7 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
             return childrenResults;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Propositional Quantifier Elimination rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!"
         );
     }
 

@@ -50,7 +50,7 @@ class QuantifierEliminationChecker extends TransformationChecker {
             return childrenResults;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Quantifier Elimination rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Quantifier Elimination rule!"
         );
     }
 

@@ -35,28 +35,28 @@ describe("Distributivity Quantifier Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∨ ∀y cat(y))",
                 "(∃x cat(x) ∨ ∃x∀y cat(z))",
-                "cat(y) and cat(z) are not equivalent according to the Distributivity of Quantifiers rule!",
-                "cat(z) and cat(y) are not equivalent according to the Distributivity of Quantifiers rule!"
+                "cat(y) and cat(z) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!",
+                "cat(z) and cat(y) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∧ ∃y cat(y))",
                 "(∀x cat(x) ∧ ∀x∃y cat(z))",
-                "cat(y) and cat(z) are not equivalent according to the Distributivity of Quantifiers rule!",
-                "cat(z) and cat(y) are not equivalent according to the Distributivity of Quantifiers rule!"
+                "cat(y) and cat(z) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!",
+                "cat(z) and cat(y) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!"
             );
         });
         it("Incorrect connective", () => {
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∨ ∀y cat(y))",
                 "(∃x cat(x) ∧ ∃x∀y cat(y))",
-                "∃x (cat(x)  ∨  ∀y cat(y)) and (∃x cat(x)  ∧  ∃x ∀y cat(y)) are not equivalent according to the Distributivity of Quantifiers rule!",
-                "(∃x cat(x)  ∧  ∃x ∀y cat(y)) and ∃x (cat(x)  ∨  ∀y cat(y)) are not equivalent according to the Distributivity of Quantifiers rule!"
+                "∃x (cat(x)  ∨  ∀y cat(y)) and (∃x cat(x)  ∧  ∃x ∀y cat(y)) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!",
+                "(∃x cat(x)  ∧  ∃x ∀y cat(y)) and ∃x (cat(x)  ∨  ∀y cat(y)) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∧ ∃y cat(y))",
                 "(∀x cat(x) ∨ ∀x∃y cat(y))",
-                "∀x (cat(x)  ∧  ∃y cat(y)) and (∀x cat(x)  ∨  ∀x ∃y cat(y)) are not equivalent according to the Distributivity of Quantifiers rule!",
-                "(∀x cat(x)  ∨  ∀x ∃y cat(y)) and ∀x (cat(x)  ∧  ∃y cat(y)) are not equivalent according to the Distributivity of Quantifiers rule!"
+                "∀x (cat(x)  ∧  ∃y cat(y)) and (∀x cat(x)  ∨  ∀x ∃y cat(y)) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!",
+                "(∀x cat(x)  ∨  ∀x ∃y cat(y)) and ∀x (cat(x)  ∧  ∃y cat(y)) are neither equivalent nor identical according to the Distributivity of Quantifiers rule!"
             );
         });
     });

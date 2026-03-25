@@ -82,16 +82,16 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x cat(y)",
                 "cat(x)",
-                "y and x are not equivalent according to the Quantifier Elimination rule!",
-                "y and x are not equivalent according to the Quantifier Elimination rule!"
+                "y and x are neither equivalent nor identical according to the Quantifier Elimination rule!",
+                "y and x are neither equivalent nor identical according to the Quantifier Elimination rule!"
             );
         });
         it("Incorrect quantifier", () => {
             testErrorTwoDirectional(checker,
                 "∃x cat(y)",
                 "∀x cat(x)",
-                "y and x are not equivalent according to the Quantifier Elimination rule!",
-                "x and y are not equivalent according to the Quantifier Elimination rule!"
+                "y and x are neither equivalent nor identical according to the Quantifier Elimination rule!",
+                "x and y are neither equivalent nor identical according to the Quantifier Elimination rule!"
             );
         });
     });

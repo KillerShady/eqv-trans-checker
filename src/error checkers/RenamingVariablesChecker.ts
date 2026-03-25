@@ -23,7 +23,7 @@ class RenamingVariablesChecker extends TransformationChecker {
             return this.checkVariables(original, transformed);
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are not equivalent according to the Renaming Variables rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Renaming Variables rule!"
         );
     }
 
