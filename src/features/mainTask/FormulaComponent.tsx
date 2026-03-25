@@ -11,8 +11,9 @@ import {Button, Dropdown, DropdownButton, Form, InputGroup} from "react-bootstra
 import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {InlineMath} from "react-katex";
 
-export default function FormulaComponent({ TransId, id, canRemove }: { TransId: number; id: number, canRemove: boolean }) {
+export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
     const error = useSelector((state: RootState)  => selectParsedFormula(state, id));
     const transformationError = useSelector((state: RootState)  => selectTransformationError(state, formula.prevFormula, id))
@@ -30,8 +31,10 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
     console.log(isValid);
 
     return (
-        <InputGroup className="mb-3" hasValidation={isValid === false ? true : undefined}>
-            {formula.prevFormula !== undefined && <InputGroup.Text>&lt;==&gt;</InputGroup.Text>}
+        <InputGroup size="sm" className="mb-3" hasValidation={isValid === false ? true : undefined}>
+            {formula.prevFormula !== undefined &&
+                <InputGroup.Text><InlineMath>\Leftrightarrow</InlineMath></InputGroup.Text>
+            }
             <Form.Control value={formula.formula}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
@@ -57,8 +60,10 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
                 <Dropdown.Item eventKey={"RemoveFALSE"}>RemoveFALSE</Dropdown.Item>
              </DropdownButton>
             }
-            <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>+</Button>
-            <Button variant="outline-danger" disabled={!canRemove} onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
+            <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>
+                + Step
+            </Button>
+            <Button variant="outline-danger" onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
                 <FontAwesomeIcon icon={faTrash} />
             </Button>
             <ErrorFeedback error={error.error ?? transformationError.error} text={formula.formula}></ErrorFeedback>

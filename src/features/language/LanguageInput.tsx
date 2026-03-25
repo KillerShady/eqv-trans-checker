@@ -22,7 +22,7 @@ export default function LanguageInput({
     return (
         <>
             {label != "" && (<Form.Label> {label} </Form.Label>)}
-            <InputGroup className="mb-3">
+            <InputGroup size="sm" className="mb-3">
                 <InputGroup.Text>{prefix}</InputGroup.Text>
                 <Form.Control value={text} onChange={onChange} isInvalid={!!error} />
                 <InputGroup.Text>{suffix}</InputGroup.Text>

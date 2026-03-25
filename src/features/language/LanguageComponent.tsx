@@ -7,7 +7,6 @@ import {
     updatePredicates
 } from "./languageSlice.ts";
 import {useDispatch, useSelector} from "react-redux";
-import {Card} from "react-bootstrap";
 import { InlineMath } from "react-katex";
 import LanguageInput from "./LanguageInput.tsx";
 
@@ -25,44 +24,42 @@ export default function LanguageComponent() {
     const dispatch = useDispatch();
 
     return (
-        <Card className="mb-3 mt-3">
-            <Card.Header as="h4">
+        <div>
+            <h4>
                 Language <InlineMath>{String.raw`\mathcal{L}`}</InlineMath>
-            </Card.Header>
-            <Card.Body>
-                <LanguageInput
-                    label={"Individual constants"}
-                    prefix={<InlineMath>{String.raw`\mathcal{C_L} = \{`}</InlineMath>}
-                    suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
-                    text={constantsText}
-                    onChange={e =>
-                        dispatch(updateConstants(e.target.value))
-                    }
-                    error={constantsError.error ?? symbolsClash.constantsClash}
-                />
+            </h4>
+            <LanguageInput
+                label={"Individual constants"}
+                prefix={<InlineMath>{String.raw`\mathcal{C_L} = \{`}</InlineMath>}
+                suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
+                text={constantsText}
+                onChange={e =>
+                    dispatch(updateConstants(e.target.value))
+                }
+                error={constantsError.error ?? symbolsClash.constantsClash}
+            />
 
-                <LanguageInput
-                    label={"Predicate symbols"}
-                    prefix={<InlineMath>{String.raw`\mathcal{P_L} = \{`}</InlineMath>}
-                    suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
-                    text={predicatesText}
-                    onChange={e =>
-                        dispatch(updatePredicates(e.target.value))
-                    }
-                    error={predicatesError.error ?? symbolsClash.predicatesClash}
-                />
+            <LanguageInput
+                label={"Predicate symbols"}
+                prefix={<InlineMath>{String.raw`\mathcal{P_L} = \{`}</InlineMath>}
+                suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
+                text={predicatesText}
+                onChange={e =>
+                    dispatch(updatePredicates(e.target.value))
+                }
+                error={predicatesError.error ?? symbolsClash.predicatesClash}
+            />
 
-                <LanguageInput
-                    label={"Function symbols"}
-                    prefix={<InlineMath>{String.raw`\mathcal{F_L} = \{`}</InlineMath>}
-                    suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
-                    text={functionsText}
-                    onChange={e =>
-                        dispatch(updateFunctions(e.target.value))
-                    }
-                    error={functionsError.error ?? symbolsClash.functionsClash}
-                />
-            </Card.Body>
-        </Card>
+            <LanguageInput
+                label={"Function symbols"}
+                prefix={<InlineMath>{String.raw`\mathcal{F_L} = \{`}</InlineMath>}
+                suffix={<InlineMath>{String.raw`\}`}</InlineMath>}
+                text={functionsText}
+                onChange={e =>
+                    dispatch(updateFunctions(e.target.value))
+                }
+                error={functionsError.error ?? symbolsClash.functionsClash}
+            />
+        </div>
     )
 }

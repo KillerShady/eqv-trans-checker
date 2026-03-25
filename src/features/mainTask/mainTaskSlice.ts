@@ -57,8 +57,8 @@ const MainTaskSlice = createSlice({
     name:"mainTask",
     initialState,
     reducers: {
-        "transSequenceAdded": (state, action) => {
-            state.transSequences.splice(state.transSequences.indexOf(action.payload)+1, 0, state.transSequenceKey);
+        "transSequenceAdded": (state) => {
+            state.transSequences.push(state.transSequenceKey);
             state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
             state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: 'Operation'};
             state.transSequenceKey++;
