@@ -159,16 +159,19 @@ export const selectTransformationError = createSelector(
      (state, _prevId, id) => selectParsedFormula(state, id),
      (state, _prevId, id) => selectFormulaByID(state, id).operation],
     (original, transformed, operation) => {
-        if (!original.parsed || !transformed.parsed) return {}
+        if (!original.parsed || !transformed.parsed) return {validated: false}
         const checker = selectErrorChecker(operation);
-        if (!checker) return {error: new Error("Operation was not selected!")}
+        if (!checker) return {error: new Error("Operation was not selected!"),
+                              validated: true}
         const result = checker.checkForError(original.parsed, transformed.parsed);
-        if (result.isEquivalent()) return {};
+        if (result.isEquivalent()) return {validated: true};
         if (result.isIdentical()) {
-            return {error: new Error("Formula is identical to previous formula!")};
+            return {error: new Error("Formula is identical to previous formula!"),
+                    validated: true};
         }
         console.log(result.errors.length);
-        return {error: result.errors[result.errors.length - 1]};
+        return {error: result.errors[result.errors.length - 1],
+                validated: true};
     }
 )
 

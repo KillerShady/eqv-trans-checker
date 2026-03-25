@@ -21,14 +21,23 @@ export default function FormulaComponent({ TransId, id, canRemove }: { TransId: 
     console.log(formula.prevFormula);
     console.log(transformationError);
     console.log(" ")
+    let isValid: boolean | undefined = undefined;
+    if (error.error !== undefined) {
+        isValid = false;
+    } else if (transformationError.validated) {
+        isValid = transformationError.error === undefined;
+    }
+    console.log(isValid);
 
     return (
-        <InputGroup className="mb-3">
+        <InputGroup className="mb-3" hasValidation={isValid === false ? true : undefined}>
             {formula.prevFormula !== undefined && <InputGroup.Text>&lt;==&gt;</InputGroup.Text>}
-            <Form.Control value={formula.formula} isInvalid={!!(error.error ?? transformationError.error)} onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
+            <Form.Control value={formula.formula}
+                          isValid={isValid}
+                          isInvalid={isValid === undefined ? undefined : !isValid}
+                          onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
             {formula.prevFormula !== undefined &&
              <DropdownButton variant="secondary" title={formula.operation} onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
-                <Dropdown.Item eventKey={"Operation"}>---</Dropdown.Item>
                 <Dropdown.Item eventKey={"Associativity"}>Associativity</Dropdown.Item>
                 <Dropdown.Item eventKey={"Commutativity"}>Commutativity</Dropdown.Item>
                 <Dropdown.Item eventKey={"DeMorganPROP"}>DeMorganPROP</Dropdown.Item>
