@@ -12,7 +12,7 @@ import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {InlineMath} from "react-katex";
-import {EquivalentTransformationsRecord} from "./EquivalentTransfromationsRecord.ts";
+import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
 import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
 
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {

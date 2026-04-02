@@ -1,5 +1,5 @@
 import {Dropdown, OverlayTrigger, Tooltip, type TooltipProps} from "react-bootstrap";
-import {EquivalentTransformationsRecord} from "./EquivalentTransfromationsRecord.ts";
+import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
 import {InlineMath} from "react-katex";
 import type {RefAttributes} from "react";
 import type {JSX} from "react/jsx-runtime";

@@ -3,27 +3,9 @@ import type {RootState} from "../../state/store.ts"
 import {parseFormulaWithPrecedence} from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {selectLanguage} from "../language/languageSlice.ts";
 import {getFactories} from "../../model";
-import TransformationChecker from "../../error checkers/TransformationChecker.ts";
-import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
-import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
-import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
-import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
-import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
-import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
-import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
-import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
-import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
-import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
-import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
-import QuantifierEliminationPropositionalChecker
-    from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
-import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
-import TautologyEliminationChecker from "../../error checkers/TautologyEliminationChecker.ts";
-import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
-import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
-import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
 import {importAppState} from "../import/importExportSlice.ts";
 import type {serializedAppState} from "../import/validationSchema.ts";
+import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
 
 interface transformationState {
     id: number,
@@ -160,7 +142,7 @@ export const selectTransformationError = createSelector(
      (state, _prevId, id) => selectFormulaByID(state, id).operation],
     (original, transformed, operation) => {
         if (!original.parsed || !transformed.parsed) return {validated: false}
-        const checker = selectErrorChecker(operation);
+        const checker = EquivalentTransformationsRecord[operation]?.checker;
         if (!checker) return {error: new Error("Operation was not selected!"),
                               validated: true}
         const result = checker.checkForError(original.parsed, transformed.parsed);
@@ -174,25 +156,3 @@ export const selectTransformationError = createSelector(
                 validated: true};
     }
 )
-
-function selectErrorChecker(operation: string): TransformationChecker | undefined {
-    switch (operation) {
-        case "Associativity": return new AssociativityChecker();
-        case "Commutativity": return new CommutativityChecker();
-        case "DeMorganPROP": return new DeMorganChecker();
-        case "DeMorganQUANT": return new DeMorganQuantifierChecker();
-        case "DeMorganCOMBINED": return new DeMorganCombinedChecker();
-        case "Distributivity": return new DistributivityChecker();
-        case "DistributivityQUANT": return new DistributivityQuantifierChecker();
-        case "DoubleNEG": return new DoubleNegationEliminationChecker();
-        case "RemoveFormula": return new FormulaEliminationChecker();
-        case "RemoveIMPL": return new ImplicationEliminationChecker();
-        case "RemoveQUANT": return new QuantifierEliminationChecker();
-        case "RemoveQUANTPROP": return new QuantifierEliminationPropositionalChecker();
-        case "RenameVAR": return new RenamingVariablesChecker();
-        case "CreateTRUE": return new TautologyCreationChecker();
-        case "RemoveTRUE": return new TautologyEliminationChecker();
-        case "CreateFALSE": return new UnsatisfiableFormulaCreationChecker();
-        case "RemoveFALSE": return new UnsatisfiableFormulaEliminationChecker();
-    }
-}
