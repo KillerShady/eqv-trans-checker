@@ -7,11 +7,13 @@ import {
     selectFormulaByID,
     selectParsedFormula, selectTransformationError
 } from "./mainTaskSlice.ts";
-import {Button, Dropdown, DropdownButton, Form, InputGroup} from "react-bootstrap";
+import {Button, DropdownButton, Form, InputGroup} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {InlineMath} from "react-katex";
+import {EquivalentTransformationsRecord} from "./EquivalentTransfromationsRecord.ts";
+import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
 
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
@@ -40,24 +42,10 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                           isInvalid={isValid === undefined ? undefined : !isValid}
                           onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
             {formula.prevFormula !== undefined &&
-             <DropdownButton variant="secondary" title={formula.operation} onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
-                <Dropdown.Item eventKey={"Associativity"}>Associativity</Dropdown.Item>
-                <Dropdown.Item eventKey={"Commutativity"}>Commutativity</Dropdown.Item>
-                <Dropdown.Item eventKey={"DeMorganPROP"}>DeMorganPROP</Dropdown.Item>
-                <Dropdown.Item eventKey={"DeMorganQUANT"}>DeMorganQUANT</Dropdown.Item>
-                <Dropdown.Item eventKey={"DeMorganCOMBINED"}>DeMorganCOMBINED</Dropdown.Item>
-                <Dropdown.Item eventKey={"Distributivity"}>Distributivity</Dropdown.Item>
-                <Dropdown.Item eventKey={"DistributivityQUANT"}>DistributivityQUANT</Dropdown.Item>
-                <Dropdown.Item eventKey={"DoubleNEG"}>DoubleNEG</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveFormula"}>RemoveFormula</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveIMPL"}>RemoveIMPL</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveQUANT"}>RemoveQUANT</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveQUANTPROP"}>RemoveQUANTPROP</Dropdown.Item>
-                <Dropdown.Item eventKey={"RenameVAR"}>RenameVAR</Dropdown.Item>
-                <Dropdown.Item eventKey={"CreateTRUE"}>CreateTRUE</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveTRUE"}>RemoveTRUE</Dropdown.Item>
-                <Dropdown.Item eventKey={"CreateFALSE"}>CreateFALSE</Dropdown.Item>
-                <Dropdown.Item eventKey={"RemoveFALSE"}>RemoveFALSE</Dropdown.Item>
+             <DropdownButton variant="secondary"
+                             title={EquivalentTransformationsRecord[formula.operation]?.name ?? formula.operation}
+                             onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
+                 {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
              </DropdownButton>
             }
             <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>
