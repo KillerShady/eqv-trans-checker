@@ -48,9 +48,11 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                  {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
              </DropdownButton>
             }
-            <Button variant="success" onClick={() => dispatch(formulaAdded({transformation: TransId, prevFormula:id}))}>
-                + Step
-            </Button>
+            <DropdownButton variant="success"
+                            title="+ Step"
+                            onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
+                {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
+            </DropdownButton>
             <Button variant="outline-danger" onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
                 <FontAwesomeIcon icon={faTrash} />
             </Button>

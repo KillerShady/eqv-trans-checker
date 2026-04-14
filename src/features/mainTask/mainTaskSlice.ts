@@ -52,7 +52,7 @@ const MainTaskSlice = createSlice({
             delete state.transformations[action.payload];
         },
         "formulaAdded": (state, action) => {
-            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: "Operation", prevFormula: action.payload.prevFormula};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: "", operation: action.payload.operation, prevFormula: action.payload.prevFormula};
             const formulas = state.transformations[action.payload.transformation].formulas;
             const index = formulas.indexOf(action.payload.prevFormula);
             if (index < formulas.length - 1) {
