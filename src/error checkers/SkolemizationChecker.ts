@@ -48,7 +48,7 @@ class SkolemizationChecker extends TransformationChecker {
             }
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Skolemization rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equisatisfiable nor identical according to the Skolemization rule!"
         );
     }
 
@@ -75,7 +75,7 @@ class SkolemizationChecker extends TransformationChecker {
             return result;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Skolemization rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equisatisfiable nor identical according to the Skolemization rule!"
         );
     }
 
