@@ -104,7 +104,7 @@ export const selectFunctionsError = createSelector(
     (functions) => getFunctionsError(functions)
 )
 
-export const getConstantsError = (constants: string) => {
+const getConstantsError = (constants: string) => {
     try {
         const parsed = parseConstants(constants);
         parsed.forEach((element) => {
@@ -120,7 +120,7 @@ export const getConstantsError = (constants: string) => {
         throw error;
     }
 }
-export const getPredicatesError = (predicates: string) => {
+const getPredicatesError = (predicates: string) => {
     try {
         const parsed = parsePredicates(predicates);
         parsed.forEach((element) => {
@@ -136,7 +136,7 @@ export const getPredicatesError = (predicates: string) => {
         throw error;
     }
 }
-export const getFunctionsError = (functions: string) => {
+const getFunctionsError = (functions: string) => {
     try {
         const parsed = parseFunctions(functions);
         parsed.forEach((element) => {
@@ -186,12 +186,24 @@ export const selectSymbolsClash = createSelector(
 );
 
 export const selectLanguage = createSelector(
-    [selectParsedConstants, selectParsedPredicates, selectParsedFunctions],
-    (consts, preds, funcs) => {
-        const constants = new Set(consts);
+    [selectParsedConstants, selectParsedPredicates, selectParsedFunctions,
+     (_state, skolems) => skolems],
+    (consts, preds, funcs, skolems) => {
+        const constants = new Set([...consts, ...skolems.constants]);
         const predicates = new Map(preds.map(({ name, arity }) => [name, arity]));
-        const functions = new Map(funcs.map(({ name, arity }) => [name, arity]));
+        const functions = new Map([...funcs, ...skolems.functions].map(({ name, arity }) => [name, arity]));
 
         return new Language(constants, predicates, functions);
     }
 );
+
+export const selectAllLanguageSymbols = createSelector(
+    [selectParsedConstants, selectParsedPredicates, selectParsedFunctions],
+    (consts, preds, funcs) => {
+        const languageSymbols: Set<string> = new Set(consts);
+        preds.forEach(pred => {languageSymbols.add(pred.name)});
+        funcs.forEach(func => {languageSymbols.add(func.name)});
+
+        return languageSymbols;
+    }
+)
