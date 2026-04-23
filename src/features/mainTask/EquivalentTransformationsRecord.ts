@@ -17,6 +17,7 @@ import DistributivityChecker from "../../error checkers/DistributivityChecker.ts
 import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
 import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
 import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
+import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 
 interface EquivalentTransformationData {
     key: string,
@@ -115,6 +116,13 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         name: "Renaming Variables",
         tex: "\\exists x A \\Leftrightarrow \\exists y A\\{x \\mapsto y\\}\\\\\\forall x A \\Leftrightarrow \\forall y A\\{x \\mapsto y\\}",
         checker: new RenamingVariablesChecker(),
+        help: ""
+    },
+    "Skolem": {
+        key: "Skolem",
+        name: "Skolemization",
+        tex: "...\\forall x_1 (...\\forall x_n ...(\\exists y A)...)... \\Rightarrow \\\\ A \\{ y \\mapsto f(x_1,...,x_n) \\}",
+        checker: new SkolemizationChecker(),
         help: ""
     },
     "CreateTRUE": {

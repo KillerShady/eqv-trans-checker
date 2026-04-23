@@ -5,7 +5,10 @@ import {
     formulaModified,
     formulaRemoved,
     selectFormulaByID,
-    selectParsedFormula, selectTransformationError
+    selectParsedFormula, selectTransformationError,
+    updateSkolemSymbols,
+    selectSkolemSymbolsErrorByID,
+    selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash
 } from "./mainTaskSlice.ts";
 import {Button, DropdownButton, Form, InputGroup} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
@@ -17,15 +20,20 @@ import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
 
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
-    const error = useSelector((state: RootState)  => selectParsedFormula(state, id));
-    const transformationError = useSelector((state: RootState)  => selectTransformationError(state, formula.prevFormula, id))
+    const skolemSymbols = useSelector((state: RootState) => selectSkolemSymbolsTextByID(state, id));
+    const error = useSelector((state: RootState)  => selectParsedFormula(state, TransId, id));
+    const transformationError = useSelector((state: RootState)  => selectTransformationError(state, TransId, formula.prevFormula, id));
+    const skolemError = useSelector((state: RootState) => selectSkolemSymbolsErrorByID(state, id));
+    const skolemSymbolClash = useSelector((state: RootState) => selectSkolemConstantSymbolsClash(state, id));
     const dispatch = useDispatch();
     console.log("drawing line", id, "in", TransId);
-    console.log(formula.prevFormula);
-    console.log(transformationError);
+    console.log("prevFormula", formula.prevFormula);
+    console.log("transformationError", transformationError);
+    console.log("skolemError", skolemError);
+    console.log("skolemError", skolemSymbolClash);
     console.log(" ")
     let isValid: boolean | undefined = undefined;
-    if (error.error !== undefined) {
+    if (error.error !== undefined || skolemError.error !== undefined || skolemSymbolClash !== undefined) {
         isValid = false;
     } else if (transformationError.validated) {
         isValid = transformationError.error === undefined;
@@ -40,7 +48,15 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
             <Form.Control value={formula.formula}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
-                          onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))} />
+                          onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))}
+            />
+            {formula.operation === 'Skolem' &&
+             <Form.Control placeholder="Skolem constants and functions"
+                           value={skolemSymbols}
+                           isInvalid={skolemError.error !== undefined || skolemSymbolClash !== undefined}
+                           onChange={(e) => dispatch(updateSkolemSymbols({id: id, skolemSymbols:e.target.value}))}
+             />
+            }
             {formula.prevFormula !== undefined &&
              <DropdownButton variant="secondary"
                              title={EquivalentTransformationsRecord[formula.operation]?.name ?? formula.operation}
@@ -57,6 +73,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                 <FontAwesomeIcon icon={faTrash} />
             </Button>
             <ErrorFeedback error={error.error ?? transformationError.error} text={formula.formula}></ErrorFeedback>
+            <ErrorFeedback error={skolemError.error ?? skolemSymbolClash} text={skolemSymbols}></ErrorFeedback>
         </InputGroup>
     );
 }

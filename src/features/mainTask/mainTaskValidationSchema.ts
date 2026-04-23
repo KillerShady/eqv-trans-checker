@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {symbolWithAritySchema} from "../language/languageValidationSchema.ts";
 
 const transformationStateSchema = z.object({
     id: z.number(),
@@ -10,6 +11,11 @@ const formulaStateSchema = z.object({
     operation: z.string(),
     prevFormula: z.number().optional(),
 });
+const skolemSymbolsStateSchema = z.object({
+    text: z.string(),
+    constants: z.array(z.string()),
+    functions: z.array(symbolWithAritySchema),
+})
 
 export const serializedMainTaskStateSchema = z.object({
     transSequences: z.array(z.number()),
@@ -17,6 +23,7 @@ export const serializedMainTaskStateSchema = z.object({
     transformations: z.record(z.number(), transformationStateSchema),
     formulas: z.record(z.number(), formulaStateSchema),
     formulasKey: z.number(),
+    skolemSymbols: z.record(z.number(), skolemSymbolsStateSchema),
 }).superRefine((mainTask, context) => {
     for (const sequence of mainTask.transSequences) {
         if (! (sequence in mainTask.transSequences)) {
