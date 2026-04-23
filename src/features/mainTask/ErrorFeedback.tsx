@@ -31,10 +31,10 @@ export default function ErrorFeedback({ error, text }: Props) {
     }
     return (
         <Form.Control.Feedback type="invalid">
-            {error.message}
             {error instanceof SyntaxError && (
                 <LocationDisplay location={error.location} text={text} />
             )}
+            {error.message}
         </Form.Control.Feedback>
     );
 }
