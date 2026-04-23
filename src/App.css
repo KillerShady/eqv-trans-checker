@@ -56,3 +56,7 @@
 .tooltip-inner {
     --bs-tooltip-max-width: 20rem;
 }
+
+.skolem-symbol-input {
+    max-width: 25%;
+}

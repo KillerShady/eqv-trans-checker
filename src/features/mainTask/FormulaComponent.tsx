@@ -43,15 +43,20 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     return (
         <InputGroup size="sm" className="mb-3" hasValidation={isValid === false ? true : undefined}>
             {formula.prevFormula !== undefined &&
-                <InputGroup.Text><InlineMath>\Leftrightarrow</InlineMath></InputGroup.Text>
+                <InputGroup.Text>
+                    <InlineMath>
+                        {formula.operation === "Skolem" ? "\\leftrightsquigarrow" : "\\Leftrightarrow"}
+                    </InlineMath>
+                </InputGroup.Text>
             }
             <Form.Control value={formula.formula}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
                           onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))}
             />
-            {formula.operation === 'Skolem' &&
-             <Form.Control placeholder="Skolem constants and functions"
+            {formula.operation === "Skolem" &&
+             <Form.Control className="skolem-symbol-input"
+                           placeholder="constant, function/arity, ..."
                            value={skolemSymbols}
                            isInvalid={skolemError.error !== undefined || skolemSymbolClash !== undefined}
                            onChange={(e) => dispatch(updateSkolemSymbols({id: id, skolemSymbols:e.target.value}))}
