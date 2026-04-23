@@ -1,6 +1,4 @@
 import Expression from "../Expression.ts";
-import {type Symbol} from "../Language.ts";
-import { Structure, type Valuation } from "../Structure.ts";
 
 export enum SignedFormulaType {
   ALPHA = "alpha",
@@ -43,7 +41,32 @@ abstract class Formula extends Expression {
     return `(${this.getSubFormulas().join(` ${this.connectiveTex} `)})`;
   }
 
-  gameDepth(sign: boolean): number {
+  abstract flatten(): Formula;
+
+  compare(other: Expression): number {
+    const constructorA = this.constructor.name;
+    const constructorB = other.constructor.name;
+    if (! (other instanceof Formula)) {
+      return constructorA === constructorB ? 0 :
+             constructorA < constructorB ? -1 : 1;
+    }
+    if (constructorA !== constructorB) {
+      return constructorA < constructorB ? -1 : 1;
+    }
+
+    if (this.subFormulas.length !== other.subFormulas.length) {
+      return this.subFormulas.length < other.subFormulas.length ? -1 : 1;
+    }
+    for (let i = 0; i < this.subFormulas.length; i++) {
+        const comparison = this.subFormulas[i].compare(other.subFormulas[i]);
+        if (comparison !== 0) {
+            return comparison;
+        }
+    }
+    return 0;
+  }
+
+  /*gameDepth(sign: boolean): number {
     return Math.max(
       ...this.getSignedSubFormulas(sign).map(({ formula: f }) =>
         f.gameDepth(sign)
@@ -119,7 +142,7 @@ abstract class Formula extends Expression {
       if (!this.subFormulas[i].equals(other.subFormulas[i])) return false;
     }
     return true;
-  }
+  }*/
 
 }
 

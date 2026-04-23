@@ -1,5 +1,4 @@
-import Structure, { type Valuation } from "../Structure.ts";
-import Formula, { SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
 import QuantifiedFormula from "./QuantifiedFormula.ts";
 
 /**
@@ -19,12 +18,17 @@ class ExistentialQuant extends QuantifiedFormula {
     super(variableName, subFormula, "∃", "\\exists");
   }
 
-  /**
+  flatten() {
+    return new ExistentialQuant(this.variableName, this.subFormula.flatten());
+  }
+
+  /*
+  **
    *
    * @param {Structure} structure
    * @param {Map} e
    * @return {boolean}
-   */
+   *
   eval(structure: Structure, e: Valuation): boolean {
     let eCopy = new Map(e);
 
@@ -43,7 +47,7 @@ class ExistentialQuant extends QuantifiedFormula {
 
   getSignedType(sign: boolean): SignedFormulaType {
     return sign ? SignedFormulaType.DELTA : SignedFormulaType.GAMMA;
-  }
+  }*/
 }
 
 export default ExistentialQuant;

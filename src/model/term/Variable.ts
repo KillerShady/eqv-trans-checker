@@ -1,6 +1,7 @@
 import type { Symbol } from "../Language.ts";
-import { Structure, type Valuation, type DomainElement } from "../Structure.ts";
+import { type DomainElement } from "../Structure.ts";
 import Term from "./Term.ts";
+import type Expression from "../Expression.ts";
 
 /**
  * Variable
@@ -19,21 +20,6 @@ class Variable extends Term {
   }
 
   /**
-   * Return intepretation of variable.
-   * @param {Structure} structure
-   * @param {Map} e variables valuation
-   * @return {DomainElement} domain item
-   */
-  eval(_: Structure, e: Valuation): DomainElement {
-    const v = e.get(this.name);
-    if (v === undefined) {
-      throw new Error(`The variable ${this.name} is free,
-        but it is not assigned any value by the variable assignment 𝑒.`);
-    }
-    return v;
-  }
-
-  /**
    * Return string representation of variable
    * @returns {DomainElement}
    */
@@ -45,17 +31,45 @@ class Variable extends Term {
     return this.toString();
   }
 
-  createCopy(): Variable {
-    return new Variable(this.name);
+  flatten() {
+    return new Variable(this.name)
   }
 
-  getVariables(): Set<Symbol> {
-    return new Set([this.name]);
+  compare(other: Expression): number {
+    if (! (other instanceof Variable)) {
+      return this.constructor.name === other.constructor.name ? 0 :
+             this.constructor.name < other.constructor.name ? -1 : 1;
+    }
+    return this.name === other.name ? 0 : this.name < other.name ? -1 : 1;
   }
 
-  equals(other: Term): boolean {
-    return other instanceof Variable && this.name === other.name;
-  }
+    /*
+      **
+       * Return intepretation of variable.
+       * @param {Structure} structure
+       * @param {Map} e variables valuation
+       * @return {DomainElement} domain item
+       *
+      eval(_: Structure, e: Valuation): DomainElement {
+        const v = e.get(this.name);
+        if (v === undefined) {
+          throw new Error(`The variable ${this.name} is free,
+            but it is not assigned any value by the variable assignment 𝑒.`);
+        }
+        return v;
+      }
+
+      createCopy(): Variable {
+        return new Variable(this.name);
+      }
+
+      getVariables(): Set<Symbol> {
+        return new Set([this.name]);
+      }
+
+      equals(other: Term): boolean {
+        return other instanceof Variable && this.name === other.name;
+      }*/
 }
 
 export default Variable;

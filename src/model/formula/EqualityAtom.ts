@@ -1,6 +1,6 @@
-import Structure, { type Valuation } from "../Structure.ts";
 import Term from "../term/Term.ts";
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
+import type Expression from "../Expression.ts";
 
 /**
  * Represent equality symbol
@@ -21,16 +21,6 @@ class EqualityAtom extends Formula {
 
   /**
    *
-   * @param {Structure} structure
-   * @param {Map} e
-   * @return {boolean}
-   */
-  eval(structure: Structure, e: Valuation): boolean {
-    return this.subLeft.eval(structure, e) === this.subRight.eval(structure, e);
-  }
-
-  /**
-   *
    * @returns {string}
    */
   toString(): string {
@@ -41,9 +31,35 @@ class EqualityAtom extends Formula {
     return this.toString();
   }
 
-  getSubFormulas() {
-    return [];
+  flatten() {
+    return new EqualityAtom(this.subLeft.flatten(), this.subRight.flatten());
   }
+
+  compare(other: Expression): number {
+    const constructorA = this.constructor.name;
+    const constructorB = other.constructor.name;
+    if (! (other instanceof EqualityAtom)) {
+      return constructorA === constructorB ? 0 :
+             constructorA < constructorB ? -1 : 1;
+    }
+    const comparisonLeft = this.subLeft.compare(other.subLeft);
+    if (comparisonLeft !== 0) {
+      return comparisonLeft;
+    }
+    return this.subRight.compare(other.subRight);
+  }
+
+  /*
+  **
+   *
+   * @param {Structure} structure
+   * @param {Map} e
+   * @return {boolean}
+   *
+  eval(structure: Structure, e: Valuation): boolean {
+    return this.subLeft.eval(structure, e) === this.subRight.eval(structure, e);
+  }
+
 
   getSignedType(_sign: boolean): SignedFormulaType {
     return SignedFormulaType.ALPHA;
@@ -51,7 +67,7 @@ class EqualityAtom extends Formula {
 
   getSignedSubFormulas(_sign: boolean): SignedFormula[] {
     return [];
-  }
+  }*/
 }
 
 export default EqualityAtom;

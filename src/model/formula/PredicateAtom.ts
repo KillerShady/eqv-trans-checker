@@ -1,6 +1,6 @@
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
 import Term from "../term/Term.ts";
-import Structure, { type Valuation } from "../Structure.ts";
+import type Expression from "../Expression.ts";
 
 /**
  * Represent predicate symbol
@@ -21,10 +21,53 @@ class PredicateAtom extends Formula {
 
   /**
    *
+   * @returns {string}
+   */
+  toString(): string {
+    return `${this.name}(${this.terms.join(", ")})`;
+  }
+
+  toTex(): string {
+    return this.toString();
+  }
+
+  flatten() {
+    const copiedTerms: Term[] = [];
+    for (let i = 0; i < this.terms.length; i++) {
+      copiedTerms.push(this.terms[i].flatten());
+    }
+    return new PredicateAtom(this.name, copiedTerms)
+  }
+
+  compare(other: Expression): number {
+    const constructorA = this.constructor.name;
+    const constructorB = other.constructor.name;
+    if (! (other instanceof PredicateAtom)) {
+      return constructorA === constructorB ? 0 :
+             constructorA < constructorB ? -1 : 1;
+    }
+    if (this.name !== other.name) {
+       return this.name < other.name ? -1 : 1;
+    }
+    if (this.terms.length !== other.terms.length) {
+      return this.terms.length < other.terms.length ? -1 : 1;
+    }
+    for (let i = 0; i < this.terms.length; i++) {
+        const comparison = this.terms[i].compare(other.terms[i]);
+        if (comparison !== 0) {
+            return comparison;
+        }
+    }
+    return 0;
+  }
+
+  /*
+  **
+   *
    * @param {Structure} structure
    * @param {Map} e
    * @return {boolean}
-   */
+   *
   eval(structure: Structure, e: Valuation): boolean {
     let translatedTerms: string[] = [];
     try {
@@ -61,22 +104,6 @@ class PredicateAtom extends Formula {
     //return interpretation.has(translatedTerms);
   }
 
-  /**
-   *
-   * @returns {string}
-   */
-  toString(): string {
-    return `${this.name}(${this.terms.join(", ")})`;
-  }
-
-  toTex(): string {
-    return this.toString();
-  }
-
-  getSubFormulas(): Formula[] {
-    return [];
-  }
-
   getSignedType(_: boolean): SignedFormulaType {
     return SignedFormulaType.ALPHA;
   }
@@ -106,7 +133,7 @@ class PredicateAtom extends Formula {
       if (!this.terms[i].equals(other.terms[i])) return false;
     }
     return true;
-  }
+  }*/
 }
 
 export default PredicateAtom;
