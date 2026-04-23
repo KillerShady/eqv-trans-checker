@@ -1,6 +1,6 @@
 import {z} from "zod";
 
-const symbolWithAritySchema = z.object({
+export const symbolWithAritySchema = z.object({
     name: z.string(),
     arity: z.number(),
 })
