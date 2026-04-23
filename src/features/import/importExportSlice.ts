@@ -40,7 +40,7 @@ export const exportAppState =
 
         const downloadLink = document.createElement("a");
         downloadLink.href = downloadURL;
-        downloadLink.download = "eqv-transformation-checker.json";
+        downloadLink.download = "eqv-trans-checker.json";
         downloadLink.click();
 
         URL.revokeObjectURL(downloadURL);
