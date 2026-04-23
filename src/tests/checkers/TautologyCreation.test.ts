@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "./testUtils.ts"
-import TautologyCreationChecker from "../error checkers/TautologyCreationChecker.ts";
+} from "../testUtils.ts"
+import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
     const checker = new TautologyCreationChecker();

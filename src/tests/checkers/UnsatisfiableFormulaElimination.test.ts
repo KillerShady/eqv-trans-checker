@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "./testUtils.ts"
-import UnsatisfiableFormulaEliminationChecker from "../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
+} from "../testUtils.ts"
+import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
 
 describe("Unsatisfiable Formula Elimination Checker", () => {
     const checker = new UnsatisfiableFormulaEliminationChecker();

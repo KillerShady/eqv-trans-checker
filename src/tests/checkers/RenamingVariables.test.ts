@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
-import RenamingVariablesChecker from "../error checkers/RenamingVariablesChecker.ts";
-import {testEquivalent, testError, testIdentical} from "./testUtils.ts"
+import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
+import {testEquivalent, testError, testIdentical} from "../testUtils.ts"
 
 describe("Renaming Variables Checker", () => {
     const checker = new RenamingVariablesChecker();

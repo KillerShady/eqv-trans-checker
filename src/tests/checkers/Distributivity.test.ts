@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "./testUtils.ts";
-import DistributivityChecker from "../error checkers/DistributivityChecker.ts";
+} from "../testUtils.ts";
+import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
 
 describe("Distributivity Checker", () => {
     const checker = new DistributivityChecker();

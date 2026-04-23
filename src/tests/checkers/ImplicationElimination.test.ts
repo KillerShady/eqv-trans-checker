@@ -1,10 +1,10 @@
 import {describe, it} from "vitest";
-import ImplicationEliminationChecker from "../error checkers/ImplicationEliminationChecker.ts";
+import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
 import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "./testUtils.ts";
+} from "../testUtils.ts";
 
 describe("Implication Elimination Checker", () => {
     const checker = new ImplicationEliminationChecker();

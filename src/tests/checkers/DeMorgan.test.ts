@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "./testUtils.ts";
-import DeMorganChecker from "../error checkers/DeMorganChecker.ts";
+} from "../testUtils.ts";
+import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
 
 describe("De Morgan Checker", () => {
     const checker = new DeMorganChecker();
