@@ -18,6 +18,7 @@ import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecke
 import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
 import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
 import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
+import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 
 interface EquivalentTransformationData {
     key: string,
@@ -32,6 +33,13 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         name: "Associativity",
         tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C)\\\\(A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
         checker: new AssociativityChecker(),
+        help: ""
+    },
+    "Reorder": {
+        key: "Reorder",
+        name: "A&C",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C)\\\\(A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)\\\\(A \\land B) \\Leftrightarrow (B \\land A)\\\\(A \\lor B) \\Leftrightarrow (B \\lor A)",
+        checker: new ReorderingChecker(),
         help: ""
     },
     "Commutativity": {
