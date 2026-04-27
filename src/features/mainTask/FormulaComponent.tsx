@@ -10,13 +10,15 @@ import {
     selectSkolemSymbolsErrorByID,
     selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash
 } from "./mainTaskSlice.ts";
-import {Button, DropdownButton, Form, InputGroup} from "react-bootstrap";
+import {Button, DropdownButton, Form, InputGroup, OverlayTrigger, Tooltip, type TooltipProps} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {InlineMath} from "react-katex";
 import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
 import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
+import type {JSX} from "react/jsx-runtime";
+import type {RefAttributes} from "react";
 
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
@@ -31,7 +33,15 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     console.log("transformationError", transformationError);
     console.log("skolemError", skolemError);
     console.log("skolemError", skolemSymbolClash);
-    console.log(" ")
+    console.log(" ");
+
+    const renderTooltip = (props: JSX.IntrinsicAttributes & TooltipProps & RefAttributes<HTMLDivElement>) => (
+        <Tooltip {...props}>
+            <small>{EquivalentTransformationsRecord[formula.operation].name}</small><br/>
+            <small><InlineMath>{EquivalentTransformationsRecord[formula.operation].tex}</InlineMath></small>
+        </Tooltip>
+    );
+
     let isValid: boolean | undefined = undefined;
     if (error.error !== undefined || skolemError.error !== undefined || skolemSymbolClash !== undefined) {
         isValid = false;
@@ -63,14 +73,22 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
              />
             }
             {formula.prevFormula !== undefined &&
-             <DropdownButton variant="secondary"
-                             title={EquivalentTransformationsRecord[formula.operation]?.name ?? formula.operation}
-                             onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
-                 {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
-             </DropdownButton>
+                <DropdownButton className="operation-selection text-truncate"
+                                variant="secondary"
+                                title={
+                    <OverlayTrigger placement="top" overlay={renderTooltip} show={EquivalentTransformationsRecord[formula.operation] === undefined ? false: undefined}>
+                        <span className="text-truncate">{EquivalentTransformationsRecord[formula.operation]?.name ?? formula.operation}</span>
+                    </OverlayTrigger>
+                                }
+                                onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
+                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
+                </DropdownButton>
+
             }
             <DropdownButton variant="success"
-                            title="+ Step"
+                            title={
+                                <>+<span className="step"> Step</span></>
+                            }
                             onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
                 {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
             </DropdownButton>
