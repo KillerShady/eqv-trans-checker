@@ -1,15 +1,22 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {combineReducers, configureStore, type Middleware} from '@reduxjs/toolkit';
 import languageReducer from "../features/language/languageSlice.ts";
 import mainTaskReducer from "../features/mainTask/mainTaskSlice.ts";
-import importExportSlice from "../features/import/importExportSlice.ts";
+import importExportReducer from "../features/import/importExportSlice.ts";
 
-export const store = configureStore({
-    reducer: {
-        language: languageReducer,
-        mainTask: mainTaskReducer,
-        importExport: importExportSlice,
-    }
+const reducer = combineReducers({
+    language: languageReducer,
+    mainTask: mainTaskReducer,
+    importExport: importExportReducer,
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store['dispatch'];
+export const createStore = (middleware?: Middleware) =>
+    configureStore({
+        reducer: reducer,
+        middleware: (getDefaultMiddleware) =>
+            middleware ? getDefaultMiddleware().concat(middleware) : getDefaultMiddleware()
+        ,
+    });
+
+export type RootState = ReturnType<typeof reducer>;
+export type AppState = ReturnType<typeof createStore>;
+export type AppDispatch = AppState["dispatch"];

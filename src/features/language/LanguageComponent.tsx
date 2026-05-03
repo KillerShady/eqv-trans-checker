@@ -9,6 +9,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import { InlineMath } from "react-katex";
 import LanguageInput from "./LanguageInput.tsx";
+import {useUpdateLanguageContext} from "../../LogicContext.ts";
 
 
 export default function LanguageComponent() {
@@ -19,6 +20,7 @@ export default function LanguageComponent() {
     const predicatesError = useSelector(selectPredicatesError);
     const functionsError = useSelector(selectFunctionsError);
     const symbolsClash = useSelector(selectSymbolsClash);
+    const hasContext = useUpdateLanguageContext();
     console.log("drawing language");
 
     const dispatch = useDispatch();
@@ -37,6 +39,7 @@ export default function LanguageComponent() {
                     dispatch(updateConstants(e.target.value))
                 }
                 error={constantsError.error ?? symbolsClash.constantsClash}
+                disabled={hasContext}
             />
 
             <LanguageInput
@@ -48,6 +51,7 @@ export default function LanguageComponent() {
                     dispatch(updatePredicates(e.target.value))
                 }
                 error={predicatesError.error ?? symbolsClash.predicatesClash}
+                disabled={hasContext}
             />
 
             <LanguageInput
@@ -59,6 +63,7 @@ export default function LanguageComponent() {
                     dispatch(updateFunctions(e.target.value))
                 }
                 error={functionsError.error ?? symbolsClash.functionsClash}
+                disabled={hasContext}
             />
         </div>
     )

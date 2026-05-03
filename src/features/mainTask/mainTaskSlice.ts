@@ -25,6 +25,7 @@ interface formulaState {
     formula: string,
     operation: string,
     prevFormula?: number,
+    name?: string,
 }
 
 interface skolemSymbolsState {
@@ -39,7 +40,8 @@ interface MainTaskState {
     transformations: Record<number, transformationState>;
     formulas: Record<number, formulaState>;
     formulasKey: number;
-    skolemSymbols: Record<number, skolemSymbolsState>
+    skolemSymbols: Record<number, skolemSymbolsState>;
+    contextFormulaNames: string[];
 }
 
 const initialState: MainTaskState = {
@@ -49,6 +51,7 @@ const initialState: MainTaskState = {
     formulas: {0: {id: 0, formula: "", operation: 'Operation'}},
     formulasKey: 1,
     skolemSymbols: {},
+    contextFormulaNames: [],
 }
 
 const MainTaskSlice = createSlice({
@@ -65,6 +68,13 @@ const MainTaskSlice = createSlice({
         "transSequenceRemoved": (state, action) => {
             state.transSequences.splice(state.transSequences.indexOf(action.payload), 1);
             state.transformations[action.payload].formulas.forEach((formula) => {
+                const name = state.formulas[formula].name;
+                if (name !== undefined) {
+                    const nameIndex = state.contextFormulaNames.indexOf(name);
+                    if (nameIndex > -1) {
+                        state.contextFormulaNames.splice(nameIndex, 1);
+                    }
+                }
                 delete state.formulas[formula];
                 delete state.skolemSymbols[formula];
             });
@@ -93,6 +103,13 @@ const MainTaskSlice = createSlice({
                 state.formulas[formulas[index + 1]].prevFormula = state.formulas[action.payload.id].prevFormula;
             }
             formulas.splice(index, 1);
+            const name = state.formulas[action.payload.id].name;
+            if (name !== undefined) {
+                const nameIndex = state.contextFormulaNames.indexOf(name);
+                if (nameIndex > -1) {
+                    state.contextFormulaNames.splice(nameIndex, 1);
+                }
+            }
             delete state.formulas[action.payload.id];
             delete state.skolemSymbols[action.payload.id];
         },
@@ -107,7 +124,7 @@ const MainTaskSlice = createSlice({
             }
             state.formulas[action.payload.id].operation = action.payload.operation;
         },
-        "updateSkolemSymbols": (state, action) => {
+        "skolemSymbolsUpdated": (state, action) => {
             state.skolemSymbols[action.payload.id].text = action.payload.skolemSymbols;
             const parsed = getSkolemSymbolsError(action.payload.skolemSymbols);
             if (parsed.parsed) {
@@ -118,6 +135,36 @@ const MainTaskSlice = createSlice({
                 state.skolemSymbols[action.payload.id].functions =
                     parsed.parsed
                         .filter((skolem) => skolem.arity !== 0);
+            }
+        },
+        "contextFormulaAdded": (state, action) => {
+            state.transSequences.push(state.transSequenceKey);
+            state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
+            state.formulas[state.formulasKey] = {id: state.formulasKey, formula: action.payload.formula, operation: 'Operation', name: action.payload.name};
+            state.transSequenceKey++;
+            state.formulasKey++;
+            state.contextFormulaNames.push(action.payload.name);
+        },
+        "allContextFormulasAdded": (state, action) => {
+            for (const formula of action.payload) {
+                state.transSequences.push(state.transSequenceKey);
+                state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
+                state.formulas[state.formulasKey] = {id: state.formulasKey, formula: formula.formula, operation: 'Operation', name: formula.name};
+                state.transSequenceKey++;
+                state.formulasKey++;
+                state.contextFormulaNames.push(formula.name);
+            }
+        },
+        "contextFormulasUpdated": (state, action) => {
+            for (const transId of state.transSequences) {
+                const formulaId = state.transformations[transId].formulas[0];
+                const formulaName = state.formulas[formulaId].name;
+                if (formulaName !== undefined) {
+                    const formulaText = action.payload[formulaName];
+                    if (formulaText !== undefined) {
+                        state.formulas[formulaId].formula = formulaText;
+                    }
+                }
             }
         },
     },
@@ -134,9 +181,14 @@ const MainTaskSlice = createSlice({
             importedState.transSequenceKey = Math.max(...importedState.transSequences)+1;
 
             const seenFormulas = new Set<number>();
+            const seenContextFormulas: string[] = [];
             const seenSkolemFormulas = new Set<number>();
             let maxFormulasKey = 0;
             for (const transformation of Object.values(importedState.transformations)) {
+                const contextName = importedState.formulas[transformation.formulas[0]].name;
+                if (contextName !== undefined) {
+                    seenContextFormulas.push(contextName);
+                }
                 for (const formula of transformation.formulas) {
                     seenFormulas.add(formula);
                     maxFormulasKey = Math.max(maxFormulasKey, formula);
@@ -161,14 +213,15 @@ const MainTaskSlice = createSlice({
                 }
             }
             importedState.formulasKey = maxFormulasKey+1;
-
+            importedState.contextFormulaNames = seenContextFormulas;
             return importedState;
         })
     },
 });
 
 export const {transSequenceAdded, transSequenceRemoved, formulaAdded,
-              formulaRemoved, formulaModified, updateSkolemSymbols} = MainTaskSlice.actions;
+              formulaRemoved, formulaModified, skolemSymbolsUpdated,
+              contextFormulaAdded, allContextFormulasAdded, contextFormulasUpdated} = MainTaskSlice.actions;
 export default MainTaskSlice.reducer;
 
 export const selectTransSequences = (state: RootState) =>
@@ -177,10 +230,14 @@ export const selectTransformations = (state: RootState, id: number) =>
     state.mainTask.transformations[id].formulas;
 export const selectFormulaByID = (state: RootState, id: number) =>
     state.mainTask.formulas[id];
+export const selectAllFormulas = (state: RootState) =>
+    state.mainTask.formulas;
 export const selectSkolemSymbols = (state: RootState) =>
     state.mainTask.skolemSymbols;
 export const selectSkolemSymbolsTextByID = (state: RootState, id: number) =>
     state.mainTask.skolemSymbols[id]?.text;
+export const selectContextFormulasNames = (state: RootState) =>
+    state.mainTask.contextFormulaNames;
 
 export const selectParsedSkolemSymbolsByIDs = createSelector(
     [selectTransformations, selectSkolemSymbols, (_state, _TransId, id) => id],
@@ -197,7 +254,7 @@ export const selectParsedSkolemSymbolsByIDs = createSelector(
         }
         return result;
     }
-)
+);
 
 export const selectParsedFormula = createSelector(
     [(state, _TransId, id) => selectFormulaByID(state, id),
@@ -217,7 +274,7 @@ export const selectParsedFormula = createSelector(
             throw error;
         }
     }
-)
+);
 
 export const selectTransformationError = createSelector(
     [(state, TransId, prevId) => selectParsedFormula(state, TransId, prevId),
@@ -242,7 +299,7 @@ export const selectTransformationError = createSelector(
         return {error: result.errors[result.errors.length - 1],
                 validated: true};
     }
-)
+);
 
 export const selectSkolemSymbolsErrorByID = createSelector(
     [selectSkolemSymbolsTextByID],
@@ -267,7 +324,7 @@ const getSkolemSymbolsError = (skolemSymbols: string) => {
         }
         throw error;
     }
-}
+};
 
 export const selectSkolemConstantSymbolsClash = createSelector(
     [selectAllLanguageSymbols,
@@ -308,4 +365,4 @@ export const selectSkolemConstantSymbolsClash = createSelector(
 
         return undefined;
     }
-)
+);

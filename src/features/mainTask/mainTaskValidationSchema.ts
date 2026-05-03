@@ -10,6 +10,7 @@ const formulaStateSchema = z.object({
     formula: z.string(),
     operation: z.string(),
     prevFormula: z.number().optional(),
+    name: z.string().optional(),
 });
 const skolemSymbolsStateSchema = z.object({
     text: z.string(),
@@ -24,9 +25,10 @@ export const serializedMainTaskStateSchema = z.object({
     formulas: z.record(z.number(), formulaStateSchema),
     formulasKey: z.number(),
     skolemSymbols: z.record(z.number(), skolemSymbolsStateSchema),
+    contextFormulaNames: z.array(z.string()),
 }).superRefine((mainTask, context) => {
     for (const sequence of mainTask.transSequences) {
-        if (! (sequence in mainTask.transSequences)) {
+        if (! (sequence in mainTask.transformations)) {
             context.addIssue({
                 code: "custom",
                 message: `Found invalid key ${sequence} for transformations.`,

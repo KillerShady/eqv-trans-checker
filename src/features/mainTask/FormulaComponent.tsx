@@ -6,7 +6,7 @@ import {
     formulaRemoved,
     selectFormulaByID,
     selectParsedFormula, selectTransformationError,
-    updateSkolemSymbols,
+    skolemSymbolsUpdated,
     selectSkolemSymbolsErrorByID,
     selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash
 } from "./mainTaskSlice.ts";
@@ -19,15 +19,26 @@ import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord
 import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
 import type {JSX} from "react/jsx-runtime";
 import type {RefAttributes} from "react";
+import {useFormulasContext} from "../../LogicContext.ts";
 
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
     const skolemSymbols = useSelector((state: RootState) => selectSkolemSymbolsTextByID(state, id));
+
     const error = useSelector((state: RootState)  => selectParsedFormula(state, TransId, id));
     const transformationError = useSelector((state: RootState)  => selectTransformationError(state, TransId, formula.prevFormula, id));
     const skolemError = useSelector((state: RootState) => selectSkolemSymbolsErrorByID(state, id));
     const skolemSymbolClash = useSelector((state: RootState) => selectSkolemConstantSymbolsClash(state, id));
+
     const dispatch = useDispatch();
+
+    const {formulas} = useFormulasContext();
+    const isContextFormula = formula.name !== undefined;
+    const missingInContextError = isContextFormula && formulas.filter((f) => f.name === formula.name).length === 0 ?
+        new Error("Formula is missing in context!") :
+        undefined;
+    console.log(missingInContextError);
+
     console.log("drawing line", id, "in", TransId);
     console.log("prevFormula", formula.prevFormula);
     console.log("transformationError", transformationError);
@@ -43,7 +54,8 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     );
 
     let isValid: boolean | undefined = undefined;
-    if (error.error !== undefined || skolemError.error !== undefined || skolemSymbolClash !== undefined) {
+    if (error.error !== undefined || missingInContextError !== undefined ||
+        skolemError.error !== undefined || skolemSymbolClash !== undefined) {
         isValid = false;
     } else if (transformationError.validated) {
         isValid = transformationError.error === undefined;
@@ -60,6 +72,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                 </InputGroup.Text>
             }
             <Form.Control value={formula.formula}
+                          disabled={isContextFormula}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
                           onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))}
@@ -69,7 +82,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                            placeholder="constant, function/arity, ..."
                            value={skolemSymbols}
                            isInvalid={skolemError.error !== undefined || skolemSymbolClash !== undefined}
-                           onChange={(e) => dispatch(updateSkolemSymbols({id: id, skolemSymbols:e.target.value}))}
+                           onChange={(e) => dispatch(skolemSymbolsUpdated({id: id, skolemSymbols:e.target.value}))}
              />
             }
             {formula.prevFormula !== undefined &&
@@ -92,10 +105,12 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                             onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
                 {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
             </DropdownButton>
-            <Button variant="outline-danger" onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
+            <Button variant="outline-danger"
+                    className="view-mode-hide"
+                    onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>
                 <FontAwesomeIcon icon={faTrash} />
             </Button>
-            <ErrorFeedback error={error.error ?? transformationError.error} text={formula.formula}></ErrorFeedback>
+            <ErrorFeedback error={missingInContextError ?? error.error ?? transformationError.error} text={formula.formula}></ErrorFeedback>
             <ErrorFeedback error={skolemError.error ?? skolemSymbolClash} text={skolemSymbols}></ErrorFeedback>
         </InputGroup>
     );
