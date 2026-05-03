@@ -2,7 +2,7 @@ import type Expression from "../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
 import {AlwaysFalse, AlwaysTrue, Conjunction, Disjunction} from "../model";
 
-class FormulaEliminationChecker extends TransformationChecker {
+class AbsorptionIdempotenceChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if ((original instanceof Conjunction && this.checkConjunction(original, transformed)) ||
             (original instanceof Disjunction && this.checkDisjunction(original, transformed)) ||
@@ -60,4 +60,4 @@ class FormulaEliminationChecker extends TransformationChecker {
     }
 }
 
-export default FormulaEliminationChecker;
+export default AbsorptionIdempotenceChecker;

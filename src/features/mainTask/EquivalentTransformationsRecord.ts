@@ -10,7 +10,7 @@ import QuantifierEliminationPropositionalChecker
     from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
 import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
 import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
-import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
+import AbsorptionIdempotenceChecker from "../../error checkers/AbsorptionIdempotenceChecker.ts";
 import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
 import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
 import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
@@ -70,7 +70,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     },
     "Distributivity": {
         key: "Distributivity",
-        name: "Distributivity",
+        name: "Distributivity Propositional",
         tex: "(A \\land (B \\lor C)) \\Leftrightarrow ((A \\land B) \\lor (A \\land C))\\\\(A \\lor (B \\land C)) \\Leftrightarrow ((A \\lor B) \\land (A \\lor C))",
         checker: new DistributivityChecker(),
         help: ""
@@ -78,7 +78,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "DistributivityQUANT": {
         key: "DistributivityQUANT",
         name: "Distributivity Quantifier",
-        tex: "\\exists x(A \\lor B) \\Leftrightarrow (\\exists x A \\lor \\exists x B)\\\\\\forall x (A \\land B) \\Leftrightarrow (\\forall x A \\land \\forall x B)",
+        tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x))\\\\\\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
         checker: new DistributivityQuantifierChecker(),
         help: ""
     },
@@ -89,11 +89,11 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new DoubleNegationEliminationChecker(),
         help: ""
     },
-    "RemoveFormula": {
-        key: "RemoveFormula",
-        name: "Formula Elimination",
-        tex: "(A \\land A) \\Leftrightarrow A \\\\(A \\lor A) \\Leftrightarrow A\\\\(A \\lor (A \\land B)) \\Leftrightarrow A \\\\(A \\land (A \\lor B)) \\Leftrightarrow A",
-        checker: new FormulaEliminationChecker(),
+    "AbsorptionIdem": {
+        key: "AbsorptionIdem",
+        name: "Absorption and Idempotence",
+        tex: "(A \\land A) \\Leftrightarrow A \\\\(A \\lor A) \\Leftrightarrow A\\\\(A \\lor (A \\land B)) \\Leftrightarrow A \\\\(A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
+        checker: new AbsorptionIdempotenceChecker(),
         help: ""
     },
     "RemoveIMPL": {
@@ -112,22 +112,22 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     },
     "RemoveQUANTPROP": {
         key: "RemoveQUANTPROP",
-        name: "Quantifier Elimination Propositional",
-        tex: "\\exists x(A \\lor D) \\Leftrightarrow \\exists x A \\lor D \\\\\\forall x (A \\lor D) \\Leftrightarrow \\forall x A \\lor D\\\\\\exists x (A \\land D) \\Leftrightarrow \\exists x A \\land D \\\\\\forall x (A \\land D) \\Leftrightarrow \\forall x A \\land D",
+        name: "Quantifier Prenexing",
+        tex: "\\exists x A(x) \\lor D \\Leftrightarrow \\exists x(A(x) \\lor D) \\\\ \\forall x A(x) \\lor D \\Leftrightarrow \\forall x (A(x) \\lor D) \\\\ \\exists x A(x) \\land D \\Leftrightarrow \\exists x (A(x) \\land D) \\\\ \\forall x A(x) \\land D \\Leftrightarrow \\forall x (A(x) \\land D)",
         checker: new QuantifierEliminationPropositionalChecker(),
         help: ""
     },
     "RenameVAR": {
         key: "RenameVAR",
         name: "Renaming Variables",
-        tex: "\\exists x A \\Leftrightarrow \\exists y A\\{x \\mapsto y\\}\\\\\\forall x A \\Leftrightarrow \\forall y A\\{x \\mapsto y\\}",
+        tex: "\\exists x A(x) \\Leftrightarrow \\exists y A(y)\\{x \\mapsto y\\}\\\\\\forall x A(x) \\Leftrightarrow \\forall y A(y)\\{x \\mapsto y\\}",
         checker: new RenamingVariablesChecker(),
         help: ""
     },
     "Skolem": {
         key: "Skolem",
         name: "Skolemization",
-        tex: "...\\forall x_1 (...\\forall x_n ...(\\exists y A)...)... \\Rightarrow \\\\ A \\{ y \\mapsto f(x_1,...,x_n) \\}",
+        tex: "...\\forall x_1 (...\\forall x_n ...(\\exists y A(y))...)... \\Rightarrow \\\\ A \\{ y \\mapsto f(x_1,...,x_n) \\}",
         checker: new SkolemizationChecker(),
         help: ""
     },

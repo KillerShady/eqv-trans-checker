@@ -4,10 +4,10 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import FormulaEliminationChecker from "../../error checkers/FormulaEliminationChecker.ts";
+import AbsorptionIdempotenceChecker from "../../error checkers/AbsorptionIdempotenceChecker.ts";
 
 describe("Tautology Elimination Checker", () => {
-    const checker = new FormulaEliminationChecker();
+    const checker = new AbsorptionIdempotenceChecker();
 
     testIdentical(checker);
 
