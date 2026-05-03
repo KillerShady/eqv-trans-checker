@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "../testUtils.ts"
-import TautologyEliminationChecker from "../../error checkers/TautologyEliminationChecker.ts";
+} from "../../testUtils.ts"
+import TautologyEliminationChecker from "../../../error checkers/obsolete/TautologyEliminationChecker.ts";
 
 describe("Tautology Elimination Checker", () => {
     const checker = new TautologyEliminationChecker();

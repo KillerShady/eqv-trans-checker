@@ -1,9 +1,7 @@
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
 import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
 import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
-import UnsatisfiableFormulaEliminationChecker from "../../error checkers/UnsatisfiableFormulaEliminationChecker.ts";
 import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
-import TautologyEliminationChecker from "../../error checkers/TautologyEliminationChecker.ts";
 import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
 import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
 import QuantifierEliminationPropositionalChecker
@@ -17,6 +15,7 @@ import DistributivityChecker from "../../error checkers/DistributivityChecker.ts
 import DeMorganCombinedChecker from "../../error checkers/obsolete/DeMorganCombinedChecker.ts";
 import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
+import IdentityChecker from "../../error checkers/IdentityChecker.ts";
 
 interface EquivalentTransformationData {
     key: string,
@@ -138,13 +137,13 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new TautologyCreationChecker(),
         help: ""
     },
-    "RemoveTRUE": {
+    /*"RemoveTRUE": {
         key: "RemoveTRUE",
         name: "Tautology Elimination",
         tex: "(A \\land \\top) \\Leftrightarrow A",
         checker: new TautologyEliminationChecker(),
         help: ""
-    },
+    },*/
     "CreateFALSE": {
         key: "CreateFALSE",
         name: "Unsatisfiable Formula Creation",
@@ -152,11 +151,18 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new UnsatisfiableFormulaCreationChecker(),
         help: ""
     },
-    "RemoveFALSE": {
+    /*"RemoveFALSE": {
         key: "RemoveFALSE",
         name: "Unsatisfiable Formula Elimination",
         tex: "(A \\lor \\bot) \\Leftrightarrow A",
         checker: new UnsatisfiableFormulaEliminationChecker(),
+        help: ""
+    },*/
+    "Identity": {
+        key: "Identity",
+        name: "Identity",
+        tex: "(A \\lor \\bot) \\Leftrightarrow A \\\\ (A \\land \\top) \\Leftrightarrow A",
+        checker: new IdentityChecker(),
         help: ""
     },
 }

@@ -1,17 +1,17 @@
-import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
-import type Expression from "../model/Expression.ts";
-import {AlwaysTrue, Conjunction} from "../model";
+import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
+import type Expression from "../../model/Expression.ts";
+import {AlwaysFalse, Disjunction} from "../../model";
 
-class TautologyEliminationChecker extends TransformationChecker {
+class UnsatisfiableFormulaEliminationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = original.subLeft instanceof AlwaysTrue ?
+            const result = original.subLeft instanceof AlwaysFalse ?
                 this.checkForError(original.subRight, transformed) :
                 this.checkForError(original.subLeft, transformed);
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = transformed.subLeft instanceof AlwaysTrue ?
+            const result = transformed.subLeft instanceof AlwaysFalse ?
                 this.checkForError(original, transformed.subRight) :
                 this.checkForError(original, transformed.subLeft);
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
@@ -28,11 +28,11 @@ class TautologyEliminationChecker extends TransformationChecker {
     }
 
     checkRequisites(original: Expression, _transformed: Expression): boolean {
-        return (original instanceof Conjunction &&
-            (original.subLeft instanceof AlwaysTrue ||
-             original.subRight instanceof AlwaysTrue));
+        return (original instanceof Disjunction &&
+                (original.subLeft instanceof AlwaysFalse ||
+                 original.subRight instanceof AlwaysFalse));
     }
 
 }
 
-export default TautologyEliminationChecker;
+export default UnsatisfiableFormulaEliminationChecker;
