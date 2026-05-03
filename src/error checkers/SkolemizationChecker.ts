@@ -20,6 +20,7 @@ class SkolemizationChecker extends TransformationChecker {
     universalQuants: string[] = [];
     changedVars: Map<string, skolemizedPattern> = new Map<string, skolemizedPattern>();
     public allowedSkolemSymbols: {constants: string[], functions: SymbolWithArity[]} = {constants: [], functions: []}
+    usedSymbols: Set<string> = new Set<string>();
 
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (original instanceof Negation && this.isNotNNF(original)) {
@@ -87,10 +88,16 @@ class SkolemizationChecker extends TransformationChecker {
                 );
             }
             if (pattern.name === "") {
+                if (this.usedSymbols.has(transformed.name)) {
+                    return this.errorResult(
+                        "Skolem constant " + transformed.name + " was used to replace a different variable!"
+                    );
+                }
                 const index = this.allowedSkolemSymbols.constants.indexOf(transformed.name);
                 if (index >= 0) {
                     pattern.name = transformed.name;
                     this.allowedSkolemSymbols.constants.splice(index, 1);
+                    this.usedSymbols.add(transformed.name);
                 }
             }
             if (pattern.name !== transformed.name) {
@@ -105,12 +112,18 @@ class SkolemizationChecker extends TransformationChecker {
                 );
             }
             if (pattern.name === "") {
+                if (this.usedSymbols.has(transformed.name)) {
+                    return this.errorResult(
+                        "Skolem function " + transformed.name + " was used to replace a different variable!"
+                    );
+                }
                 for (let i = 0; i < this.allowedSkolemSymbols.functions.length; i++) {
                     if (this.allowedSkolemSymbols.functions[i].name === transformed.name &&
                         this.allowedSkolemSymbols.functions[i].arity === transformed.terms.length) {
                         pattern.name = transformed.name;
                         pattern.subterms = this.orderSubterms(pattern.subterms, transformed);
                         this.allowedSkolemSymbols.functions.splice(i, 1);
+                        this.usedSymbols.add(transformed.name);
                         break;
                     }
                 }
@@ -133,14 +146,11 @@ class SkolemizationChecker extends TransformationChecker {
             );
         }
         for (let i = 0; i < pattern.subterms.length; i++) {
-            if (! (transformed.terms[i] instanceof Variable)) {
+            if (! (transformed.terms[i] instanceof Variable) ||
+                transformed.terms[i].name !== pattern.subterms[i]) {
+                const patternString = pattern.name + "(" + pattern.subterms.join(", ")+")";
                 return this.errorResult(
-                    "Expected variable " + pattern.subterms[i] + " but found " + transformed.terms[i].toString() + " instead!"
-                );
-            }
-            if (transformed.terms[i].name !== pattern.subterms[i]) {
-                return this.errorResult(
-                    "Expected variable " + pattern.subterms[i] + " but found " + transformed.terms[i].toString() + " instead!"
+                    "Expected " + patternString + " but found " + transformed.toString() + " instead!"
                 );
             }
         }
@@ -173,6 +183,7 @@ class SkolemizationChecker extends TransformationChecker {
     reset(skolemSymbols: {constants: string[], functions: SymbolWithArity[]}) {
         this.allowedSkolemSymbols = {constants: Object.assign([], skolemSymbols.constants), functions: []};
         skolemSymbols.functions.forEach(val => this.allowedSkolemSymbols.functions.push(Object.assign({}, val)));
+        this.usedSymbols = new Set<string>();
     }
 }
 
