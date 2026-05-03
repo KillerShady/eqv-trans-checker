@@ -1,6 +1,7 @@
 import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {AppDispatch, RootState} from "../../state/store.ts";
-import type {serializedAppState} from "./validationSchema.ts";
+import {type serializedAppState, serializedAppStateSchema} from "./validationSchema.ts";
+import {z, ZodError} from "zod";
 
 interface ImportExportState {
     error: string;
@@ -34,7 +35,7 @@ export const exportAppState =
     ()=> (_: AppDispatch, getState: () => RootState) => {
         const state = getState();
 
-        const json = JSON.stringify(serializeState(state), null, 2);
+        const json = getStateToJson(state);
         const blob = new Blob([json], { type: "application/json" });
         const downloadURL = URL.createObjectURL(blob);
 
@@ -45,6 +46,27 @@ export const exportAppState =
 
         URL.revokeObjectURL(downloadURL);
     };
+
+export function importAppStateFromJSON(importedState: string, dispatch: AppDispatch) {
+    try {
+        const json = JSON.parse(importedState);
+        const serializedAppState = serializedAppStateSchema.parse(json);
+        dispatch(importAppState(serializedAppState));
+    } catch (error) {
+        if (error instanceof ZodError) {
+            const prettyError = z.prettifyError(error);
+            console.error(prettyError);
+            dispatch(setError(prettyError));
+        } else if (error instanceof Error) {
+            console.error(error);
+            dispatch(setError(error.message));
+        }
+    }
+}
+
+export const getStateToJson = (state: RootState) => {
+    return JSON.stringify(serializeState(state), null, 2);
+}
 
 export const selectImportError = (state: RootState) =>
     state.importExport.error;
