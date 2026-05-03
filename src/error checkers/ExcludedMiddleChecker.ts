@@ -2,7 +2,7 @@ import TransformationChecker, {TransformationCheckerResult} from "./Transformati
 import type Expression from "../model/Expression.ts";
 import {Disjunction, Negation, AlwaysTrue, AlwaysFalse} from "../model";
 
-class TautologyCreationChecker extends TransformationChecker {
+class ExcludedMiddleChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkNegatedFormulaRequisites(original, transformed) ||
             this.checkNegatedUnsatRequisites(original, transformed) ||
@@ -39,4 +39,4 @@ class TautologyCreationChecker extends TransformationChecker {
 
 }
 
-export default TautologyCreationChecker;
+export default ExcludedMiddleChecker;

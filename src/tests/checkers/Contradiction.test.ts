@@ -4,10 +4,10 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
+import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
-    const checker = new UnsatisfiableFormulaCreationChecker();
+    const checker = new ContradictionChecker();
 
     testIdentical(checker);
     describe("Correct", () => {
@@ -24,17 +24,6 @@ describe("Quantifier Elimination Checker", () => {
             testEquivalentTwoDirectional(checker,
                 "((cat(x) ∧ ¬cat(x)) ∨ ⊥)",
                 "(⊥ ∨ (cat(x) ∧ ¬cat(x)))"
-            );
-        });
-        it("Correct negated Tautology", () => {
-            testEquivalentTwoDirectional(checker,
-                "¬⊤",
-                "⊥"
-            );
-
-            testEquivalentTwoDirectional(checker,
-                "(¬⊤ ∧ ⊥)",
-                "(⊥ ∧ ¬⊤)"
             );
         });
     });

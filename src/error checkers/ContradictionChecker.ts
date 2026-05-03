@@ -2,7 +2,7 @@ import TransformationChecker, {TransformationCheckerResult} from "./Transformati
 import type Expression from "../model/Expression.ts";
 import {Negation, AlwaysFalse, Conjunction, AlwaysTrue} from "../model";
 
-class UnsatisfiableFormulaCreationChecker extends TransformationChecker {
+class ContradictionChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkNegatedFormulaRequisites(original, transformed) ||
             this.checkNegatedTautologyRequisites(original, transformed) ||
@@ -39,4 +39,4 @@ class UnsatisfiableFormulaCreationChecker extends TransformationChecker {
 
 }
 
-export default UnsatisfiableFormulaCreationChecker;
+export default ContradictionChecker;

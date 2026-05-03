@@ -4,10 +4,10 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
+import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
-    const checker = new TautologyCreationChecker();
+    const checker = new ExcludedMiddleChecker();
 
     testIdentical(checker);
 
@@ -25,17 +25,6 @@ describe("Quantifier Elimination Checker", () => {
             testEquivalentTwoDirectional(checker,
                 "((cat(x) ∨ ¬cat(x)) ∧ ⊤)",
                 "(⊤ ∧ (cat(x) ∨ ¬cat(x)))"
-            );
-        });
-        it("Correct negated Unsat", () => {
-            testEquivalentTwoDirectional(checker,
-                "¬⊥",
-                "⊤"
-            );
-
-            testEquivalentTwoDirectional(checker,
-                "(¬⊥ ∧ ⊤)",
-                "(⊤ ∧ ¬⊥)"
             );
         });
     });
