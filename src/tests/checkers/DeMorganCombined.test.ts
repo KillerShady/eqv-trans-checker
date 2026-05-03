@@ -3,8 +3,8 @@ import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
-} from "../../testUtils.ts";
-import DeMorganCombinedChecker from "../../../error checkers/obsolete/DeMorganCombinedChecker.ts";
+} from "../testUtils.ts";
+import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
 
 describe("De Morgan Checker", () => {
     const checker = new DeMorganCombinedChecker();
@@ -55,6 +55,28 @@ describe("De Morgan Checker", () => {
             );
         });
 
+        it("Correct negated Tautology", () => {
+            testEquivalentTwoDirectional(checker,
+                "¬⊤",
+                "⊥"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "(¬⊤ ∧ ⊥)",
+                "(⊥ ∧ ¬⊤)"
+            );
+        });
+        it("Correct negated Unsat", () => {
+            testEquivalentTwoDirectional(checker,
+                "¬⊥",
+                "⊤"
+            );
+
+            testEquivalentTwoDirectional(checker,
+                "(¬⊥ ∧ ⊤)",
+                "(⊤ ∧ ¬⊥)"
+            );
+        });
     });
 
     describe("Incorrect", () => {

@@ -1,6 +1,6 @@
-import type Expression from "../../model/Expression.ts";
-import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
-import {Conjunction, Disjunction, ExistentialQuant, Negation, UniversalQuant} from "../../model";
+import type Expression from "../model/Expression.ts";
+import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
+import {AlwaysFalse, AlwaysTrue, Conjunction, Disjunction, ExistentialQuant, Negation, UniversalQuant} from "../model";
 
 class DeMorganCombinedChecker extends TransformationChecker {
     negated = false;
@@ -36,6 +36,12 @@ class DeMorganCombinedChecker extends TransformationChecker {
                 this.negated = true;
                 if (result.isEquivalentOrIdentical()) return this.equivalentResult();
                 return result;
+            }
+            if (original instanceof AlwaysTrue && transformed instanceof AlwaysFalse) {
+                return this.equivalentResult();
+            }
+            if (original instanceof AlwaysFalse && transformed instanceof AlwaysTrue) {
+                return this.equivalentResult();
             }
             if (childrenResults &&
                 (this.hasOneChild(original) ||

@@ -1,8 +1,8 @@
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
 import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
 import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
-import UnsatisfiableFormulaCreationChecker from "../../error checkers/UnsatisfiableFormulaCreationChecker.ts";
-import TautologyCreationChecker from "../../error checkers/TautologyCreationChecker.ts";
+import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
+import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
 import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
 import QuantifierEliminationPropositionalChecker
     from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
@@ -12,7 +12,7 @@ import AbsorptionIdempotenceChecker from "../../error checkers/AbsorptionIdempot
 import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
 import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
 import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
-import DeMorganCombinedChecker from "../../error checkers/obsolete/DeMorganCombinedChecker.ts";
+import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
 import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 import IdentityChecker from "../../error checkers/IdentityChecker.ts";
@@ -63,7 +63,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "DeMorganCOMBINED": {
         key: "DeMorganCOMBINED",
         name: "DeMorgan",
-        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B) \\\\ \\neg \\bot \\Leftrightarrow \\top \\\\ \\neg \\top \\Leftrightarrow \\bot",
         checker: new DeMorganCombinedChecker(),
         help: ""
     },
@@ -131,10 +131,10 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         help: ""
     },
     "CreateTRUE": {
-        key: "CreateTRUE",
-        name: "Tautology Creation",
-        tex: "(A \\lor \\neg A) \\Leftrightarrow \\top \\\\ \\neg \\bot \\Leftrightarrow \\top",
-        checker: new TautologyCreationChecker(),
+        key: "ExcludedMiddle",
+        name: "Excluded middle",
+        tex: "(A \\lor \\neg A) \\Leftrightarrow \\top",
+        checker: new ExcludedMiddleChecker(),
         help: ""
     },
     /*"RemoveTRUE": {
@@ -146,9 +146,9 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     },*/
     "CreateFALSE": {
         key: "CreateFALSE",
-        name: "Unsatisfiable Formula Creation",
-        tex: "(A \\land \\neg A) \\Leftrightarrow \\bot \\\\ \\neg \\top \\Leftrightarrow \\bot",
-        checker: new UnsatisfiableFormulaCreationChecker(),
+        name: "Contradiction",
+        tex: "(A \\land \\neg A) \\Leftrightarrow \\bot",
+        checker: new ContradictionChecker(),
         help: ""
     },
     /*"RemoveFALSE": {
