@@ -1,3 +1,15 @@
+.view-mode .view-mode-hide,
+.view-mode .input-group .btn-success {
+    display: none; !important;
+}
+
+.view-mode .form-control,
+.view-mode .form-select,
+.view-mode .input-group-text {
+    border: none;
+    background-color: initial;
+}
+
 .tooltip-inner {
     --bs-tooltip-max-width: 20rem;
 }
