@@ -6,7 +6,7 @@ import {
 } from "../testUtils.ts"
 import IdentityChecker from "../../error checkers/IdentityChecker.ts";
 
-describe("Unsatisfiable Formula Elimination Checker", () => {
+describe("Identity Checker", () => {
     const checker = new IdentityChecker();
 
     testIdentical(checker);
