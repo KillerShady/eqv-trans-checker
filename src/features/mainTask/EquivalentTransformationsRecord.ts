@@ -14,9 +14,7 @@ import FormulaEliminationChecker from "../../error checkers/FormulaEliminationCh
 import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
 import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
 import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
-import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
-import DeMorganQuantifierChecker from "../../error checkers/DeMorganQuantifierChecker.ts";
-import DeMorganChecker from "../../error checkers/DeMorganChecker.ts";
+import DeMorganCombinedChecker from "../../error checkers/obsolete/DeMorganCombinedChecker.ts";
 import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 
@@ -49,7 +47,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new CommutativityChecker(),
         help: ""
     },
-    "DeMorganPROP": {
+    /*"DeMorganPROP": {
         key: "DeMorganPROP",
         name: "DeMorgan Propositional",
         tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B)\\\\\\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
@@ -62,11 +60,11 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A \\\\\\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
         checker: new DeMorganQuantifierChecker(),
         help: ""
-    },
+    },*/
     "DeMorganCOMBINED": {
         key: "DeMorganCOMBINED",
-        name: "DeMorgan Combined",
-        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A \\\\\\neg \\forall x A \\Leftrightarrow \\exists x \\neg A\\\\\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B)\\\\\\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        name: "DeMorgan",
+        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\\\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x)\\\\\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B)\\\\\\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
         checker: new DeMorganCombinedChecker(),
         help: ""
     },

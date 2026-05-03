@@ -1,6 +1,6 @@
-import type Expression from "../model/Expression.ts";
-import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
-import {ExistentialQuant, Negation, UniversalQuant} from "../model";
+import type Expression from "../../model/Expression.ts";
+import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
+import {ExistentialQuant, Negation, UniversalQuant} from "../../model";
 
 class DeMorganQuantifierChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
