@@ -29,56 +29,56 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "Associativity": {
         key: "Associativity",
         name: "Associativity",
-        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C)\\\\(A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
         checker: new AssociativityChecker(),
         help: ""
     },
     "Reorder": {
         key: "Reorder",
         name: "A&C",
-        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C)\\\\(A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)\\\\(A \\land B) \\Leftrightarrow (B \\land A)\\\\(A \\lor B) \\Leftrightarrow (B \\lor A)",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C) \\\\ (A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
         checker: new ReorderingChecker(),
         help: ""
     },
     "Commutativity": {
         key: "Commutativity",
         name: "Commutativity",
-        tex: "(A \\land B) \\Leftrightarrow (B \\land A)\\\\(A \\lor B) \\Leftrightarrow (B \\lor A)",
+        tex: "(A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
         checker: new CommutativityChecker(),
         help: ""
     },
     /*"DeMorganPROP": {
         key: "DeMorganPROP",
         name: "DeMorgan Propositional",
-        tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B)\\\\\\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
         checker: new DeMorganChecker(),
         help: ""
     },
     "DeMorganQUANT": {
         key: "DeMorganQUANT",
         name: "DeMorgan Quantifier",
-        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A \\\\\\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
+        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A  \\\\ \\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
         checker: new DeMorganQuantifierChecker(),
         help: ""
     },*/
     "DeMorganCOMBINED": {
         key: "DeMorganCOMBINED",
         name: "DeMorgan",
-        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\\\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x)\\\\\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B)\\\\\\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
         checker: new DeMorganCombinedChecker(),
         help: ""
     },
     "Distributivity": {
         key: "Distributivity",
         name: "Distributivity Propositional",
-        tex: "(A \\land (B \\lor C)) \\Leftrightarrow ((A \\land B) \\lor (A \\land C))\\\\(A \\lor (B \\land C)) \\Leftrightarrow ((A \\lor B) \\land (A \\lor C))",
+        tex: "(A \\land (B \\lor C)) \\Leftrightarrow ((A \\land B) \\lor (A \\land C)) \\\\ (A \\lor (B \\land C)) \\Leftrightarrow ((A \\lor B) \\land (A \\lor C))",
         checker: new DistributivityChecker(),
         help: ""
     },
     "DistributivityQUANT": {
         key: "DistributivityQUANT",
         name: "Distributivity Quantifier",
-        tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x))\\\\\\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
+        tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x)) \\\\ \\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
         checker: new DistributivityQuantifierChecker(),
         help: ""
     },
@@ -92,7 +92,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "AbsorptionIdem": {
         key: "AbsorptionIdem",
         name: "Absorption and Idempotence",
-        tex: "(A \\land A) \\Leftrightarrow A \\\\(A \\lor A) \\Leftrightarrow A\\\\(A \\lor (A \\land B)) \\Leftrightarrow A \\\\(A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
+        tex: "(A \\land A) \\Leftrightarrow A \\\\ (A \\lor A) \\Leftrightarrow A \\\\ (A \\lor (A \\land B)) \\Leftrightarrow A \\\\ (A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
         checker: new AbsorptionIdempotenceChecker(),
         help: ""
     },
@@ -106,7 +106,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "RemoveQUANT": {
         key: "RemoveQUANT",
         name: "Quantifier Elimination",
-        tex: "\\exists x D \\Leftrightarrow D \\\\\\forall x D \\Leftrightarrow D",
+        tex: "\\exists x D \\Leftrightarrow D \\\\ \\forall x D \\Leftrightarrow D",
         checker: new QuantifierEliminationChecker(),
         help: ""
     },
@@ -120,7 +120,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "RenameVAR": {
         key: "RenameVAR",
         name: "Renaming Variables",
-        tex: "\\exists x A(x) \\Leftrightarrow \\exists y A(y)\\{x \\mapsto y\\}\\\\\\forall x A(x) \\Leftrightarrow \\forall y A(y)\\{x \\mapsto y\\}",
+        tex: "\\exists x A(x) \\Leftrightarrow \\exists y A(y)\\{x \\mapsto y\\} \\\\ \\forall x A(x) \\Leftrightarrow \\forall y A(y)\\{x \\mapsto y\\}",
         checker: new RenamingVariablesChecker(),
         help: ""
     },
@@ -134,7 +134,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "CreateTRUE": {
         key: "CreateTRUE",
         name: "Tautology Creation",
-        tex: "(A \\lor \\neg A) \\Leftrightarrow \\top\\\\\\neg \\bot \\Leftrightarrow \\top",
+        tex: "(A \\lor \\neg A) \\Leftrightarrow \\top \\\\ \\neg \\bot \\Leftrightarrow \\top",
         checker: new TautologyCreationChecker(),
         help: ""
     },
@@ -148,7 +148,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     "CreateFALSE": {
         key: "CreateFALSE",
         name: "Unsatisfiable Formula Creation",
-        tex: "(A \\land \\neg A) \\Leftrightarrow \\bot\\\\\\neg \\top \\Leftrightarrow \\bot",
+        tex: "(A \\land \\neg A) \\Leftrightarrow \\bot \\\\ \\neg \\top \\Leftrightarrow \\bot",
         checker: new UnsatisfiableFormulaCreationChecker(),
         help: ""
     },
