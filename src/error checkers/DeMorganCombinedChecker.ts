@@ -6,8 +6,6 @@ class DeMorganCombinedChecker extends TransformationChecker {
     negated = false;
 
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
-        console.log(original.toString(), transformed.toString(), this.negated);
-
         if (this.negated) {
             if ((original instanceof Conjunction && transformed instanceof Disjunction) ||
                 (original instanceof Disjunction && transformed instanceof Conjunction)) {
