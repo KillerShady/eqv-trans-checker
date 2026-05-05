@@ -1,6 +1,4 @@
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
-import AssociativityChecker from "../../error checkers/obsolete/AssociativityChecker.ts";
-import CommutativityChecker from "../../error checkers/obsolete/CommutativityChecker.ts";
 import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
 import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
 import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
@@ -34,11 +32,18 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new CNFChecker(),
         help: ""
     },
-    /*"Associativity": {
-        key: "Associativity",
-        name: "Associativity",
-        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
-        checker: new AssociativityChecker(),
+    "DoubleNEG": {
+        key: "DoubleNEG",
+        name: "Double Negation Elimination",
+        tex: "\\neg\\neg A \\Leftrightarrow A",
+        checker: new DoubleNegationEliminationChecker(),
+        help: ""
+    },
+    "RemoveIMPL": {
+        key: "RemoveIMPL",
+        name: "Implication Elimination",
+        tex: "(A \\to B) \\Leftrightarrow (\\neg A \\lor B)",
+        checker: new ImplicationEliminationChecker(),
         help: ""
     },
     "RemoveEquiv": {
@@ -62,34 +67,6 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new ReorderingChecker(),
         help: ""
     },
-    /*"Commutativity": {
-        key: "Commutativity",
-        name: "Commutativity",
-        tex: "(A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
-        checker: new CommutativityChecker(),
-        help: ""
-    },
-    "DeMorganPROP": {
-        key: "DeMorganPROP",
-        name: "DeMorgan Propositional",
-        tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
-        checker: new DeMorganChecker(),
-        help: ""
-    },
-    "DeMorganQUANT": {
-        key: "DeMorganQUANT",
-        name: "DeMorgan Quantifier",
-        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A  \\\\ \\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
-        checker: new DeMorganQuantifierChecker(),
-        help: ""
-    },*/
-    "DeMorganCOMBINED": {
-        key: "DeMorganCOMBINED",
-        name: "DeMorgan",
-        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B) \\\\ \\neg \\bot \\Leftrightarrow \\top \\\\ \\neg \\top \\Leftrightarrow \\bot",
-        checker: new DeMorganCombinedChecker(),
-        help: ""
-    },
     "Distributivity": {
         key: "Distributivity",
         name: "Distributivity Propositional",
@@ -102,27 +79,6 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         name: "Distributivity Quantifier",
         tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x)) \\\\ \\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
         checker: new DistributivityQuantifierChecker(),
-        help: ""
-    },
-    "DoubleNEG": {
-        key: "DoubleNEG",
-        name: "Double Negation Elimination",
-        tex: "\\neg\\neg A \\Leftrightarrow A",
-        checker: new DoubleNegationEliminationChecker(),
-        help: ""
-    },
-    "AbsorptionIdem": {
-        key: "AbsorptionIdem",
-        name: "Absorption and Idempotence",
-        tex: "(A \\land A) \\Leftrightarrow A \\\\ (A \\lor A) \\Leftrightarrow A \\\\ (A \\lor (A \\land B)) \\Leftrightarrow A \\\\ (A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
-        checker: new AbsorptionIdempotenceChecker(),
-        help: ""
-    },
-    "RemoveIMPL": {
-        key: "RemoveIMPL",
-        name: "Implication Elimination",
-        tex: "(A \\to B) \\Leftrightarrow (\\neg A \\lor B)",
-        checker: new ImplicationEliminationChecker(),
         help: ""
     },
     "RemoveQUANT": {
@@ -153,6 +109,13 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new SkolemizationChecker(),
         help: ""
     },
+    "AbsorptionIdem": {
+        key: "AbsorptionIdem",
+        name: "Absorption and Idempotence",
+        tex: "(A \\land A) \\Leftrightarrow A \\\\ (A \\lor A) \\Leftrightarrow A \\\\ (A \\lor (A \\land B)) \\Leftrightarrow A \\\\ (A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
+        checker: new AbsorptionIdempotenceChecker(),
+        help: ""
+    },
     "CreateTRUE": {
         key: "ExcludedMiddle",
         name: "Excluded middle",
@@ -160,13 +123,6 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new ExcludedMiddleChecker(),
         help: ""
     },
-    /*"RemoveTRUE": {
-        key: "RemoveTRUE",
-        name: "Tautology Elimination",
-        tex: "(A \\land \\top) \\Leftrightarrow A",
-        checker: new TautologyEliminationChecker(),
-        help: ""
-    },*/
     "CreateFALSE": {
         key: "CreateFALSE",
         name: "Contradiction",
@@ -174,13 +130,6 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new ContradictionChecker(),
         help: ""
     },
-    /*"RemoveFALSE": {
-        key: "RemoveFALSE",
-        name: "Unsatisfiable Formula Elimination",
-        tex: "(A \\lor \\bot) \\Leftrightarrow A",
-        checker: new UnsatisfiableFormulaEliminationChecker(),
-        help: ""
-    },*/
     "Identity": {
         key: "Identity",
         name: "Identity",
@@ -188,4 +137,46 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new IdentityChecker(),
         help: ""
     },
+    /*"Associativity": {
+        key: "Associativity",
+        name: "Associativity",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
+        checker: new AssociativityChecker(),
+        help: ""
+    },
+    "Commutativity": {
+        key: "Commutativity",
+        name: "Commutativity",
+        tex: "(A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
+        checker: new CommutativityChecker(),
+        help: ""
+    },
+    "DeMorganPROP": {
+        key: "DeMorganPROP",
+        name: "DeMorgan Propositional",
+        tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        checker: new DeMorganChecker(),
+        help: ""
+    },
+    "DeMorganQUANT": {
+        key: "DeMorganQUANT",
+        name: "DeMorgan Quantifier",
+        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A  \\\\ \\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
+        checker: new DeMorganQuantifierChecker(),
+        help: ""
+    },
+    "RemoveTRUE": {
+        key: "RemoveTRUE",
+        name: "Tautology Elimination",
+        tex: "(A \\land \\top) \\Leftrightarrow A",
+        checker: new TautologyEliminationChecker(),
+        help: ""
+    },
+    "RemoveFALSE": {
+        key: "RemoveFALSE",
+        name: "Unsatisfiable Formula Elimination",
+        tex: "(A \\lor \\bot) \\Leftrightarrow A",
+        checker: new UnsatisfiableFormulaEliminationChecker(),
+        help: ""
+    },*/
 }
