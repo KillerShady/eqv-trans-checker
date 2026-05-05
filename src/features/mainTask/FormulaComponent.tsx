@@ -24,11 +24,17 @@ import {useFormulasContext} from "../../LogicContext.ts";
 export default function FormulaComponent({ TransId, id }: { TransId: number; id: number }) {
     const formula = useSelector((state: RootState)  => selectFormulaByID(state, id));
     const skolemSymbols = useSelector((state: RootState) => selectSkolemSymbolsTextByID(state, id));
+    const isCNF = formula.operation == "CNF";
+    const prevFormula = useSelector((state: RootState) => selectFormulaByID(state, formula.prevFormula !== undefined ? formula.prevFormula : id));
 
     const error = useSelector((state: RootState)  => selectParsedFormula(state, TransId, id));
     const transformationError = useSelector((state: RootState)  => selectTransformationError(state, TransId, formula.prevFormula, id));
     const skolemError = useSelector((state: RootState) => selectSkolemSymbolsErrorByID(state, id));
     const skolemSymbolClash = useSelector((state: RootState) => selectSkolemConstantSymbolsClash(state, id));
+
+    if (isCNF) {
+        error.error = undefined;
+    }
 
     const dispatch = useDispatch();
 
@@ -44,6 +50,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     console.log("transformationError", transformationError);
     console.log("skolemError", skolemError);
     console.log("skolemError", skolemSymbolClash);
+    console.log("prevFormula", prevFormula);
     console.log(" ");
 
     const renderTooltip = (props: JSX.IntrinsicAttributes & TooltipProps & RefAttributes<HTMLDivElement>) => (
@@ -71,8 +78,8 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                     </InlineMath>
                 </InputGroup.Text>
             }
-            <Form.Control value={formula.formula}
-                          disabled={isContextFormula}
+            <Form.Control value={isCNF ? prevFormula.formula : formula.formula}
+                          disabled={isContextFormula || isCNF}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
                           onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))}
@@ -98,13 +105,15 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                 </DropdownButton>
 
             }
-            <DropdownButton variant="success"
-                            title={
-                                <>+<span className="step"> Step</span></>
-                            }
-                            onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
-                {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
-            </DropdownButton>
+            {! isCNF &&
+                <DropdownButton variant="success"
+                                title={
+                                    <>+<span className="step"> Step</span></>
+                                }
+                                onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
+                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
+                </DropdownButton>
+            }
             <Button variant="outline-danger"
                     className="view-mode-hide"
                     onClick={() => dispatch(formulaRemoved({transformation: TransId, id:id}))}>

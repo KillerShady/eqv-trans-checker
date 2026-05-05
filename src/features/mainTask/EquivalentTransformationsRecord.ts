@@ -1,6 +1,6 @@
 import TransformationChecker from "../../error checkers/TransformationChecker.ts";
-import AssociativityChecker from "../../error checkers/AssociativityChecker.ts";
-import CommutativityChecker from "../../error checkers/CommutativityChecker.ts";
+import AssociativityChecker from "../../error checkers/obsolete/AssociativityChecker.ts";
+import CommutativityChecker from "../../error checkers/obsolete/CommutativityChecker.ts";
 import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
 import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
 import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
@@ -16,6 +16,7 @@ import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecke
 import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 import IdentityChecker from "../../error checkers/IdentityChecker.ts";
+import CNFChecker from "../../error checkers/CNFChecker.ts";
 
 interface EquivalentTransformationData {
     key: string,
@@ -25,13 +26,20 @@ interface EquivalentTransformationData {
     help: string,
 }
 export const EquivalentTransformationsRecord: Record<string, EquivalentTransformationData> = {
-    "Associativity": {
+    "CNF": {
+        key: "CNF",
+        name: "CNF",
+        tex: "",
+        checker: new CNFChecker(),
+        help: ""
+    },
+    /*"Associativity": {
         key: "Associativity",
         name: "Associativity",
         tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
         checker: new AssociativityChecker(),
         help: ""
-    },
+    },*/
     "Reorder": {
         key: "Reorder",
         name: "A&C",
@@ -39,14 +47,14 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         checker: new ReorderingChecker(),
         help: ""
     },
-    "Commutativity": {
+    /*"Commutativity": {
         key: "Commutativity",
         name: "Commutativity",
         tex: "(A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
         checker: new CommutativityChecker(),
         help: ""
     },
-    /*"DeMorganPROP": {
+    "DeMorganPROP": {
         key: "DeMorganPROP",
         name: "DeMorgan Propositional",
         tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
