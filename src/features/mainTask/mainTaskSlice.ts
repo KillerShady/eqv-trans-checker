@@ -88,7 +88,7 @@ const MainTaskSlice = createSlice({
             const formulas = state.transformations[action.payload.transformation].formulas;
             const prevFormulaIndex = formulas.indexOf(action.payload.prevFormula);
             if (prevFormulaIndex < formulas.length - 1) {
-                state.formulas[prevFormulaIndex + 1].prevFormula = state.formulasKey;
+                state.formulas[formulas[prevFormulaIndex + 1]].prevFormula = state.formulasKey;
             }
             formulas.splice(formulas.indexOf(action.payload.prevFormula)+1, 0, state.formulasKey);
             if (action.payload.operation === EquivalentTransformationsRecord["Skolem"].key) {
