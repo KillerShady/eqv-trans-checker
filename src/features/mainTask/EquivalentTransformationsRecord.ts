@@ -17,6 +17,7 @@ import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
 import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 import IdentityChecker from "../../error checkers/IdentityChecker.ts";
 import CNFChecker from "../../error checkers/CNFChecker.ts";
+import EquivalenceEliminationChecker from "../../error checkers/EquivalenceEliminationChecker.ts";
 
 interface EquivalentTransformationData {
     key: string,
@@ -39,7 +40,21 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
         tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
         checker: new AssociativityChecker(),
         help: ""
-    },*/
+    },
+    "RemoveEquiv": {
+        key: "RemoveEquiv",
+        name: "Equivalence Elimination",
+        tex: "(A \\leftrightarrow B) \\Leftrightarrow ((A \\to B) \\land (B \\to A)))",
+        checker: new EquivalenceEliminationChecker(),
+        help: ""
+    },
+    "DeMorganCOMBINED": {
+        key: "DeMorganCOMBINED",
+        name: "DeMorgan",
+        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B) \\\\ \\neg \\bot \\Leftrightarrow \\top \\\\ \\neg \\top \\Leftrightarrow \\bot",
+        checker: new DeMorganCombinedChecker(),
+        help: ""
+    },
     "Reorder": {
         key: "Reorder",
         name: "A&C",
