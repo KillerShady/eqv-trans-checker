@@ -127,35 +127,35 @@ describe("CNF Checker", () => {
         });
         it("Full CNF", () => {
             testEquivalent(checker,
-                "∀x((cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "(∀x(cat(x) ∨ ¬cat(x)) ∧ ∀x ¬cat(x))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀a∀b∀c∀d((cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "(∀a∀b∀c∀d(cat(x) ∨ ¬cat(x)) ∧ ∀a∀b∀c∀d¬cat(x))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀x((cat(x) ∧ ¬cat(x)) ∧ (cat(x) ∨ ¬cat(x)))",
+                "((∀x cat(x) ∧ ∀x¬cat(x)) ∧ ∀x(cat(x) ∨ ¬cat(x)))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀a∀b∀c∀d((cat(x) ∧ ¬cat(x)) ∧ (cat(x) ∨ ¬cat(x)))",
+                "((∀a∀b∀c∀d cat(x) ∧ ∀a∀b∀c∀d¬cat(x)) ∧ ∀a∀b∀c∀d(cat(x) ∨ ¬cat(x)))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀x((cat(x) ∧ (cat(x) ∨ ¬cat(x))) ∧ (x = y ∧ (cat(x) ∨ ¬cat(x))))",
+                "((∀x cat(x) ∧ ∀x(cat(x) ∨ ¬cat(x))) ∧ (∀x x = y ∧ ∀x(cat(x) ∨ ¬cat(x))))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀a∀b∀c∀d((cat(x) ∧ (cat(x) ∨ ¬cat(x))) ∧ (x = y ∧ (cat(x) ∨ ¬cat(x))))",
+                "((∀a∀b∀c∀d cat(x) ∧ ∀a∀b∀c∀d(cat(x) ∨ ¬cat(x))) ∧ (∀a∀b∀c∀d x = y ∧ ∀a∀b∀c∀d(cat(x) ∨ ¬cat(x))))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀x(((cat(x) ∨ ¬cat(x)) ∧ (cat(x) ∨ ¬cat(x))) ∧ (¬(x = y) ∧ (cat(x) ∨ ¬cat(x))))",
+                "((∀x(cat(x) ∨ ¬cat(x)) ∧ ∀x(cat(x) ∨ ¬cat(x))) ∧ (∀x¬(x = y) ∧ ∀x(cat(x) ∨ ¬cat(x))))",
                 "cat(x)"
             );
             testEquivalent(checker,
-                "∀a∀b∀c∀d(((cat(x) ∨ ¬cat(x)) ∧ (cat(x) ∨ ¬cat(x))) ∧ (¬(x = y) ∧ (cat(x) ∨ ¬cat(x))))",
+                "((∀a∀b∀c∀d(cat(x) ∨ ¬cat(x)) ∧ ∀a∀b∀c∀d(cat(x) ∨ ¬cat(x))) ∧ (∀a∀b∀c∀d¬(x = y) ∧ ∀a∀b∀c∀d(cat(x) ∨ ¬cat(x))))",
                 "cat(x)"
             );
         });
@@ -252,31 +252,31 @@ describe("CNF Checker", () => {
         });
         it("Negation not next to atom", () => {
             testError(checker,
-                "¬∀x((cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "¬(∀x(cat(x) ∨ ¬cat(x)) ∧ ∀x ¬cat(x))",
                 "cat(x)",
                 "Negation must be before an atomic formula!"
             );
             testError(checker,
-                "∀x¬((cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "(¬∀x(cat(x) ∨ ¬cat(x)) ∧ ¬∀x ¬cat(x))",
                 "cat(x)",
                 "Negation must be before an atomic formula!"
             );
             testError(checker,
-                "∀x(¬(cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "(∀x¬(cat(x) ∨ ¬cat(x)) ∧ ∀x ¬cat(x))",
                 "cat(x)",
                 "Negation must be before an atomic formula!"
             );
         });
-        it("Universal quantifier not at start", () => {
+        it("Universal quantifier not at start of clause", () => {
             testError(checker,
-                "(∀x(cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
+                "∀x((cat(x) ∨ ¬cat(x)) ∧ ¬cat(x))",
                 "cat(x)",
-                "Universal quantifiers must be at the start of the formula in CNF!"
+                "Universal quantifiers must be at the start of the clause in CNF!"
             );
             testError(checker,
-                "((cat(x) ∨ ¬cat(x)) ∧ ∀x¬cat(x))",
+                "((cat(x) ∨ ∀x¬cat(x)) ∧ ¬cat(x))",
                 "cat(x)",
-                "Universal quantifiers must be at the start of the formula in CNF!"
+                "Universal quantifiers must be at the start of the clause in CNF!"
             );
         });
     });
