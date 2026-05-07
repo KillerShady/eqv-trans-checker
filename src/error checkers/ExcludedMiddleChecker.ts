@@ -16,7 +16,7 @@ class ExcludedMiddleChecker extends TransformationChecker {
             return childrenResults;
         }
         return this.errorResult(
-            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Tautology Creation rule!"
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Excluded Middle rule!"
         );
     }
 

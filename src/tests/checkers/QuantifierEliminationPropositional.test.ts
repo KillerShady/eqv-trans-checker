@@ -81,26 +81,26 @@ describe("Quantifier Elimination Checker", () => {
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∨ cat(y))",
                 "∃x cat(x) ∧ cat(y)",
-                "∃x (cat(x)  ∨  cat(y)) and (∃x cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!",
-                "(∃x cat(x)  ∧  cat(y)) and ∃x (cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!"
+                "∃x (cat(x)  ∨  cat(y)) and (∃x cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!",
+                "(∃x cat(x)  ∧  cat(y)) and ∃x (cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!"
             );
             testErrorTwoDirectional(checker,
                 "∃x(cat(x) ∧ cat(y))",
                 "∃x cat(x) ∨ cat(y)",
-                "∃x (cat(x)  ∧  cat(y)) and (∃x cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!",
-                "(∃x cat(x)  ∨  cat(y)) and ∃x (cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!"
+                "∃x (cat(x)  ∧  cat(y)) and (∃x cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!",
+                "(∃x cat(x)  ∨  cat(y)) and ∃x (cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∨ cat(y))",
                 "∀x cat(x) ∧ cat(y)",
-                "∀x (cat(x)  ∨  cat(y)) and (∀x cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!",
-                "(∀x cat(x)  ∧  cat(y)) and ∀x (cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!"
+                "∀x (cat(x)  ∨  cat(y)) and (∀x cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!",
+                "(∀x cat(x)  ∧  cat(y)) and ∀x (cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!"
             );
             testErrorTwoDirectional(checker,
                 "∀x(cat(x) ∧ cat(y))",
                 "∀x cat(x) ∨ cat(y)",
-                "∀x (cat(x)  ∧  cat(y)) and (∀x cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!",
-                "(∀x cat(x)  ∨  cat(y)) and ∀x (cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Propositional Quantifier Elimination rule!"
+                "∀x (cat(x)  ∧  cat(y)) and (∀x cat(x)  ∨  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!",
+                "(∀x cat(x)  ∨  cat(y)) and ∀x (cat(x)  ∧  cat(y)) are neither equivalent nor identical according to the Quantifier Prenexing rule!"
             );
         });
     });
