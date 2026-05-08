@@ -8,7 +8,7 @@ import {
     selectParsedFormula, selectTransformationError,
     skolemSymbolsUpdated,
     selectSkolemSymbolsErrorByID,
-    selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash
+    selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash, selectIsFormulaLast
 } from "./mainTaskSlice.ts";
 import {Button, DropdownButton, Form, InputGroup, OverlayTrigger, Tooltip, type TooltipProps} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
@@ -26,6 +26,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     const skolemSymbols = useSelector((state: RootState) => selectSkolemSymbolsTextByID(state, id));
     const isCNF = formula.operation == "CNF";
     const prevFormula = useSelector((state: RootState) => selectFormulaByID(state, formula.prevFormula !== undefined ? formula.prevFormula : id));
+    const isFormulaLast = useSelector((state: RootState) => selectIsFormulaLast(state, TransId, id));
 
     const error = useSelector((state: RootState)  => selectParsedFormula(state, TransId, id));
     const transformationError = useSelector((state: RootState)  => selectTransformationError(state, TransId, formula.prevFormula, id));
@@ -101,7 +102,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                     </OverlayTrigger>
                                 }
                                 onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
-                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
+                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} isLast={isFormulaLast} />)}
                 </DropdownButton>
 
             }
@@ -111,7 +112,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                                     <>+<span className="step"> Step</span></>
                                 }
                                 onSelect={(e) => dispatch(formulaAdded({transformation: TransId, prevFormula:id, operation: e}))}>
-                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} />)}
+                    {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} isLast={isFormulaLast} />)}
                 </DropdownButton>
             }
             <Button variant="outline-danger"
