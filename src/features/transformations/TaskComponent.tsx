@@ -2,7 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     selectTransSequences,
     transSequenceAdded
-} from "./mainTaskSlice.ts";
+} from "./transformationsSlice.ts";
 import TransformationComponent from "./TransformationComponent.tsx";
 import {Button, Stack} from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

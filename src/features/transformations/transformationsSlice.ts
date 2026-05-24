@@ -34,7 +34,7 @@ interface skolemSymbolsState {
     functions: SymbolWithArity[],
 }
 
-export interface MainTaskState {
+export interface transformationsState {
     transSequences: number[];
     transSequenceKey: number;
     transformations: Record<number, transformationState>;
@@ -44,7 +44,7 @@ export interface MainTaskState {
     contextFormulaNames: string[];
 }
 
-const initialState: MainTaskState = {
+const initialState: transformationsState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
@@ -54,8 +54,8 @@ const initialState: MainTaskState = {
     contextFormulaNames: [],
 }
 
-export const MainTaskSlice = createSlice({
-    name:"mainTask",
+export const transformationsSlice = createSlice({
+    name:"transformations",
     initialState,
     reducers: {
         "transSequenceAdded": (state) => {
@@ -170,7 +170,7 @@ export const MainTaskSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
-            const importedState: MainTaskState = action.payload.mainTask;
+            const importedState: transformationsState = action.payload.transformations;
 
             const seenTransformations = new Set(importedState.transSequences);
             for (const key in importedState.transformations) {
@@ -221,26 +221,26 @@ export const MainTaskSlice = createSlice({
 
 export const {transSequenceAdded, transSequenceRemoved, formulaAdded,
               formulaRemoved, formulaModified, skolemSymbolsUpdated,
-              contextFormulaAdded, allContextFormulasAdded, contextFormulasUpdated} = MainTaskSlice.actions;
-export default MainTaskSlice.reducer;
+              contextFormulaAdded, allContextFormulasAdded, contextFormulasUpdated} = transformationsSlice.actions;
+export default transformationsSlice.reducer;
 
 export const selectTransSequences = (state: RootState) =>
-    state.mainTask.transSequences;
+    state.transformations.transSequences;
 export const selectTransformations = (state: RootState, id: number) =>
-    state.mainTask.transformations[id].formulas;
+    state.transformations.transformations[id].formulas;
 export const selectFormulaByID = (state: RootState, id: number) =>
-    state.mainTask.formulas[id];
+    state.transformations.formulas[id];
 export const selectAllFormulas = (state: RootState) =>
-    state.mainTask.formulas;
+    state.transformations.formulas;
 export const selectSkolemSymbols = (state: RootState) =>
-    state.mainTask.skolemSymbols;
+    state.transformations.skolemSymbols;
 export const selectSkolemSymbolsTextByID = (state: RootState, id: number) =>
-    state.mainTask.skolemSymbols[id]?.text;
+    state.transformations.skolemSymbols[id]?.text;
 export const selectContextFormulasNames = (state: RootState) =>
-    state.mainTask.contextFormulaNames;
+    state.transformations.contextFormulaNames;
 
 export const selectIsFormulaLast = (state: RootState, TransId: number, id: number) =>
-    state.mainTask.transformations[TransId].formulas.indexOf(id) === state.mainTask.transformations[TransId].formulas.length-1;
+    state.transformations.transformations[TransId].formulas.indexOf(id) === state.transformations.transformations[TransId].formulas.length-1;
 
 export const selectParsedSkolemSymbolsByIDs = createSelector(
     [selectTransformations, selectSkolemSymbols, (_state, _TransId, id) => id],

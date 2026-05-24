@@ -74,6 +74,6 @@ export const selectImportError = (state: RootState) =>
 function serializeState(state: RootState) {
     return {
         "language": state.language,
-        "mainTask": state.mainTask,
+        "transformations": state.transformations,
     }
 }

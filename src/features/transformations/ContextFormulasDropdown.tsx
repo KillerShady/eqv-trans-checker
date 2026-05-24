@@ -1,7 +1,7 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useUpdateFormulasContext} from "../../LogicContext.ts";
 import {Dropdown, DropdownButton, DropdownItem} from "react-bootstrap";
-import {allContextFormulasAdded, contextFormulaAdded, selectContextFormulasNames} from "./mainTaskSlice.ts";
+import {allContextFormulasAdded, contextFormulaAdded, selectContextFormulasNames} from "./transformationsSlice.ts";
 
 export default function ContextFormulasDropdown() {
 

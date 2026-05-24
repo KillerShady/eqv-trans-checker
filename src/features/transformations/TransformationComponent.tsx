@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import type {RootState} from "../../state/store.ts";
-import {selectTransformations, transSequenceRemoved} from "./mainTaskSlice.ts";
+import {selectTransformations, transSequenceRemoved} from "./transformationsSlice.ts";
 import FormulaComponent from "./FormulaComponent.tsx";
 
 export default function TransformationComponent({ index, id, canRemove }: { index: number, id: number, canRemove: boolean }) {

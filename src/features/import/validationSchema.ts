@@ -1,10 +1,10 @@
 import {z} from "zod";
 import {serializedLanguageStateSchema} from "../language/languageValidationSchema.ts";
-import {serializedMainTaskStateSchema} from "../mainTask/mainTaskValidationSchema.ts";
+import {serializedTransformationsStateSchema} from "../transformations/transformationsValidationSchema.ts";
 
 export const serializedAppStateSchema = z.object({
     language: serializedLanguageStateSchema,
-    mainTask: serializedMainTaskStateSchema,
+    transformations: serializedTransformationsStateSchema,
 });
 
 export type serializedAppState = z.infer<typeof serializedAppStateSchema>;

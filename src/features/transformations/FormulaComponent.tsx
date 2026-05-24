@@ -9,7 +9,7 @@ import {
     skolemSymbolsUpdated,
     selectSkolemSymbolsErrorByID,
     selectSkolemSymbolsTextByID, selectSkolemConstantSymbolsClash, selectIsFormulaLast
-} from "./mainTaskSlice.ts";
+} from "./transformationsSlice.ts";
 import {Button, DropdownButton, Form, InputGroup, OverlayTrigger, Tooltip, type TooltipProps} from "react-bootstrap";
 import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";

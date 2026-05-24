@@ -1,6 +1,6 @@
 import {Form, InputGroup} from "react-bootstrap";
 import type {ChangeEvent, ReactNode} from "react";
-import ErrorFeedback from "../mainTask/ErrorFeedback.tsx";
+import ErrorFeedback from "../transformations/ErrorFeedback.tsx";
 
 interface Props {
     label: string;

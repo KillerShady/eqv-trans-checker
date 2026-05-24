@@ -2,7 +2,7 @@ import {type SymbolWithArity} from "@fmfi-uk-1-ain-412/js-fol-parser";
 import {createContext, useContext, useEffect, useMemo} from "react";
 import {useDispatch} from "react-redux";
 import {updateConstants, updateFunctions, updatePredicates} from "./features/language/languageSlice.ts";
-import {contextFormulasUpdated} from "./features/mainTask/mainTaskSlice.ts";
+import {contextFormulasUpdated} from "./features/transformations/transformationsSlice.ts";
 
 export interface NamedFormula {
     name: string;

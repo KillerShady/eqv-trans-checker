@@ -18,7 +18,7 @@ const skolemSymbolsStateSchema = z.object({
     functions: z.array(symbolWithAritySchema),
 })
 
-export const serializedMainTaskStateSchema = z.object({
+export const serializedTransformationsStateSchema = z.object({
     transSequences: z.array(z.number()),
     transSequenceKey: z.number(),
     transformations: z.record(z.number(), transformationStateSchema),
@@ -26,31 +26,31 @@ export const serializedMainTaskStateSchema = z.object({
     formulasKey: z.number(),
     skolemSymbols: z.record(z.number(), skolemSymbolsStateSchema),
     contextFormulaNames: z.array(z.string()),
-}).superRefine((mainTask, context) => {
-    for (const sequence of mainTask.transSequences) {
-        if (! (sequence in mainTask.transformations)) {
+}).superRefine((transformations, context) => {
+    for (const sequence of transformations.transSequences) {
+        if (! (sequence in transformations.transformations)) {
             context.addIssue({
                 code: "custom",
                 message: `Found invalid key ${sequence} for transformations.`,
-                input: mainTask.transSequences,
+                input: transformations.transSequences,
             });
         }
     }
     const seenFormulas = new Set<number>();
-    for (const transformation of Object.values(mainTask.transformations)) {
+    for (const transformation of Object.values(transformations.transformations)) {
         for (const formula of transformation.formulas) {
-            if (! (formula in mainTask.formulas)) {
+            if (! (formula in transformations.formulas)) {
                 context.addIssue({
                     code: "custom",
                     message: `Found invalid key ${formula} for formulas.`,
-                    input: mainTask.transformations,
+                    input: transformations.transformations,
                 });
             }
             if (formula in seenFormulas) {
                 context.addIssue({
                     code: "custom",
                     message: `Formula ${formula} used more than once.`,
-                    input: mainTask.transformations,
+                    input: transformations.transformations,
                 });
             }
             seenFormulas.add(formula);

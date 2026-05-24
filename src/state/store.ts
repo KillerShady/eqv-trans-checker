@@ -1,11 +1,11 @@
 import {combineReducers, configureStore, type Middleware} from '@reduxjs/toolkit';
 import languageReducer from "../features/language/languageSlice.ts";
-import mainTaskReducer from "../features/mainTask/mainTaskSlice.ts";
+import transformationsReducer from "../features/transformations/transformationsSlice.ts";
 import importExportReducer from "../features/import/importExportSlice.ts";
 
 const reducer = combineReducers({
     language: languageReducer,
-    mainTask: mainTaskReducer,
+    transformations: transformationsReducer,
     importExport: importExportReducer,
 });
 
