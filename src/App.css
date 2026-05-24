@@ -1,6 +1,6 @@
 .view-mode .view-mode-hide,
 .view-mode .input-group .btn-success {
-    display: none; !important;
+    display: none;
 }
 
 .view-mode .form-control,
