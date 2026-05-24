@@ -3,7 +3,7 @@ import type {AppDispatch, RootState} from "../../state/store.ts";
 import {type serializedAppState, serializedAppStateSchema} from "./validationSchema.ts";
 import {z, ZodError} from "zod";
 
-interface ImportExportState {
+export interface ImportExportState {
     error: string;
 }
 
@@ -11,7 +11,7 @@ const initialState: ImportExportState = {
     error: "",
 }
 
-const importExportSlice = createSlice({
+export const importExportSlice = createSlice({
     name:"importExport",
     initialState,
     reducers: {

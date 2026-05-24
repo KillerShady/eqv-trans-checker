@@ -10,7 +10,7 @@ import {Language} from "../../model"
 import {importAppState} from "../import/importExportSlice.ts";
 import type {serializedAppState} from "../import/validationSchema.ts";
 
-interface LanguageState {
+export interface LanguageState {
     constants: string;
     predicates: string;
     functions: string;
@@ -28,7 +28,7 @@ const initialState: LanguageState = {
     parsedFunctions: [],
 }
 
-const languageSlice = createSlice({
+export const languageSlice = createSlice({
     name:"language",
     initialState,
     reducers: {

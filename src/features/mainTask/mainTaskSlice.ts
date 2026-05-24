@@ -8,7 +8,7 @@ import {
 import {getFactories} from "../../model";
 import {importAppState} from "../import/importExportSlice.ts";
 import type {serializedAppState} from "../import/validationSchema.ts";
-import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
+import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.tsx";
 import {
     parseSkolemSymbols,
     SyntaxError, type SymbolWithArity,
@@ -34,7 +34,7 @@ interface skolemSymbolsState {
     functions: SymbolWithArity[],
 }
 
-interface MainTaskState {
+export interface MainTaskState {
     transSequences: number[];
     transSequenceKey: number;
     transformations: Record<number, transformationState>;
@@ -54,7 +54,7 @@ const initialState: MainTaskState = {
     contextFormulaNames: [],
 }
 
-const MainTaskSlice = createSlice({
+export const MainTaskSlice = createSlice({
     name:"mainTask",
     initialState,
     reducers: {
@@ -238,6 +238,9 @@ export const selectSkolemSymbolsTextByID = (state: RootState, id: number) =>
     state.mainTask.skolemSymbols[id]?.text;
 export const selectContextFormulasNames = (state: RootState) =>
     state.mainTask.contextFormulaNames;
+
+export const selectIsFormulaLast = (state: RootState, TransId: number, id: number) =>
+    state.mainTask.transformations[TransId].formulas.indexOf(id) === state.mainTask.transformations[TransId].formulas.length-1;
 
 export const selectParsedSkolemSymbolsByIDs = createSelector(
     [selectTransformations, selectSkolemSymbols, (_state, _TransId, id) => id],

@@ -15,7 +15,7 @@ import ErrorFeedback from "./ErrorFeedback.tsx";
 import {faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {InlineMath} from "react-katex";
-import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.ts";
+import {EquivalentTransformationsRecord} from "./EquivalentTransformationsRecord.tsx";
 import TransformationSelectionOption from "./TransformationSelectionOption.tsx";
 import type {JSX} from "react/jsx-runtime";
 import type {RefAttributes} from "react";
