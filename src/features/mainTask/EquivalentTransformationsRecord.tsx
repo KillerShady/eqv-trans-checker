@@ -16,10 +16,11 @@ import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
 import IdentityChecker from "../../error checkers/IdentityChecker.ts";
 import CNFChecker from "../../error checkers/CNFChecker.ts";
 import EquivalenceEliminationChecker from "../../error checkers/EquivalenceEliminationChecker.ts";
+import type {ReactNode} from "react";
 
 interface EquivalentTransformationData {
     key: string,
-    name: string,
+    name: string | ReactNode,
     tex: string,
     checker: TransformationChecker,
     help: string,
@@ -27,8 +28,8 @@ interface EquivalentTransformationData {
 export const EquivalentTransformationsRecord: Record<string, EquivalentTransformationData> = {
     "CNF": {
         key: "CNF",
-        name: "CNF",
-        tex: "",
+        name: "Is CNF",
+        tex: "\\text{Check if formula is in CNF}",
         checker: new CNFChecker(),
         help: ""
     },
@@ -62,21 +63,21 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     },
     "Reorder": {
         key: "Reorder",
-        name: "A&C",
+        name: "Associativity & Commutativity",
         tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C) \\\\ (A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
         checker: new ReorderingChecker(),
         help: ""
     },
     "Distributivity": {
         key: "Distributivity",
-        name: "Distributivity Propositional",
+        name: <>Distributivity Propositional<sup>One Step Only</sup></>,
         tex: "(A \\land (B \\lor C)) \\Leftrightarrow ((A \\land B) \\lor (A \\land C)) \\\\ (A \\lor (B \\land C)) \\Leftrightarrow ((A \\lor B) \\land (A \\lor C))",
         checker: new DistributivityChecker(),
         help: ""
     },
     "DistributivityQUANT": {
         key: "DistributivityQUANT",
-        name: "Distributivity Quantifier",
+        name: <>Distributivity Quantifier<sup>One Step Only</sup></>,
         tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x)) \\\\ \\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
         checker: new DistributivityQuantifierChecker(),
         help: ""
@@ -90,7 +91,7 @@ export const EquivalentTransformationsRecord: Record<string, EquivalentTransform
     },
     "RemoveQUANTPROP": {
         key: "RemoveQUANTPROP",
-        name: "Quantifier Prenexing",
+        name: <>Quantifier Prenexing<sup>One Step Only</sup></>,
         tex: "\\exists x A(x) \\lor D \\Leftrightarrow \\exists x(A(x) \\lor D) \\\\ \\forall x A(x) \\lor D \\Leftrightarrow \\forall x (A(x) \\lor D) \\\\ \\exists x A(x) \\land D \\Leftrightarrow \\exists x (A(x) \\land D) \\\\ \\forall x A(x) \\land D \\Leftrightarrow \\forall x (A(x) \\land D)",
         checker: new QuantifierEliminationPropositionalChecker(),
         help: ""
