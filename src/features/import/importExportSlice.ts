@@ -49,7 +49,7 @@ export const exportAppState =
 
 export function importAppStateFromJSON(importedState: string, dispatch: AppDispatch) {
     try {
-        const json = JSON.parse(importedState);
+        const json = updateJSON(JSON.parse(importedState));
         const serializedAppState = serializedAppStateSchema.parse(json);
         dispatch(importAppState(serializedAppState));
     } catch (error) {
@@ -64,6 +64,15 @@ export function importAppStateFromJSON(importedState: string, dispatch: AppDispa
     }
 }
 
+function updateJSON(json) {
+    if (json.mainTask !== undefined && json.transformations === undefined) {
+        json.transformations = json.mainTask;
+        delete json.mainTask;
+    }
+
+    return json;
+}
+
 export const getStateToJson = (state: RootState) => {
     return JSON.stringify(serializeState(state), null, 2);
 }
@@ -74,6 +83,6 @@ export const selectImportError = (state: RootState) =>
 function serializeState(state: RootState) {
     return {
         "language": state.language,
-        "transformations": state.transformations,
+        "transformations": state.transformations
     }
 }
