@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import QuantifierEliminationPropositionalChecker from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
+import QuantifierEliminationPropositionalChecker from "../../error_checkers/QuantifierEliminationPropositionalChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
     const checker = new QuantifierEliminationPropositionalChecker();

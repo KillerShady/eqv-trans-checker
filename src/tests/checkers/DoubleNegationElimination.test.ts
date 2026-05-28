@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts";
-import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
+import DoubleNegationEliminationChecker from "../../error_checkers/DoubleNegationEliminationChecker.ts";
 
 describe("Double Negation Elimination Checker", () => {
     const checker = new DoubleNegationEliminationChecker();

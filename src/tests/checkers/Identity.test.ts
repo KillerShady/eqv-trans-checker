@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import IdentityChecker from "../../error checkers/IdentityChecker.ts";
+import IdentityChecker from "../../error_checkers/IdentityChecker.ts";
 
 describe("Identity Checker", () => {
     const checker = new IdentityChecker();

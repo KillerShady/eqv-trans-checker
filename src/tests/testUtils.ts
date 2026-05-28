@@ -10,9 +10,9 @@ import {
     getFactories, //Implication,
     Language, //Negation, PredicateAtom, UniversalQuant, Variable
 } from "../model";
-import type TransformationChecker from "../error checkers/TransformationChecker.ts";
+import type TransformationChecker from "../error_checkers/TransformationChecker.ts";
 import {expect, it} from "vitest";
-import SkolemizationChecker from "../error checkers/SkolemizationChecker.ts";
+import SkolemizationChecker from "../error_checkers/SkolemizationChecker.ts";
 
 const constants = new Set(["kitty", "sk1", "sk2", "sk3"]);
 const predicates = new Map([["cat", 1], ["loves", 2]]);

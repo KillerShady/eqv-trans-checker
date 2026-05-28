@@ -13,7 +13,7 @@ import {
     parseSkolemSymbols,
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
-import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
+import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
 
 interface transformationState {
     id: number,

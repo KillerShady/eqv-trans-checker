@@ -7,7 +7,6 @@ import {
 
 class ReorderingChecker extends TransformationChecker {
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
-    //console.log("CHECKING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", original.toString(), "\n", transformed.toString());
         if (this.checkSameFunctor(original, transformed)) {
             const childrenResults = this.checkChildren(original, transformed);
             if (childrenResults.isEquivalentOrIdentical()) return childrenResults;
@@ -17,7 +16,6 @@ class ReorderingChecker extends TransformationChecker {
     }
 
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
-        //console.log("error on\n", original.toString(), "\n", transformed.toString());
         if (original instanceof Conjunction && transformed instanceof Conjunction) {
             return this.checkConjunctionDisjunction(original, transformed, "conjunct");
         } else if (original instanceof Disjunction && transformed instanceof Disjunction) {
@@ -32,16 +30,8 @@ class ReorderingChecker extends TransformationChecker {
     }
 
     checkConjunctionDisjunction(original: Conjunction | Disjunction, transformed: Conjunction | Disjunction, type: string) {
-        //console.log(original.toString(), type, transformed.toString());
         const originalSubFormulas = original.flatten().getSubFormulas();
         const transformedSubFormulas = transformed.flatten().getSubFormulas();
-        /*console.log(originalSubFormulas.length, transformedSubFormulas.length);
-        for (let i = 0; i < originalSubFormulas.length; i++) {
-            console.log(originalSubFormulas[i].toString());
-        }
-        for (let i = 0; i < transformedSubFormulas.length; i++) {
-            console.log(originalSubFormulas[i].toString());
-        }*/
 
         if (originalSubFormulas.length < transformedSubFormulas.length) {
             return this.errorResult(

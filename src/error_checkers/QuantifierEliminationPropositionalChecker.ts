@@ -18,28 +18,20 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
 
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisitesStandard(original, transformed)) {
-            return this.performCheck(original.subFormula.subRight,
-                                     original.subFormula.subLeft,
-                                     transformed.subRight,
-                                     transformed.subLeft.subFormula,
+            return this.performCheck(original.subFormula.subRight, original.subFormula.subLeft,
+                                     transformed.subRight, transformed.subLeft.subFormula,
                                      original.variableName);
         } else if (this.checkRequisitesFlipped(original, transformed)) {
-            return this.performCheck(original.subFormula.subLeft,
-                                     original.subFormula.subRight,
-                                     transformed.subLeft,
-                                     transformed.subRight.subFormula,
+            return this.performCheck(original.subFormula.subLeft, original.subFormula.subRight,
+                                     transformed.subLeft, transformed.subRight.subFormula,
                                      original.variableName);
         } else if (this.checkRequisitesStandard(transformed, original)) {
-            return this.performCheck(original.subRight,
-                                     original.subLeft.subFormula,
-                                     transformed.subFormula.subRight,
-                                     transformed.subFormula.subLeft,
+            return this.performCheck(original.subRight, original.subLeft.subFormula,
+                                     transformed.subFormula.subRight, transformed.subFormula.subLeft,
                                      transformed.variableName);
         } else if (this.checkRequisitesFlipped(transformed, original)) {
-            return this.performCheck(original.subLeft,
-                                     original.subRight.subFormula,
-                                     transformed.subFormula.subLeft,
-                                     transformed.subFormula.subRight,
+            return this.performCheck(original.subLeft, original.subRight.subFormula,
+                                     transformed.subFormula.subLeft, transformed.subFormula.subRight,
                                      transformed.variableName);
         } else if (original instanceof Variable &&
                    transformed instanceof Variable &&

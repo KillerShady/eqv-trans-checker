@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts";
-import EquivalenceEliminationChecker from "../../error checkers/EquivalenceEliminationChecker.ts";
+import EquivalenceEliminationChecker from "../../error_checkers/EquivalenceEliminationChecker.ts";
 
 describe("Equivalence Elimination Checker", () => {
     const checker = new EquivalenceEliminationChecker();

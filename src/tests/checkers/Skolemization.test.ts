@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
 import {testEquivalent, testError, testIdentical} from "../testUtils.ts"
-import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
+import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
 
 describe("Skolemization Checker", () => {
     const checker = new SkolemizationChecker();

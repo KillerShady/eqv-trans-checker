@@ -5,12 +5,12 @@ import {Conjunction, Disjunction, ExistentialQuant, UniversalQuant} from "../mod
 class DistributivityQuantifierChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula)
+            const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula);
             if (result.isNotError()) result.combine(this.checkForError(original.subFormula.subRight, transformed.subRight.subFormula));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft)
+            const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft);
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;

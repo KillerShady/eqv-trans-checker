@@ -1,6 +1,6 @@
 import {describe, it} from "vitest";
 import {testEquivalent, testError} from "../testUtils.ts"
-import CNFChecker from "../../error checkers/CNFChecker.ts";
+import CNFChecker from "../../error_checkers/CNFChecker.ts";
 
 describe("CNF Checker", () => {
     const checker = new CNFChecker();

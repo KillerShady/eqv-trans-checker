@@ -5,12 +5,16 @@ import {Conjunction, Disjunction} from "../../model";
 class CommutativityChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
+            // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subLeft, transformed.subRight);
+            // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subLeft));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
+            // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subRight, transformed.subLeft);
+            // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;

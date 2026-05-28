@@ -1,21 +1,21 @@
-import TransformationChecker from "../../error checkers/TransformationChecker.ts";
-import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
-import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
-import RenamingVariablesChecker from "../../error checkers/RenamingVariablesChecker.ts";
+import TransformationChecker from "../../error_checkers/TransformationChecker.ts";
+import ContradictionChecker from "../../error_checkers/ContradictionChecker.ts";
+import ExcludedMiddleChecker from "../../error_checkers/ExcludedMiddleChecker.ts";
+import RenamingVariablesChecker from "../../error_checkers/RenamingVariablesChecker.ts";
 import QuantifierEliminationPropositionalChecker
-    from "../../error checkers/QuantifierEliminationPropositionalChecker.ts";
-import QuantifierEliminationChecker from "../../error checkers/QuantifierEliminationChecker.ts";
-import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
-import AbsorptionIdempotenceChecker from "../../error checkers/AbsorptionIdempotenceChecker.ts";
-import DoubleNegationEliminationChecker from "../../error checkers/DoubleNegationEliminationChecker.ts";
-import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
-import DistributivityChecker from "../../error checkers/DistributivityChecker.ts";
-import DeMorganCombinedChecker from "../../error checkers/DeMorganCombinedChecker.ts";
-import SkolemizationChecker from "../../error checkers/SkolemizationChecker.ts";
-import ReorderingChecker from "../../error checkers/ReorderingChecker.ts";
-import IdentityChecker from "../../error checkers/IdentityChecker.ts";
-import CNFChecker from "../../error checkers/CNFChecker.ts";
-import EquivalenceEliminationChecker from "../../error checkers/EquivalenceEliminationChecker.ts";
+    from "../../error_checkers/QuantifierEliminationPropositionalChecker.ts";
+import QuantifierEliminationChecker from "../../error_checkers/QuantifierEliminationChecker.ts";
+import ImplicationEliminationChecker from "../../error_checkers/ImplicationEliminationChecker.ts";
+import AbsorptionIdempotenceChecker from "../../error_checkers/AbsorptionIdempotenceChecker.ts";
+import DoubleNegationEliminationChecker from "../../error_checkers/DoubleNegationEliminationChecker.ts";
+import DistributivityQuantifierChecker from "../../error_checkers/DistributivityQuantifierChecker.ts";
+import DistributivityChecker from "../../error_checkers/DistributivityChecker.ts";
+import DeMorganCombinedChecker from "../../error_checkers/DeMorganCombinedChecker.ts";
+import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
+import ReorderingChecker from "../../error_checkers/ReorderingChecker.ts";
+import IdentityChecker from "../../error_checkers/IdentityChecker.ts";
+import CNFChecker from "../../error_checkers/CNFChecker.ts";
+import EquivalenceEliminationChecker from "../../error_checkers/EquivalenceEliminationChecker.ts";
 import type {ReactNode} from "react";
 
 interface EquivalentTransformationData {

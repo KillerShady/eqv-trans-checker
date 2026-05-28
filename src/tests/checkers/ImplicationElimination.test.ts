@@ -1,5 +1,5 @@
 import {describe, it} from "vitest";
-import ImplicationEliminationChecker from "../../error checkers/ImplicationEliminationChecker.ts";
+import ImplicationEliminationChecker from "../../error_checkers/ImplicationEliminationChecker.ts";
 import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,

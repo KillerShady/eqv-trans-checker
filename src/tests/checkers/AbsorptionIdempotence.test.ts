@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import AbsorptionIdempotenceChecker from "../../error checkers/AbsorptionIdempotenceChecker.ts";
+import AbsorptionIdempotenceChecker from "../../error_checkers/AbsorptionIdempotenceChecker.ts";
 
 describe("Tautology Elimination Checker", () => {
     const checker = new AbsorptionIdempotenceChecker();

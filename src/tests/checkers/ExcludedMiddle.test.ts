@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import ExcludedMiddleChecker from "../../error checkers/ExcludedMiddleChecker.ts";
+import ExcludedMiddleChecker from "../../error_checkers/ExcludedMiddleChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
     const checker = new ExcludedMiddleChecker();

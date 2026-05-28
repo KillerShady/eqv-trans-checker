@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts";
-import DistributivityQuantifierChecker from "../../error checkers/DistributivityQuantifierChecker.ts";
+import DistributivityQuantifierChecker from "../../error_checkers/DistributivityQuantifierChecker.ts";
 
 describe("Distributivity Quantifier Checker", () => {
     const checker = new DistributivityQuantifierChecker();

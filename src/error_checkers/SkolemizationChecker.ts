@@ -9,7 +9,7 @@ import {
     QuantifiedFormula, Term,
     Variable
 } from "../model";
-import type { SymbolWithArity } from "@fmfi-uk-1-ain-412/js-fol-parser";
+import type { SymbolWithArity } from "../js-fol-parser";
 
 interface skolemizedPattern {
     name: string,
@@ -42,6 +42,7 @@ class SkolemizationChecker extends TransformationChecker {
         }
         if (original instanceof Variable) {
             if (this.changedVars.has(original.name)) {
+                // @ts-expect-error honestly i dont know why es-lint flags this
                 return this.checkCorrectlySkolemized(this.changedVars.get(original.name), transformed);
             }
             if (this.checkSameFunctor(original, transformed)) {
@@ -60,6 +61,7 @@ class SkolemizationChecker extends TransformationChecker {
     handleQuant(original: QuantifiedFormula, transformed: Expression) {
         if (original instanceof ExistentialQuant) {
             if (this.checkSameFunctor(original, transformed)) {
+                // @ts-expect-error instance has been checked in if statement
                 return this.checkForError(original.subFormula, transformed.subFormula);
             }
             this.changedVars.set(original.variableName, {name: "",
@@ -71,6 +73,7 @@ class SkolemizationChecker extends TransformationChecker {
         }
         if (this.checkSameFunctor(original, transformed)) {
             this.universalQuants.push(original.variableName);
+            // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subFormula, transformed.subFormula);
             this.universalQuants.pop();
             return result;
@@ -147,6 +150,7 @@ class SkolemizationChecker extends TransformationChecker {
         }
         for (let i = 0; i < pattern.subterms.length; i++) {
             if (! (transformed.terms[i] instanceof Variable) ||
+                // @ts-expect-error all terms have .name
                 transformed.terms[i].name !== pattern.subterms[i]) {
                 const patternString = pattern.name + "(" + pattern.subterms.join(", ")+")";
                 return this.errorResult(
@@ -171,6 +175,7 @@ class SkolemizationChecker extends TransformationChecker {
     getNamesOfTerms(terms: Term[]) {
         const result: string[] = []
         for (const term of terms) {
+            // @ts-expect-error all terms have .name
             result.push(term.name);
         }
         return result;

@@ -4,7 +4,7 @@ import {
     testErrorTwoDirectional,
     testIdentical
 } from "../testUtils.ts"
-import ContradictionChecker from "../../error checkers/ContradictionChecker.ts";
+import ContradictionChecker from "../../error_checkers/ContradictionChecker.ts";
 
 describe("Quantifier Elimination Checker", () => {
     const checker = new ContradictionChecker();

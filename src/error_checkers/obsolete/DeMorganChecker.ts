@@ -5,12 +5,16 @@ import {Conjunction, Disjunction, Negation} from "../../model";
 class DeMorganChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
+            // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula);
+            // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subFormula.subRight, transformed.subRight.subFormula));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
+            // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft);
+            // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
             if (result.isEquivalentOrIdentical()) return this.equivalentResult();
             return result;
