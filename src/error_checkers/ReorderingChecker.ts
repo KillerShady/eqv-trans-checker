@@ -11,8 +11,13 @@ class ReorderingChecker extends TransformationChecker {
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (! this.hasFlattened) {
             this.hasFlattened = true;
+            if (this.checkForError(original, transformed).isIdentical()) {
+                this.hasFlattened = false;
+                return TransformationCheckerResult.identicalResult();
+            }
             const result = this.checkForError(original.flatten(), transformed.flatten());
             this.hasFlattened = false;
+            if (result.isIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
 
