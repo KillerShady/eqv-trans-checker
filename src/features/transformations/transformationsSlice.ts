@@ -103,6 +103,11 @@ export const transformationsSlice = createSlice({
                 state.formulas[formulas[index + 1]].prevFormula = state.formulas[action.payload.id].prevFormula;
             }
             formulas.splice(index, 1);
+            if (formulas.length === 0) {
+                state.transSequences.splice(state.transSequences.indexOf(action.payload.transformation), 1);
+                delete state.transformations[action.payload.transformation];
+            }
+
             const name = state.formulas[action.payload.id].name;
             if (name !== undefined) {
                 const nameIndex = state.contextFormulaNames.indexOf(name);
