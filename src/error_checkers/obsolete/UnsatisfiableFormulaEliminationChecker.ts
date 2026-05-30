@@ -11,7 +11,7 @@ class UnsatisfiableFormulaEliminationChecker extends TransformationChecker {
                 this.checkForError(original.subRight, transformed) :
                 // @ts-expect-error instance has been checked in if statement
                 this.checkForError(original.subLeft, transformed);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             // @ts-expect-error instance has been checked in if statement
@@ -20,7 +20,7 @@ class UnsatisfiableFormulaEliminationChecker extends TransformationChecker {
                 this.checkForError(original, transformed.subRight) :
                 // @ts-expect-error instance has been checked in if statement
                 this.checkForError(original, transformed.subLeft);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
         if (childrenResults &&
@@ -28,7 +28,7 @@ class UnsatisfiableFormulaEliminationChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Tautology Creation rule!"
         );
     }

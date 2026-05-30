@@ -22,7 +22,7 @@ class RenamingVariablesChecker extends TransformationChecker {
                    transformed instanceof Variable) {
             return this.checkVariables(original, transformed);
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Renaming Variables rule!"
         );
     }
@@ -46,21 +46,21 @@ class RenamingVariablesChecker extends TransformationChecker {
         if (this.renaming.has(original.name)) {
             if (this.renaming.get(original.name) === transformed.name) {
                 return original.name === transformed.name ?
-                    this.identicalResult() :
-                    this.equivalentResult();
+                    TransformationCheckerResult.identicalResult() :
+                    TransformationCheckerResult.equivalentResult();
             }
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Expected " + this.renaming.get(original.name) + ", found " + transformed.name + "!"
             );
         }
         if (new Set(this.renaming.values()).has(transformed.name)) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Free variable " + original.name + " cannot be changed to a bound variable " + transformed.name + "!"
             );
         }
         return original.name === transformed.name ?
-            this.identicalResult() :
-            this.equivalentResult();
+            TransformationCheckerResult.identicalResult() :
+            TransformationCheckerResult.equivalentResult();
     }
 
 }

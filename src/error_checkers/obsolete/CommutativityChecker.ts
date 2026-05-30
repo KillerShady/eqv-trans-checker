@@ -9,17 +9,17 @@ class CommutativityChecker extends TransformationChecker {
             const result = this.checkForError(original.subLeft, transformed.subRight);
             // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subLeft));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subRight, transformed.subLeft);
             // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Commutativity rule!"
         );
     }

@@ -8,14 +8,14 @@ class ContradictionChecker extends TransformationChecker {
             this.checkNegatedTautologyRequisites(original, transformed) ||
             this.checkNegatedFormulaRequisites(transformed, original) ||
             this.checkNegatedTautologyRequisites(transformed, original)) {
-            return this.equivalentResult()
+            return TransformationCheckerResult.equivalentResult()
         }
         if (childrenResults &&
             (this.hasOneChild(original) ||
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Contradiction rule!"
         );
     }

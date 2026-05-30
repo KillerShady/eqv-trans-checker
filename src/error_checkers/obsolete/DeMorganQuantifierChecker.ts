@@ -7,12 +7,12 @@ class DeMorganQuantifierChecker extends TransformationChecker {
         if (this.checkRequisites(original, transformed)) {
             // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subFormula.subFormula, transformed.subFormula.subFormula);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             // @ts-expect-error instance has been checked in if statement
             const result = this.checkForError(original.subFormula.subFormula, transformed.subFormula.subFormula);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
         if (childrenResults &&
@@ -20,7 +20,7 @@ class DeMorganQuantifierChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the De Morgan rule for Quantifiers!"
         );
     }

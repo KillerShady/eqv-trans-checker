@@ -7,12 +7,12 @@ class DistributivityQuantifierChecker extends TransformationChecker {
         if (this.checkRequisites(original, transformed)) {
             const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula);
             if (result.isNotError()) result.combine(this.checkForError(original.subFormula.subRight, transformed.subRight.subFormula));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft);
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
         if (childrenResults &&
@@ -20,7 +20,7 @@ class DistributivityQuantifierChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Distributivity of Quantifiers rule!"
         );
     }

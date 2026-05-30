@@ -40,16 +40,16 @@ class QuantifierEliminationChecker extends TransformationChecker {
                    transformed instanceof Variable &&
                    original.name === transformed.name) {
             if (this.deleted.has(transformed.name)) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Cannot apply rule, because free variable " + transformed.name + " was found!"
                 );
             }
-            return this.identicalResult();
+            return TransformationCheckerResult.identicalResult();
         }
         if (childrenResults) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Quantifier Elimination rule!"
         );
     }
@@ -57,7 +57,7 @@ class QuantifierEliminationChecker extends TransformationChecker {
     private checkQuant(withQuant: QuantifiedFormula, withoutQuant: Expression) {
         this.deleted.add(withQuant.variableName);
         const result = this.checkForError(withQuant.subFormula, withoutQuant);
-        result.combine(this.equivalentResult());
+        result.combine(TransformationCheckerResult.equivalentResult());
         this.deleted.delete(withQuant.variableName);
         return result;
     }

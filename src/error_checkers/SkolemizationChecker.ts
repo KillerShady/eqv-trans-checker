@@ -24,7 +24,7 @@ class SkolemizationChecker extends TransformationChecker {
 
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
         if (original instanceof Negation && this.isNotNNF(original)) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Original formula is not in NNF!"
             );
         }
@@ -46,10 +46,10 @@ class SkolemizationChecker extends TransformationChecker {
                 return this.checkCorrectlySkolemized(this.changedVars.get(original.name), transformed);
             }
             if (this.checkSameFunctor(original, transformed)) {
-                return this.identicalResult();
+                return TransformationCheckerResult.identicalResult();
             }
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equisatisfiable nor identical according to the Skolemization rule!"
         );
     }
@@ -78,7 +78,7 @@ class SkolemizationChecker extends TransformationChecker {
             this.universalQuants.pop();
             return result;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equisatisfiable nor identical according to the Skolemization rule!"
         );
     }
@@ -86,13 +86,13 @@ class SkolemizationChecker extends TransformationChecker {
     checkCorrectlySkolemized(pattern: skolemizedPattern, transformed: Expression) {
         if (pattern.subterms.length === 0) {
             if (! (transformed instanceof Constant)) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Expected skolem constant but found " + transformed.toString() + " instead!"
                 );
             }
             if (pattern.name === "") {
                 if (this.usedSymbols.has(transformed.name)) {
-                    return this.errorResult(
+                    return TransformationCheckerResult.errorResult(
                         "Skolem constant " + transformed.name + " was used to replace a different variable!"
                     );
                 }
@@ -104,19 +104,19 @@ class SkolemizationChecker extends TransformationChecker {
                 }
             }
             if (pattern.name !== transformed.name) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Expected skolem constant " + pattern.name + " but found " + transformed.toString() + " instead!"
                 );
             }
         } else {
             if (! (transformed instanceof FunctionTerm)) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Expected skolem function but found " + transformed.toString() + " instead!"
                 );
             }
             if (pattern.name === "") {
                 if (this.usedSymbols.has(transformed.name)) {
-                    return this.errorResult(
+                    return TransformationCheckerResult.errorResult(
                         "Skolem function " + transformed.name + " was used to replace a different variable!"
                     );
                 }
@@ -134,17 +134,17 @@ class SkolemizationChecker extends TransformationChecker {
             return this.checkSkolemizedSubterms(pattern, transformed);
         }
 
-        return this.equivalentResult();
+        return TransformationCheckerResult.equivalentResult();
     }
 
     checkSkolemizedSubterms(pattern: skolemizedPattern, transformed: FunctionTerm) {
         if (pattern.name !== transformed.name) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Expected skolem function " + pattern.name + " but found " + transformed.name + " instead!"
             );
         }
         if (pattern.subterms.length !== transformed.terms.length) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Expected skolem function to have arity of " + pattern.subterms.length + " but found arity of " + transformed.terms.length + " instead!"
             );
         }
@@ -153,12 +153,12 @@ class SkolemizationChecker extends TransformationChecker {
                 // @ts-expect-error all terms have .name
                 transformed.terms[i].name !== pattern.subterms[i]) {
                 const patternString = pattern.name + "(" + pattern.subterms.join(", ")+")";
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Expected " + patternString + " but found " + transformed.toString() + " instead!"
                 );
             }
         }
-        return this.equivalentResult();
+        return TransformationCheckerResult.equivalentResult();
     }
 
     orderSubterms(subterms: string[], transformed: FunctionTerm) {

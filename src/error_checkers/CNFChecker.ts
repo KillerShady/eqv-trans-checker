@@ -58,7 +58,7 @@ class CNFChecker extends TransformationChecker {
 
     checkQuant(original: UniversalQuant): TransformationCheckerResult {
         if (original.subFormula instanceof Conjunction) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Universal quantifiers must be at the start of the clause in CNF!"
             );
         } else if (original.subFormula instanceof UniversalQuant) {
@@ -76,11 +76,11 @@ class CNFChecker extends TransformationChecker {
     checkDisjunct(original: Disjunction): TransformationCheckerResult {
         let result: TransformationCheckerResult;
         if (original.subLeft instanceof Conjunction) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Disjunction cannot contain conjunction in CNF!"
             );
         } else if (original.subLeft instanceof UniversalQuant) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Universal quantifiers must be at the start of the clause in CNF!"
             );
         } else if (original.subLeft instanceof Disjunction) {
@@ -94,11 +94,11 @@ class CNFChecker extends TransformationChecker {
         }
 
         if (original.subRight instanceof Conjunction) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Disjunction cannot contain conjunction in CNF!"
             );
         } else if (original.subRight instanceof UniversalQuant) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Universal quantifiers must be at the start of the clause in CNF!"
             );
         } else if (original.subRight instanceof Disjunction) {
@@ -115,39 +115,39 @@ class CNFChecker extends TransformationChecker {
 
     checkLiteral(original: Negation | PredicateAtom | EqualityAtom): TransformationCheckerResult {
         if (original instanceof PredicateAtom || original instanceof EqualityAtom) {
-            return this.equivalentResult();
+            return TransformationCheckerResult.equivalentResult();
         }
         if (original.subFormula instanceof PredicateAtom || original.subFormula instanceof EqualityAtom) {
-            return this.equivalentResult();
+            return TransformationCheckerResult.equivalentResult();
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             "Negation must be before an atomic formula!"
         );
     }
 
     selectError(original: Expression): TransformationCheckerResult {
         if (original instanceof Implication) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Implication is not allowed in CNF!"
             );
         }
         if (original instanceof Equivalence) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Equivalence is not allowed in CNF!"
             );
         }
         if (original instanceof ExistentialQuant) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Existential quantifier is not allowed in CNF!"
             );
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " is not allowed in CNF!"
         )
     }
 
     checkTransformationApplied(): TransformationCheckerResult {
-        return this.errorResult("")
+        return TransformationCheckerResult.errorResult("")
     }
 
 }

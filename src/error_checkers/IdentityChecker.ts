@@ -8,25 +8,25 @@ class IdentityChecker extends TransformationChecker {
             const result = original.subLeft instanceof AlwaysTrue ?
                 this.checkForError(original.subRight, transformed) :
                 this.checkForError(original.subLeft, transformed);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkConjunction(transformed)) {
             const result = transformed.subLeft instanceof AlwaysTrue ?
                 this.checkForError(original, transformed.subRight) :
                 this.checkForError(original, transformed.subLeft);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkDisjunction(original)) {
             const result = original.subLeft instanceof AlwaysFalse ?
                 this.checkForError(original.subRight, transformed) :
                 this.checkForError(original.subLeft, transformed);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkDisjunction(transformed)) {
             const result = transformed.subLeft instanceof AlwaysFalse ?
                 this.checkForError(original, transformed.subRight) :
                 this.checkForError(original, transformed.subLeft);
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
         if (childrenResults &&
@@ -34,7 +34,7 @@ class IdentityChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Identity rule!"
         );
     }

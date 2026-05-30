@@ -11,42 +11,42 @@ class DeMorganCombinedChecker extends TransformationChecker {
                 (original instanceof Disjunction && transformed instanceof Conjunction)) {
                 const result = this.checkTransformationApplied(original.subLeft, transformed.subLeft, childrenResults);
                 result.combine(this.checkTransformationApplied(original.subRight, transformed.subRight, childrenResults));
-                if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+                if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
                 return result;
             }
             if (((original instanceof UniversalQuant && transformed instanceof ExistentialQuant) ||
                  (original instanceof ExistentialQuant && transformed instanceof UniversalQuant)   ) &&
                 original.variableName === transformed.variableName) {
                 const result = this.checkTransformationApplied(original.subFormula, transformed.subFormula, childrenResults);
-                if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+                if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
                 return result;
             }
             if (original instanceof Negation) {
                 this.negated = false;
                 const result = this.checkForError(original.subFormula, transformed);
                 this.negated = true;
-                if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+                if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
                 return result;
             }
             if (transformed instanceof Negation) {
                 this.negated = false;
                 const result = this.checkForError(original, transformed.subFormula);
                 this.negated = true;
-                if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+                if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
                 return result;
             }
             if (original instanceof AlwaysTrue && transformed instanceof AlwaysFalse) {
-                return this.equivalentResult();
+                return TransformationCheckerResult.equivalentResult();
             }
             if (original instanceof AlwaysFalse && transformed instanceof AlwaysTrue) {
-                return this.equivalentResult();
+                return TransformationCheckerResult.equivalentResult();
             }
             if (childrenResults &&
                 (this.hasOneChild(original) ||
                     ! childrenResults.isAllError())) {
                 return childrenResults;
             }
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 "Expected " + original.toString() + " to be a negation of " + transformed.toString() + "!"
             );
         }
@@ -67,7 +67,7 @@ class DeMorganCombinedChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the De Morgan rule!"
         );
     }

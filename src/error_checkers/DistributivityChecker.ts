@@ -9,21 +9,21 @@ class DistributivityChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight.subLeft));
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft.subRight));
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             const result = this.checkForError(original.subLeft.subLeft, transformed.subLeft);
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft));
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight.subLeft));
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (childrenResults &&
             (this.hasOneChild(original) ||
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Distributivity rule!"
         );
     }

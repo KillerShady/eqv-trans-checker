@@ -11,7 +11,7 @@ class AssociativityChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft.subRight));
             // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
             // @ts-expect-error instance has been checked in if statement
@@ -20,10 +20,10 @@ class AssociativityChecker extends TransformationChecker {
             if (result.isNotError()) result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight.subLeft));
             // @ts-expect-error instance has been checked in if statement
             if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight.subRight));
-            if (result.isEquivalentOrIdentical()) return this.equivalentResult();
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Associativity rule!"
         );
     }

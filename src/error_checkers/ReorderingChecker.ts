@@ -33,7 +33,7 @@ class ReorderingChecker extends TransformationChecker {
         if (childrenResults !== undefined) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to a combination of Associativity and Commutativity rule!"
         );
     }
@@ -43,23 +43,23 @@ class ReorderingChecker extends TransformationChecker {
         const transformedSubFormulas = transformed.getSubFormulas();
 
         if (originalSubFormulas.length < transformedSubFormulas.length) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 transformed.toString() + " has more " + type + "s than " + original.toString()
             );
         } else if (originalSubFormulas.length > transformedSubFormulas.length) {
-            return this.errorResult(
+            return TransformationCheckerResult.errorResult(
                 original.toString() + " has more " + type + "s than " + transformed.toString()
             );
         }
         for (let i = 0; i < transformedSubFormulas.length; i++) {
             const result = this.checkForError(originalSubFormulas[i], transformedSubFormulas[i]);
             if (result.isError()) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to a combination of Associativity and Commutativity rules!"
                 );
             }
         }
-        return this.equivalentResult();
+        return TransformationCheckerResult.equivalentResult();
     }
 }
 

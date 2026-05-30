@@ -19,6 +19,16 @@ export class TransformationCheckerResult {
         this.allErrors = allErrors;
     }
 
+    public static identicalResult() {
+        return new TransformationCheckerResult([], false, false);
+    }
+    public static equivalentResult() {
+        return new TransformationCheckerResult([], true, false);
+    }
+    public static errorResult(message: string) {
+        return new TransformationCheckerResult([new Error(message)], false, true);
+    }
+
     public isIdentical(): boolean {
         return this.isNotError() && !this.anyEquivalent;
     }
@@ -93,7 +103,7 @@ abstract class TransformationChecker {
             return this.checkForError(original.subFormula, transformed.subFormula);
         } else if ((original instanceof PredicateAtom && transformed instanceof PredicateAtom) ||
                    (original instanceof FunctionTerm && transformed instanceof FunctionTerm)) {
-            if (original.terms.length === 0) return this.identicalResult();
+            if (original.terms.length === 0) return TransformationCheckerResult.identicalResult();
             const result = this.checkForError(original.terms[0], transformed.terms[0])
             for (let i = 1; i < original.terms.length; i++) {
                 result.combine(this.checkForError(original.terms[i], transformed.terms[i]));
@@ -101,17 +111,7 @@ abstract class TransformationChecker {
             return result;
         }
 
-        return this.identicalResult();
-    }
-
-    public identicalResult() {
-        return new TransformationCheckerResult([], false, false);
-    }
-    public equivalentResult() {
-        return new TransformationCheckerResult([], true, false);
-    }
-    public errorResult(message: string) {
-        return new TransformationCheckerResult([new Error(message)], false, true);
+        return TransformationCheckerResult.identicalResult();
     }
 
     protected hasOneChild(expression: Expression): boolean {

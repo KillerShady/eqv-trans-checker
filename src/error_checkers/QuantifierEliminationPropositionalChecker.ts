@@ -37,11 +37,11 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
                    transformed instanceof Variable &&
                    original.name === transformed.name) {
             if (this.deleted.has(transformed.name)) {
-                return this.errorResult(
+                return TransformationCheckerResult.errorResult(
                     "Cannot apply rule, because free variable " + transformed.name + " was found!"
                 );
             }
-            return this.identicalResult();
+            return TransformationCheckerResult.identicalResult();
         }
         if (this.checkSameFunctor(original, transformed)) {
             return this.checkChildren(original, transformed);
@@ -51,7 +51,7 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
                 ! childrenResults.isAllError())) {
             return childrenResults;
         }
-        return this.errorResult(
+        return TransformationCheckerResult.errorResult(
             original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Quantifier Prenexing rule!"
         );
     }
@@ -113,7 +113,7 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
                  transformedNotDeleted: Expression,
                  variable: string): TransformationCheckerResult {
         const addBack = this.deleted.has(variable);
-        const result = this.equivalentResult();
+        const result = TransformationCheckerResult.equivalentResult();
 
         this.deleted.add(variable);
         result.combine(this.checkForError(originalDeleted, transformedDeleted));
