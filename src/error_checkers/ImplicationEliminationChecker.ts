@@ -16,8 +16,8 @@ class ImplicationEliminationChecker extends TransformationChecker {
             return result;
         }
         if (childrenResults &&
-             (this.hasOneChild(original) ||
-              ! childrenResults.isAllError())) {
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
             return childrenResults;
         }
         return TransformationCheckerResult.errorResult(
