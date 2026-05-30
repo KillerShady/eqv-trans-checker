@@ -3,7 +3,7 @@ import type {RootState} from "../../state/store.ts";
 import {selectTransformations, transSequenceRemoved} from "./transformationsSlice.ts";
 import FormulaComponent from "./FormulaComponent.tsx";
 
-export default function TransformationComponent({ index, id, canRemove }: { index: number, id: number, canRemove: boolean }) {
+export default function SequenceComponent({ index, id, canRemove }: { index: number, id: number, canRemove: boolean }) {
     const formulas = useSelector((state: RootState)  => selectTransformations(state, id));
     const dispatch = useDispatch();
     console.log("drawing Box", id, canRemove);
