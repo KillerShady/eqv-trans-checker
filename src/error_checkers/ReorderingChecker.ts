@@ -6,7 +6,16 @@ import {
 } from "../model";
 
 class ReorderingChecker extends TransformationChecker {
+    hasFlattened = false;
+
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
+        if (! this.hasFlattened) {
+            this.hasFlattened = true;
+            const result = this.checkForError(original.flatten(), transformed.flatten());
+            this.hasFlattened = false;
+            return result;
+        }
+
         if (this.checkSameFunctor(original, transformed)) {
             const childrenResults = this.checkChildren(original, transformed);
             if (childrenResults.isEquivalentOrIdentical()) return childrenResults;
@@ -30,8 +39,8 @@ class ReorderingChecker extends TransformationChecker {
     }
 
     checkConjunctionDisjunction(original: Conjunction | Disjunction, transformed: Conjunction | Disjunction, type: string) {
-        const originalSubFormulas = original.flatten().getSubFormulas();
-        const transformedSubFormulas = transformed.flatten().getSubFormulas();
+        const originalSubFormulas = original.getSubFormulas();
+        const transformedSubFormulas = transformed.getSubFormulas();
 
         if (originalSubFormulas.length < transformedSubFormulas.length) {
             return this.errorResult(
