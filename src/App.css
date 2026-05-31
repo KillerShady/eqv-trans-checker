@@ -1,54 +1,32 @@
-/*#root {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 2rem;
-    border: #1a1a1a 1px solid;
+.view-mode .view-mode-hide,
+.view-mode .input-group .btn-success {
+    display: none;
 }
 
-.app .body {
-    border: 1px solid #1a1a1a;
-    margin-top: 1rem;
+.view-mode .form-control,
+.view-mode .form-select,
+.view-mode .input-group-text {
+    border: none;
+    background-color: initial;
 }
 
-.tmp_row {
-    display: flex;
-    flex-direction: row;
-    margin: 1rem;
+.tooltip-inner {
+    --bs-tooltip-max-width: 20rem;
 }
 
-.form-group {
-    display: flex;
+.skolem-symbol-input {
+    max-width: 25%;
 }
 
-.input-group-text {
-    align-items: center;
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    color: #495057;
-    display: flex;
-    text-align: center;
-}
+@media (max-width: 768px) {
+    .input-group .dropdown-toggle {
+        max-width: 5rem;
 
-.small-box {
-    background-color: #e9ecef;
-    border: 1px solid #ced4da;
-    margin: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .step {
+        display: none;
+    }
 }
-
-.line-box {
-    display: flex;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    content-visibility: hidden;
-    position: absolute;
-    z-index: 1;
-}
-.show-dropdown {
-    content-visibility: visible;
-}*/

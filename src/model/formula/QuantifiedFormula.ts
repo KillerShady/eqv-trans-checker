@@ -1,6 +1,5 @@
-import Structure, { type DomainElement, type Valuation } from "../Structure.ts";
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
-import type { Symbol } from "../Language.ts";
+import Formula from "./Formula.ts";
+import type Expression from "../Expression.ts";
 
 abstract class QuantifiedFormula extends Formula {
   constructor(
@@ -10,14 +9,6 @@ abstract class QuantifiedFormula extends Formula {
     public connectiveTex: string
   ) {
     super([subFormula], connective, connectiveTex);
-  }
-
-  abstract eval(structure: Structure, e: Valuation): boolean;
-
-  abstract getSignedType(sign: boolean): SignedFormulaType;
-
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    return [{ sign: sign, formula: this.subFormula }];
   }
 
   toString(): string {
@@ -31,6 +22,36 @@ abstract class QuantifiedFormula extends Formula {
       this.variableName
     } ${this.subFormula.toTex()}`;
   }
+
+  compare(other: Expression): number {
+    const constructorA = this.constructor.name;
+    const constructorB = other.constructor.name;
+    if (! (other instanceof QuantifiedFormula)) {
+      return constructorA === constructorB ? 0 :
+             constructorA < constructorB ? -1 : 1;
+    }
+    if (constructorA !== constructorB) {
+      return constructorA < constructorB ? -1 : 1;
+    }
+    if (this.variableName !== other.variableName) {
+       return this.variableName < other.variableName ? -1 : 1;
+    }
+    if (this.subFormulas.length !== other.subFormulas.length) {
+      return this.subFormulas.length < other.subFormulas.length ? -1 : 1;
+    }
+    for (let i = 0; i < this.subFormulas.length; i++) {
+        const comparison = this.subFormulas[i].compare(other.subFormulas[i]);
+        if (comparison !== 0) {
+            return comparison;
+        }
+    }
+    return 0;
+  }
+
+/*
+  abstract eval(structure: Structure, e: Valuation): boolean;
+
+  abstract getSignedType(sign: boolean): SignedFormulaType;
 
   getVariableName(): string {
     return this.variableName;
@@ -61,14 +82,14 @@ abstract class QuantifiedFormula extends Formula {
     return winning;
   }
 
+  getSignedSubFormulas(sign: boolean): SignedFormula[] {
+    return [{ sign: sign, formula: this.subFormula }];
+  }
+
   getVariables(): Set<Symbol> {
     let variables = this.subFormula.getVariables();
     variables.add(this.variableName);
     return variables;
-  }
-
-  getSubFormulas(): Formula[] {
-    return [this.subFormula];
   }
 
   equals(other: Formula): boolean {
@@ -80,7 +101,7 @@ abstract class QuantifiedFormula extends Formula {
       if (!this.subFormulas[i].equals(other.subFormulas[i])) return false;
     }
     return true;
-  }
+  }*/
 }
 
 export default QuantifiedFormula;

@@ -1,5 +1,4 @@
-import Structure, { type Valuation } from "../Structure.ts";
-import Formula, { SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
 import QuantifiedFormula from "./QuantifiedFormula.ts";
 
 /**
@@ -19,12 +18,17 @@ class UniversalQuant extends QuantifiedFormula {
     super(variableName, subFormula, "∀", "\\forall");
   }
 
-  /**
+  flatten() {
+    return new UniversalQuant(this.variableName, this.subFormula.flatten());
+  }
+
+  /*
+  **
    *
    * @param {Structure} structure
    * @param {Map} e
    * @return {boolean}
-   */
+   *
   eval(structure: Structure, e: Valuation): boolean {
     let eCopy = new Map(e);
     for (let item of structure.domain) {
@@ -42,7 +46,7 @@ class UniversalQuant extends QuantifiedFormula {
 
   getSignedType(sign: boolean): SignedFormulaType {
     return sign ? SignedFormulaType.GAMMA : SignedFormulaType.DELTA;
-  }
+  }*/
 }
 
 export default UniversalQuant;

@@ -1,0 +1,46 @@
+import type Expression from "../model/Expression.ts";
+import TransformationChecker, {TransformationCheckerResult} from "./TransformationChecker.ts";
+import {Conjunction, Disjunction} from "../model";
+
+class DistributivityChecker extends TransformationChecker {
+    checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
+        if (this.checkRequisites(original, transformed)) {
+            const result = this.checkForError(original.subLeft, transformed.subLeft.subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight.subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft.subRight));
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
+            return result;
+        } else if (this.checkRequisites(transformed, original)) {
+            const result = this.checkForError(original.subLeft.subLeft, transformed.subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight.subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
+            if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
+            return result;
+        } else if (childrenResults &&
+            (this.hasOneChild(original) ||
+                ! childrenResults.isAllError())) {
+            return childrenResults;
+        }
+        return TransformationCheckerResult.errorResult(
+            original.toString() + " and " + transformed.toString() + " are neither equivalent nor identical according to the Distributivity rule!"
+        );
+    }
+
+    checkRequisites(original: Expression, transformed: Expression): boolean {
+        return ((original instanceof Disjunction &&
+                 original.subRight instanceof Conjunction &&
+                 transformed instanceof Conjunction &&
+                 transformed.subLeft instanceof Disjunction &&
+                 transformed.subRight instanceof Disjunction) ||
+                (original instanceof Conjunction &&
+                 original.subRight instanceof Disjunction &&
+                 transformed instanceof Disjunction &&
+                 transformed.subLeft instanceof Conjunction &&
+                 transformed.subRight instanceof Conjunction));
+    }
+
+}
+
+export default DistributivityChecker;

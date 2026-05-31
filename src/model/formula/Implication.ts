@@ -1,5 +1,4 @@
-import Structure, { type Valuation } from "../Structure.ts";
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
 
 /**
  * Represent implication
@@ -21,31 +20,32 @@ export class Implication extends Formula {
     this.subRight = subRight;
   }
 
-  /**
-   *
-   * @param {Structure} structure
-   * @param {Map} e
-   * @return {boolean}
-   */
-  eval(structure: Structure, e: Valuation): boolean {
-    const left = this.subLeft.eval(structure, e);
-    const right = this.subRight.eval(structure, e);
-    return !left || right;
+  flatten() {
+    return new Implication(this.subLeft.flatten(), this.subRight.flatten());
   }
 
-  getSubFormulas(): Formula[] {
-    return [this.subLeft, this.subRight];
-  }
+    /*
+      **
+       *
+       * @param {Structure} structure
+       * @param {Map} e
+       * @return {boolean}
+       *
+      eval(structure: Structure, e: Valuation): boolean {
+        const left = this.subLeft.eval(structure, e);
+        const right = this.subRight.eval(structure, e);
+        return !left || right;
+      }
 
-  getSignedType(sign: boolean): SignedFormulaType {
-    return sign ? SignedFormulaType.BETA : SignedFormulaType.ALPHA;
-  }
-  getSignedSubFormulas(sign: boolean): SignedFormula[] {
-    return [
-      { sign: !sign, formula: this.subLeft },
-      { sign: sign, formula: this.subRight },
-    ];
-  }
+      getSignedType(sign: boolean): SignedFormulaType {
+        return sign ? SignedFormulaType.BETA : SignedFormulaType.ALPHA;
+      }
+      getSignedSubFormulas(sign: boolean): SignedFormula[] {
+        return [
+          { sign: !sign, formula: this.subLeft },
+          { sign: sign, formula: this.subRight },
+        ];
+      }*/
 }
 
 export default Implication;

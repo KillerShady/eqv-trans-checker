@@ -1,6 +1,4 @@
-import Structure, { type Valuation } from "../Structure.ts";
-import type { Symbol } from "../Language.ts";
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
+import Formula from "./Formula.ts";
 
 /**
  * Represent negation
@@ -21,16 +19,6 @@ class Negation extends Formula {
 
   /**
    *
-   * @param {Structure} structure
-   * @param {Map} e
-   * @return {boolean}
-   */
-  eval(structure: Structure, e: Valuation): boolean {
-    return !this.subFormula.eval(structure, e);
-  }
-
-  /**
-   *
    * @returns {string}
    */
 
@@ -42,8 +30,19 @@ class Negation extends Formula {
     return `\\lnot ${this.subFormula.toString()}`;
   }
 
-  getSubFormulas() {
-    return [this.subFormula];
+  flatten() {
+    return new Negation(this.subFormula.flatten());
+  }
+
+/*
+  **
+   *
+   * @param {Structure} structure
+   * @param {Map} e
+   * @return {boolean}
+   *
+  eval(structure: Structure, e: Valuation): boolean {
+    return !this.subFormula.eval(structure, e);
   }
 
   getVariables(): Set<Symbol> {
@@ -55,7 +54,7 @@ class Negation extends Formula {
   }
   getSignedSubFormulas(sign: boolean): SignedFormula[] {
     return [{ sign: !sign, formula: this.subFormula }];
-  }
+  }*/
 }
 
 export default Negation;

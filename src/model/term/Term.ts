@@ -1,6 +1,4 @@
 import Expression from "../Expression.ts";
-import type { Symbol } from "../Language.ts";
-import Structure, { type DomainElement } from "../Structure.ts";
 
 /**
  * Represent simple term.
@@ -11,12 +9,7 @@ import Structure, { type DomainElement } from "../Structure.ts";
  *
  */
 abstract class Term extends Expression {
-  abstract eval(
-    structure: Structure,
-    e: Map<Symbol, DomainElement>
-  ): DomainElement;
-
-  abstract equals(other: Term): boolean;
+    abstract flatten(): Term;
 }
 
 export default Term;

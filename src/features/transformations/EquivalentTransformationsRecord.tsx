@@ -1,0 +1,183 @@
+import TransformationChecker from "../../error_checkers/TransformationChecker.ts";
+import ContradictionChecker from "../../error_checkers/ContradictionChecker.ts";
+import ExcludedMiddleChecker from "../../error_checkers/ExcludedMiddleChecker.ts";
+import RenamingVariablesChecker from "../../error_checkers/RenamingVariablesChecker.ts";
+import QuantifierEliminationPropositionalChecker
+    from "../../error_checkers/QuantifierEliminationPropositionalChecker.ts";
+import QuantifierEliminationChecker from "../../error_checkers/QuantifierEliminationChecker.ts";
+import ImplicationEliminationChecker from "../../error_checkers/ImplicationEliminationChecker.ts";
+import AbsorptionIdempotenceChecker from "../../error_checkers/AbsorptionIdempotenceChecker.ts";
+import DoubleNegationEliminationChecker from "../../error_checkers/DoubleNegationEliminationChecker.ts";
+import DistributivityQuantifierChecker from "../../error_checkers/DistributivityQuantifierChecker.ts";
+import DistributivityChecker from "../../error_checkers/DistributivityChecker.ts";
+import DeMorganCombinedChecker from "../../error_checkers/DeMorganCombinedChecker.ts";
+import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
+import ReorderingChecker from "../../error_checkers/ReorderingChecker.ts";
+import IdentityChecker from "../../error_checkers/IdentityChecker.ts";
+import CNFChecker from "../../error_checkers/CNFChecker.ts";
+import EquivalenceEliminationChecker from "../../error_checkers/EquivalenceEliminationChecker.ts";
+import type {ReactNode} from "react";
+
+interface EquivalentTransformationData {
+    key: string,
+    name: string | ReactNode,
+    tex: string,
+    checker: TransformationChecker,
+    help: string,
+}
+export const EquivalentTransformationsRecord: Record<string, EquivalentTransformationData> = {
+    "CNF": {
+        key: "CNF",
+        name: "Is CNF",
+        tex: "\\text{Check if formula is in CNF}",
+        checker: new CNFChecker(),
+        help: ""
+    },
+    "DoubleNEG": {
+        key: "DoubleNEG",
+        name: "Double Negation Elimination",
+        tex: "\\neg\\neg A \\Leftrightarrow A",
+        checker: new DoubleNegationEliminationChecker(),
+        help: ""
+    },
+    "RemoveIMPL": {
+        key: "RemoveIMPL",
+        name: "Implication Elimination",
+        tex: "(A \\to B) \\Leftrightarrow (\\neg A \\lor B)",
+        checker: new ImplicationEliminationChecker(),
+        help: ""
+    },
+    "RemoveEquiv": {
+        key: "RemoveEquiv",
+        name: "Equivalence Elimination",
+        tex: "(A \\leftrightarrow B) \\Leftrightarrow ((A \\to B) \\land (B \\to A)))",
+        checker: new EquivalenceEliminationChecker(),
+        help: ""
+    },
+    "DeMorganCOMBINED": {
+        key: "DeMorganCOMBINED",
+        name: "DeMorgan",
+        tex: "\\neg\\neg A \\Leftrightarrow A \\\\ \\neg \\exists x A(x) \\Leftrightarrow \\forall x \\neg A(x) \\\\ \\neg \\forall x A(x) \\Leftrightarrow \\exists x \\neg A(x) \\\\ \\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B) \\\\ \\neg \\bot \\Leftrightarrow \\top \\\\ \\neg \\top \\Leftrightarrow \\bot",
+        checker: new DeMorganCombinedChecker(),
+        help: ""
+    },
+    "Reorder": {
+        key: "Reorder",
+        name: "Associativity & Commutativity",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C) \\\\ (A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
+        checker: new ReorderingChecker(),
+        help: ""
+    },
+    "Distributivity": {
+        key: "Distributivity",
+        name: <>Distributivity Propositional<sup>One Step Only</sup></>,
+        tex: "(A \\land (B \\lor C)) \\Leftrightarrow ((A \\land B) \\lor (A \\land C)) \\\\ (A \\lor (B \\land C)) \\Leftrightarrow ((A \\lor B) \\land (A \\lor C))",
+        checker: new DistributivityChecker(),
+        help: ""
+    },
+    "DistributivityQUANT": {
+        key: "DistributivityQUANT",
+        name: <>Distributivity Quantifier<sup>One Step Only</sup></>,
+        tex: "\\exists x(A(x) \\lor B(x)) \\Leftrightarrow (\\exists x A(x) \\lor \\exists x B(x)) \\\\ \\forall x (A(x) \\land B(x)) \\Leftrightarrow (\\forall x A(x) \\land \\forall x B(x))",
+        checker: new DistributivityQuantifierChecker(),
+        help: ""
+    },
+    "RemoveQUANT": {
+        key: "RemoveQUANT",
+        name: "Quantifier Elimination",
+        tex: "\\exists x D \\Leftrightarrow D \\\\ \\forall x D \\Leftrightarrow D",
+        checker: new QuantifierEliminationChecker(),
+        help: ""
+    },
+    "RemoveQUANTPROP": {
+        key: "RemoveQUANTPROP",
+        name: <>Quantifier Prenexing<sup>One Step Only</sup></>,
+        tex: "\\exists x A(x) \\lor D \\Leftrightarrow \\exists x(A(x) \\lor D) \\\\ \\forall x A(x) \\lor D \\Leftrightarrow \\forall x (A(x) \\lor D) \\\\ \\exists x A(x) \\land D \\Leftrightarrow \\exists x (A(x) \\land D) \\\\ \\forall x A(x) \\land D \\Leftrightarrow \\forall x (A(x) \\land D)",
+        checker: new QuantifierEliminationPropositionalChecker(),
+        help: ""
+    },
+    "RenameVAR": {
+        key: "RenameVAR",
+        name: "Renaming Variables",
+        tex: "\\exists x A(x) \\Leftrightarrow \\exists y A(y)\\{x \\mapsto y\\} \\\\ \\forall x A(x) \\Leftrightarrow \\forall y A(y)\\{x \\mapsto y\\}",
+        checker: new RenamingVariablesChecker(),
+        help: ""
+    },
+    "Skolem": {
+        key: "Skolem",
+        name: "Skolemization",
+        tex: "...\\forall x_1 (...\\forall x_n ...(\\exists y A(y))...)... \\Rightarrow \\\\ A \\{ y \\mapsto f(x_1,...,x_n) \\}",
+        checker: new SkolemizationChecker(),
+        help: ""
+    },
+    "AbsorptionIdem": {
+        key: "AbsorptionIdem",
+        name: "Absorption and Idempotence",
+        tex: "(A \\land A) \\Leftrightarrow A \\\\ (A \\lor A) \\Leftrightarrow A \\\\ (A \\lor (A \\land B)) \\Leftrightarrow A \\\\ (A \\land (A \\lor B)) \\Leftrightarrow A \\\\ A \\lor \\top \\Leftrightarrow \\top \\\\ A \\land \\bot \\Leftrightarrow \\bot",
+        checker: new AbsorptionIdempotenceChecker(),
+        help: ""
+    },
+    "CreateTRUE": {
+        key: "ExcludedMiddle",
+        name: "Excluded middle",
+        tex: "(A \\lor \\neg A) \\Leftrightarrow \\top",
+        checker: new ExcludedMiddleChecker(),
+        help: ""
+    },
+    "CreateFALSE": {
+        key: "CreateFALSE",
+        name: "Contradiction",
+        tex: "(A \\land \\neg A) \\Leftrightarrow \\bot",
+        checker: new ContradictionChecker(),
+        help: ""
+    },
+    "Identity": {
+        key: "Identity",
+        name: "Identity",
+        tex: "(A \\lor \\bot) \\Leftrightarrow A \\\\ (A \\land \\top) \\Leftrightarrow A",
+        checker: new IdentityChecker(),
+        help: ""
+    },
+    /*"Associativity": {
+        key: "Associativity",
+        name: "Associativity",
+        tex: "(A \\land (B \\land C)) \\Leftrightarrow ((A \\land B) \\land C) \\\\ (A \\lor (B \\lor C)) \\Leftrightarrow ((A \\lor B) \\lor C)",
+        checker: new AssociativityChecker(),
+        help: ""
+    },
+    "Commutativity": {
+        key: "Commutativity",
+        name: "Commutativity",
+        tex: "(A \\land B) \\Leftrightarrow (B \\land A) \\\\ (A \\lor B) \\Leftrightarrow (B \\lor A)",
+        checker: new CommutativityChecker(),
+        help: ""
+    },
+    "DeMorganPROP": {
+        key: "DeMorganPROP",
+        name: "DeMorgan Propositional",
+        tex: "\\neg(A \\land B) \\Leftrightarrow (\\neg A \\lor \\neg B) \\\\ \\neg(A \\lor B) \\Leftrightarrow (\\neg A \\land \\neg B)",
+        checker: new DeMorganChecker(),
+        help: ""
+    },
+    "DeMorganQUANT": {
+        key: "DeMorganQUANT",
+        name: "DeMorgan Quantifier",
+        tex: "\\neg \\exists x A \\Leftrightarrow \\forall x \\neg A  \\\\ \\neg \\forall x A \\Leftrightarrow \\exists x \\neg A",
+        checker: new DeMorganQuantifierChecker(),
+        help: ""
+    },
+    "RemoveTRUE": {
+        key: "RemoveTRUE",
+        name: "Tautology Elimination",
+        tex: "(A \\land \\top) \\Leftrightarrow A",
+        checker: new TautologyEliminationChecker(),
+        help: ""
+    },
+    "RemoveFALSE": {
+        key: "RemoveFALSE",
+        name: "Unsatisfiable Formula Elimination",
+        tex: "(A \\lor \\bot) \\Leftrightarrow A",
+        checker: new UnsatisfiableFormulaEliminationChecker(),
+        help: ""
+    },*/
+}

@@ -1,6 +1,4 @@
-import Structure, { type Valuation } from "../Structure.ts";
-import Formula, { type SignedFormula, SignedFormulaType } from "./Formula.ts";
-import Implication from "./Implication.ts";
+import Formula from "./Formula.ts";
 
 /**
  * Represent equality symbol
@@ -21,18 +19,6 @@ class Equivalence extends Formula {
 
   /**
    *
-   * @param {Structure} structure
-   * @param {Map} e
-   * @return {boolean}
-   */
-  eval(structure: Structure, e: Valuation): boolean {
-    const left = this.subLeft.eval(structure, e);
-    const right = this.subRight.eval(structure, e);
-    return left === right;
-  }
-
-  /**
-   *
    * @returns {string}
    */
   toString(): string {
@@ -45,10 +31,27 @@ class Equivalence extends Formula {
     } ${this.subRight.toString()})`;
   }
 
-  getSubFormulas(): Formula[] {
-    const toRightImpl = new Implication(this.subLeft, this.subRight);
-    const toLeftImpl = new Implication(this.subRight, this.subLeft);
-    return [toRightImpl, toLeftImpl];
+  flatten() {
+    return new Equivalence(this.subLeft.flatten(), this.subRight.flatten());
+  }
+
+  //getSubFormulas(): Formula[] {
+  //  const toRightImpl = new Implication(this.subLeft, this.subRight);
+  //  const toLeftImpl = new Implication(this.subRight, this.subLeft);
+  //  return [toRightImpl, toLeftImpl];
+  //}
+
+  /*
+  **
+   *
+   * @param {Structure} structure
+   * @param {Map} e
+   * @return {boolean}
+   *
+  eval(structure: Structure, e: Valuation): boolean {
+    const left = this.subLeft.eval(structure, e);
+    const right = this.subRight.eval(structure, e);
+    return left === right;
   }
 
   getSignedType(sign: boolean): SignedFormulaType {
@@ -62,7 +65,7 @@ class Equivalence extends Formula {
       { sign: sign, formula: toLeftImpl },
       { sign: sign, formula: toRightImpl },
     ];
-  }
+  }*/
 }
 
 export default Equivalence;
