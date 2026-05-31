@@ -19,7 +19,7 @@ interface skolemizedPattern {
 class SkolemizationChecker extends TransformationChecker {
     universalQuants: string[] = [];
     changedVars: Map<string, skolemizedPattern> = new Map<string, skolemizedPattern>();
-    public allowedSkolemSymbols: {constants: string[], functions: SymbolWithArity[]} = {constants: [], functions: []}
+    allowedSkolemSymbols: {constants: string[], functions: SymbolWithArity[]} = {constants: [], functions: []}
     usedSymbols: Set<string> = new Set<string>();
 
     public checkForError(original: Expression, transformed: Expression): TransformationCheckerResult {
