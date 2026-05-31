@@ -89,19 +89,55 @@ abstract class TransformationChecker {
     }
 
     protected checkChildren(original: Expression, transformed: Expression): TransformationCheckerResult {
-        if ((original instanceof Conjunction && transformed instanceof Conjunction) ||
-            (original instanceof Disjunction && transformed instanceof Disjunction) ||
-            (original instanceof EqualityAtom && transformed instanceof EqualityAtom) ||
+        if ((original instanceof Conjunction && transformed instanceof Conjunction)) {
+            const originalSubFormulas = original.getSubFormulas();
+            const transformedSubFormulas = transformed.getSubFormulas();
+            if (originalSubFormulas.length < transformedSubFormulas.length) {
+                return TransformationCheckerResult.errorResult(
+                    transformed.toString() + " has more conjuncts than " + original.toString()
+                );
+            } else if (originalSubFormulas.length > transformedSubFormulas.length) {
+                return TransformationCheckerResult.errorResult(
+                    original.toString() + " has more conjuncts than " + transformed.toString()
+                );
+            }
+            const result = this.checkForError(originalSubFormulas[0], transformedSubFormulas[0]);
+            for (let i = 1; i < originalSubFormulas.length; i++) {
+                result.combine(this.checkForError(originalSubFormulas[i], transformedSubFormulas[i]));
+            }
+            return result;
+        }
+        if ((original instanceof Disjunction && transformed instanceof Disjunction)) {
+            const originalSubFormulas = original.getSubFormulas();
+            const transformedSubFormulas = transformed.getSubFormulas();
+            if (originalSubFormulas.length < transformedSubFormulas.length) {
+                return TransformationCheckerResult.errorResult(
+                    transformed.toString() + " has more disjuncts than " + original.toString()
+                );
+            } else if (originalSubFormulas.length > transformedSubFormulas.length) {
+                return TransformationCheckerResult.errorResult(
+                    original.toString() + " has more disjuncts than " + transformed.toString()
+                );
+            }
+            const result = this.checkForError(originalSubFormulas[0], transformedSubFormulas[0]);
+            for (let i = 1; i < originalSubFormulas.length; i++) {
+                result.combine(this.checkForError(originalSubFormulas[i], transformedSubFormulas[i]));
+            }
+            return result;
+        }
+        if ((original instanceof EqualityAtom && transformed instanceof EqualityAtom) ||
             (original instanceof Equivalence && transformed instanceof Equivalence) ||
             (original instanceof Implication && transformed instanceof Implication)) {
             const result = this.checkForError(original.subLeft, transformed.subLeft);
             result.combine(this.checkForError(original.subRight, transformed.subRight));
             return result;
-        } else if ((original instanceof ExistentialQuant && transformed instanceof ExistentialQuant) ||
+        }
+        if ((original instanceof ExistentialQuant && transformed instanceof ExistentialQuant) ||
                    (original instanceof Negation && transformed instanceof Negation) ||
                    (original instanceof UniversalQuant && transformed instanceof UniversalQuant)) {
             return this.checkForError(original.subFormula, transformed.subFormula);
-        } else if ((original instanceof PredicateAtom && transformed instanceof PredicateAtom) ||
+        }
+        if ((original instanceof PredicateAtom && transformed instanceof PredicateAtom) ||
                    (original instanceof FunctionTerm && transformed instanceof FunctionTerm)) {
             if (original.terms.length === 0) return TransformationCheckerResult.identicalResult();
             const result = this.checkForError(original.terms[0], transformed.terms[0])

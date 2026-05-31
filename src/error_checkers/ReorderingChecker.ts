@@ -30,6 +30,9 @@ class ReorderingChecker extends TransformationChecker {
     }
 
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
+        if (! this.hasFlattened) {
+            return TransformationCheckerResult.errorResult("debug error")
+        }
         if (original instanceof Conjunction && transformed instanceof Conjunction) {
             return this.checkConjunctionDisjunction(original, transformed, "conjunct");
         } else if (original instanceof Disjunction && transformed instanceof Disjunction) {
