@@ -15,12 +15,12 @@ import {
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
 
-interface transformationState {
+interface TransformationState {
     id: number,
     formulas: number[],
 }
 
-interface formulaState {
+interface FormulaState {
     id: number,
     formula: string,
     operation: string,
@@ -28,23 +28,23 @@ interface formulaState {
     name?: string,
 }
 
-interface skolemSymbolsState {
+interface SkolemSymbolsState {
     text: string,
     constants: string[],
     functions: SymbolWithArity[],
 }
 
-export interface transformationsState {
+export interface TransformationsState {
     transSequences: number[];
     transSequenceKey: number;
-    transformations: Record<number, transformationState>;
-    formulas: Record<number, formulaState>;
+    transformations: Record<number, TransformationState>;
+    formulas: Record<number, FormulaState>;
     formulasKey: number;
-    skolemSymbols: Record<number, skolemSymbolsState>;
+    skolemSymbols: Record<number, SkolemSymbolsState>;
     contextFormulaNames: string[];
 }
 
-const initialState: transformationsState = {
+const initialState: TransformationsState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
@@ -175,7 +175,7 @@ export const transformationsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
-            const importedState: transformationsState = action.payload.transformations;
+            const importedState: TransformationsState = action.payload.transformations;
 
             const seenTransformations = new Set(importedState.transSequences);
             for (const key in importedState.transformations) {
