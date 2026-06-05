@@ -20,7 +20,7 @@ const instance = prepare(null).instance;
 
 ReactDOM.render(
     <StrictMode>
-        <AppComponent instance={instance} isEdited={false} onStateChange={() => {}} context={undefined}/>
+        <AppComponent instance={instance} isEdited={true} onStateChange={() => {}} context={undefined}/>
     </StrictMode>,
     document.getElementById("root"),
 );
