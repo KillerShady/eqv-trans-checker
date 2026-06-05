@@ -14,6 +14,7 @@ import {
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
+import type {NamedFormula} from "../../LogicContext.ts";
 
 interface TransformationState {
     id: number,
@@ -161,15 +162,44 @@ export const transformationsSlice = createSlice({
             }
         },
         "contextFormulasUpdated": (state, action) => {
+            const contextFormulas = new Map<string, string>();
+            const formulas: NamedFormula[] = action.payload;
+            for (let i = 0; i < formulas.length; i++) {
+                contextFormulas.set(action.payload[i].name, action.payload[i].formula);
+            }
+
+            if (state.transSequences.length > 0 && action.payload.length > 0) {
+                const transformations = state.transformations[state.transSequences[0]];
+                if (transformations.formulas.length == 1 &&
+                    state.formulas[transformations.formulas[0]].formula === "") {
+
+                    state.transSequences.splice(0, 1);
+                    delete state.formulas[transformations.formulas[0]];
+                    delete state.transformations[state.transSequences[0]];
+                }
+
+            }
+
             for (const transId of state.transSequences) {
                 const formulaId = state.transformations[transId].formulas[0];
                 const formulaName = state.formulas[formulaId].name;
                 if (formulaName !== undefined) {
-                    const formulaText = action.payload[formulaName];
+                    const formulaText = contextFormulas.get(formulaName);
                     if (formulaText !== undefined) {
                         state.formulas[formulaId].formula = formulaText;
                     }
+                    contextFormulas.delete(formulaName);
                 }
+            }
+
+            for (const formulaName of contextFormulas.keys()) {
+                state.transSequences.push(state.transSequenceKey);
+                state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
+                const formulaText = contextFormulas.get(formulaName);
+                state.formulas[state.formulasKey] = {id: state.formulasKey, formula: formulaText ? formulaText : "", operation: 'Operation', name: formulaName};
+                state.transSequenceKey++;
+                state.formulasKey++;
+                state.contextFormulaNames.push(formulaName);
             }
         },
     },
