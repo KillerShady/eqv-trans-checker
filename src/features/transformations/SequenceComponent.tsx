@@ -5,7 +5,7 @@ import FormulaComponent from "./FormulaComponent.tsx";
 
 export default function SequenceComponent({ index, id, canRemove }: { index: number, id: number, canRemove: boolean }) {
     const formulas = useSelector((state: RootState)  => selectTransformations(state, id));
-    console.log("drawing Box", id, canRemove);
+    //console.log("drawing Box", id);
 
     return (
         <div>

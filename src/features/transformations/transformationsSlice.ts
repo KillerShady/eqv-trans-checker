@@ -333,7 +333,7 @@ export const selectTransformationError = createSelector(
             return {error: new Error("Formula is identical to previous formula!"),
                     validated: true};
         }
-        console.log(result.errors.length);
+        //console.log(result.errors.length);
         return {error: result.errors[result.errors.length - 1],
                 validated: true};
     }

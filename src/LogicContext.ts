@@ -81,7 +81,6 @@ export function useUpdateFormulasContext() {
     useEffect(() => {
         if (!hasContext) return;
 
-        console.log("USING EFFECT");
         dispatch(contextFormulasUpdated(formulas));
     }, [hasContext, dispatch, formulas]);
 

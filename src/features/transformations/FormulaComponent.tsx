@@ -44,15 +44,15 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     const missingInContextError = isContextFormula && formulas.filter((f) => f.name === formula.name).length === 0 ?
         new Error("Formula is missing in context!") :
         undefined;
-    console.log(missingInContextError);
+    //console.log(missingInContextError);
 
-    console.log("drawing line", id, "in", TransId);
-    console.log("prevFormula", formula.prevFormula);
-    console.log("transformationError", transformationError);
-    console.log("skolemError", skolemError);
-    console.log("skolemError", skolemSymbolClash);
-    console.log("prevFormula", prevFormula);
-    console.log(" ");
+    //console.log("drawing line", id, "in", TransId);
+    //console.log("prevFormula", formula.prevFormula);
+    //console.log("transformationError", transformationError);
+    //console.log("skolemError", skolemError);
+    //console.log("skolemError", skolemSymbolClash);
+    //console.log("prevFormula", prevFormula);
+    //console.log(" ");
 
     const renderTooltip = (props: JSX.IntrinsicAttributes & TooltipProps & RefAttributes<HTMLDivElement>) => (
         <Tooltip {...props}>
@@ -68,7 +68,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
     } else if (transformationError.validated) {
         isValid = transformationError.error === undefined;
     }
-    console.log(isValid);
+    //console.log(isValid);
 
     return (
         <InputGroup size="sm" className="mb-3" hasValidation={isValid === false ? true : undefined}>
