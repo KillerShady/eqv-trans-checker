@@ -1,39 +1,39 @@
-import {describe, it} from "vitest";
+/*import {describe, it} from "vitest";
 import {
     testEquivalentTwoDirectional,
     testErrorTwoDirectional,
     testIdentical
 } from "../../testUtils.ts"
-import TautologyEliminationChecker from "../../../error_checkers/obsolete/TautologyEliminationChecker.ts";
+import UnsatisfiableFormulaEliminationChecker from "../../../error_checkers/obsolete/UnsatisfiableFormulaEliminationChecker.ts";
 
-describe("Tautology Elimination Checker", () => {
-    const checker = new TautologyEliminationChecker();
+describe("Unsatisfiable Formula Elimination Checker", () => {
+    const checker = new UnsatisfiableFormulaEliminationChecker();
 
     testIdentical(checker);
 
     it("Correct", () => {
         testEquivalentTwoDirectional(checker,
-            "cat(x) ∧ ⊤",
+            "cat(x) ∨ ⊥",
             "cat(x)"
         );
         testEquivalentTwoDirectional(checker,
-            "⊤ ∧ cat(x)",
+            "⊥ ∨ cat(x)",
             "cat(x)"
         );
         testEquivalentTwoDirectional(checker,
-            "(⊤ ∧ cat(x)) ∧ ⊤",
+            "(⊥ ∨ cat(x)) ∨ ⊥",
             "cat(x)"
         );
 
         testEquivalentTwoDirectional(checker,
-            "((⊤ ∧ cat(x)) ∨ cat(x))",
-            "(cat(x) ∨ (⊤ ∧ cat(x)))"
+            "((⊥ ∨ cat(x)) ∧ cat(x))",
+            "(cat(x) ∧ (⊥ ∨ cat(x)))"
         );
     });
     describe("Incorrect", () => {
         it("Subtree not equivalent", () => {
             testErrorTwoDirectional(checker,
-                "∃x∀y(cat(x) ∧ ⊤)",
+                "∃x∀y(cat(x) ∨ ⊥)",
                 "∃x∀y cat(y)",
                 "cat(x) and cat(y) are neither equivalent nor identical according to the Tautology Creation rule!",
                 "cat(y) and cat(x) are neither equivalent nor identical according to the Tautology Creation rule!"
@@ -41,12 +41,12 @@ describe("Tautology Elimination Checker", () => {
         });
         it("Incorrect connector", () => {
             testErrorTwoDirectional(checker,
-                "∃x∀y(cat(x) ∨ ⊤)",
+                "∃x∀y(cat(x) ∧ ⊥)",
                 "∃x∀y cat(x)",
-                "(cat(x)  ∨  ⊤) and cat(x) are neither equivalent nor identical according to the Tautology Creation rule!",
-                "cat(x) and (cat(x)  ∨  ⊤) are neither equivalent nor identical according to the Tautology Creation rule!"
+                "(cat(x)  ∧  ⊥) and cat(x) are neither equivalent nor identical according to the Tautology Creation rule!",
+                "cat(x) and (cat(x)  ∧  ⊥) are neither equivalent nor identical according to the Tautology Creation rule!"
             );
         });
     });
 
-});
+});*/

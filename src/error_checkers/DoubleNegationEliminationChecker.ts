@@ -6,11 +6,11 @@ import {Negation} from "../model";
 class DoubleNegationEliminationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original)) {
-            const result = this.checkForError(original.subFormula.subFormula, transformed);
+            const result = this.checkForError(((original as Negation).subFormula as Negation).subFormula, transformed);
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed)) {
-            const result = this.checkForError(original, transformed.subFormula.subFormula);
+            const result = this.checkForError(original, ((transformed as Negation).subFormula as Negation).subFormula);
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }

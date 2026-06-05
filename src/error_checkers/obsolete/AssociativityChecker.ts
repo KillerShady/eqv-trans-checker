@@ -1,4 +1,4 @@
-import type Expression from "../../model/Expression.ts";
+/*import type Expression from "../../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
 import {Conjunction, Disjunction} from "../../model";
 
@@ -41,4 +41,4 @@ class AssociativityChecker extends TransformationChecker {
 
 }
 
-export default AssociativityChecker;
+export default AssociativityChecker;*/

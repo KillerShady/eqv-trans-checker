@@ -5,13 +5,13 @@ import {Conjunction, Disjunction, ExistentialQuant, UniversalQuant} from "../mod
 class DistributivityQuantifierChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = this.checkForError(original.subFormula.subLeft, transformed.subLeft.subFormula);
-            if (result.isNotError()) result.combine(this.checkForError(original.subFormula.subRight, transformed.subRight.subFormula));
+            const result = this.checkForError(((original as UniversalQuant).subFormula as Conjunction).subLeft, ((transformed as Conjunction).subLeft as UniversalQuant).subFormula);
+            if (result.isNotError()) result.combine(this.checkForError(((original as UniversalQuant).subFormula as Conjunction).subRight, ((transformed as Conjunction).subRight as UniversalQuant).subFormula));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(original.subLeft.subFormula, transformed.subFormula.subLeft);
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subFormula, transformed.subFormula.subRight));
+            const result = this.checkForError(((original as Conjunction).subLeft as UniversalQuant).subFormula, ((transformed as UniversalQuant).subFormula as Conjunction).subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(((original as Conjunction).subRight as UniversalQuant).subFormula, ((transformed as UniversalQuant).subFormula as Conjunction).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }

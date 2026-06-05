@@ -1,4 +1,4 @@
-import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
+/*import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
 import type Expression from "../../model/Expression.ts";
 import {AlwaysFalse, Disjunction} from "../../model";
 
@@ -41,4 +41,4 @@ class UnsatisfiableFormulaEliminationChecker extends TransformationChecker {
 
 }
 
-export default UnsatisfiableFormulaEliminationChecker;
+export default UnsatisfiableFormulaEliminationChecker;*/
