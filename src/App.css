@@ -1,3 +1,8 @@
+.eqv-trans-checker {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
 .view-mode .view-mode-hide,
 .view-mode .input-group .btn-success {
     display: none;
