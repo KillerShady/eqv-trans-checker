@@ -3,6 +3,10 @@
     padding-bottom: 1rem;
 }
 
+.selection-icon {
+    padding: 0.7em;
+}
+
 .view-mode .view-mode-hide,
 .view-mode .input-group .btn-success {
     display: none;
