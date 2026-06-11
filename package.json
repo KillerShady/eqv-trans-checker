@@ -1,6 +1,6 @@
 {
   "name": "@fmfi-uk-1-ain-412/eqv-trans-checker",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "homepage": "https://KillerShady.github.io/eqv-trans-checker",
   "files": [
     "dist/**"
