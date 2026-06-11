@@ -5,13 +5,13 @@ import {Disjunction, Implication, Negation} from "../model";
 class ImplicationEliminationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = this.checkForError(original.subLeft, transformed.subLeft.subFormula);
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
+            const result = this.checkForError((original as Implication).subLeft, ((transformed as Disjunction).subLeft as Negation).subFormula);
+            if (result.isNotError()) result.combine(this.checkForError((original as Implication).subRight, (transformed as Disjunction).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if ((this.checkRequisites(transformed, original))) {
-            const result = this.checkForError(original.subLeft.subFormula, transformed.subLeft);
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight, transformed.subRight));
+            const result = this.checkForError(((original as Disjunction).subLeft as Negation).subFormula, (transformed as Implication).subLeft);
+            if (result.isNotError()) result.combine(this.checkForError((original as Disjunction).subRight, (transformed as Implication).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         }

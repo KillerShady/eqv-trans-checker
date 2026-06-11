@@ -18,21 +18,21 @@ class QuantifierEliminationPropositionalChecker extends TransformationChecker {
 
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisitesStandard(original, transformed)) {
-            return this.performCheck(original.subFormula.subRight, original.subFormula.subLeft,
-                                     transformed.subRight, transformed.subLeft.subFormula,
-                                     original.variableName);
+            return this.performCheck(((original as UniversalQuant).subFormula as Conjunction).subRight, ((original as UniversalQuant).subFormula as Conjunction).subLeft,
+                                     (transformed as Conjunction).subRight, ((transformed as Conjunction).subLeft as UniversalQuant).subFormula,
+                                     (original as UniversalQuant).variableName);
         } else if (this.checkRequisitesFlipped(original, transformed)) {
-            return this.performCheck(original.subFormula.subLeft, original.subFormula.subRight,
-                                     transformed.subLeft, transformed.subRight.subFormula,
-                                     original.variableName);
+            return this.performCheck(((original as UniversalQuant).subFormula as Conjunction).subLeft, ((original as UniversalQuant).subFormula as Conjunction).subRight,
+                                     (transformed as Conjunction).subLeft, ((transformed as Conjunction).subRight as UniversalQuant).subFormula,
+                                     (original as UniversalQuant).variableName);
         } else if (this.checkRequisitesStandard(transformed, original)) {
-            return this.performCheck(original.subRight, original.subLeft.subFormula,
-                                     transformed.subFormula.subRight, transformed.subFormula.subLeft,
-                                     transformed.variableName);
+            return this.performCheck((original as Conjunction).subRight, ((original as Conjunction).subLeft as UniversalQuant).subFormula,
+                                     ((transformed as UniversalQuant).subFormula as Conjunction).subRight, ((transformed as UniversalQuant).subFormula as Conjunction).subLeft,
+                                     (transformed as UniversalQuant).variableName);
         } else if (this.checkRequisitesFlipped(transformed, original)) {
-            return this.performCheck(original.subLeft, original.subRight.subFormula,
-                                     transformed.subFormula.subLeft, transformed.subFormula.subRight,
-                                     transformed.variableName);
+            return this.performCheck((original as Conjunction).subLeft, ((original as Conjunction).subRight as UniversalQuant).subFormula,
+                                     ((transformed as UniversalQuant).subFormula as Conjunction).subLeft, ((transformed as UniversalQuant).subFormula as Conjunction).subRight,
+                                     (transformed as UniversalQuant).variableName);
         } else if (original instanceof Variable &&
                    transformed instanceof Variable &&
                    original.name === transformed.name) {

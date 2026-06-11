@@ -20,7 +20,7 @@ export default function TransformationsComponent() {
 
     return (
         <div>
-            {tasks.map((task, index) => <SequenceComponent key={task} id={task} index={index} canRemove={tasks.length > 1} />)}
+            {tasks.map((task, index) => <SequenceComponent key={task} id={task} index={index} />)}
             <Stack direction={"horizontal"} gap={2} className="view-mode-hide">
                 <Button variant="success"
                         className="view-mode-hide"

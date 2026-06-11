@@ -9,7 +9,7 @@ import {
     QuantifiedFormula, Term,
     Variable
 } from "../model";
-import type { SymbolWithArity } from "../js-fol-parser";
+import type { SymbolWithArity } from "@fmfi-uk-1-ain-412/js-fol-parser";
 
 interface skolemizedPattern {
     name: string,

@@ -5,17 +5,17 @@ import {Conjunction, Disjunction} from "../model";
 class DistributivityChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = this.checkForError(original.subLeft, transformed.subLeft.subLeft);
-            if (result.isNotError()) result.combine(this.checkForError(original.subLeft, transformed.subRight.subLeft));
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft.subRight));
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
+            const result = this.checkForError((original as Disjunction).subLeft, ((transformed as Conjunction).subLeft as Disjunction).subLeft);
+            if (result.isNotError()) result.combine(this.checkForError((original as Disjunction).subLeft, ((transformed as Conjunction).subRight as Disjunction).subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(((original as Disjunction).subRight as Conjunction).subLeft, ((transformed as Conjunction).subLeft as Disjunction).subRight));
+            if (result.isNotError()) result.combine(this.checkForError(((original as Disjunction).subRight as Conjunction).subRight, ((transformed as Conjunction).subRight as Disjunction).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (this.checkRequisites(transformed, original)) {
-            const result = this.checkForError(original.subLeft.subLeft, transformed.subLeft);
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft));
-            if (result.isNotError()) result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight.subLeft));
-            if (result.isNotError()) result.combine(this.checkForError(original.subRight.subRight, transformed.subRight.subRight));
+            const result = this.checkForError(((original as Conjunction).subLeft as Disjunction).subLeft, (transformed as Disjunction).subLeft);
+            if (result.isNotError()) result.combine(this.checkForError(((original as Conjunction).subRight as Disjunction).subLeft, (transformed as Disjunction).subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(((original as Conjunction).subLeft as Disjunction).subRight, ((transformed as Disjunction).subRight as Conjunction).subLeft));
+            if (result.isNotError()) result.combine(this.checkForError(((original as Conjunction).subRight as Disjunction).subRight, ((transformed as Disjunction).subRight as Conjunction).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
             return result;
         } else if (childrenResults &&

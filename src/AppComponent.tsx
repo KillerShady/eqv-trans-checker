@@ -1,10 +1,9 @@
-import type {Middleware} from "@reduxjs/toolkit";
-import {useEffect} from "react";
+import {type Middleware, isAnyOf} from "@reduxjs/toolkit";
+import {type JSX, useEffect} from "react";
 import {Provider} from "react-redux";
 import App from "./App.tsx";
-import type {JSX} from "react/jsx-runtime";
 import {createStore, type AppState} from "./state/store.ts";
-import {getStateToJson, importAppStateFromJSON} from "./features/import/importExportSlice.ts";
+import {getStateToJson, importAppStateFromJSON, importExportSlice} from "./features/import/importExportSlice.ts";
 import { LogicContext } from "./LogicContext.ts";
 
 interface PrepareResult {
@@ -12,11 +11,22 @@ interface PrepareResult {
     getState: (instance: any) => any;
 }
 
+const actionsToFilter = [
+    importExportSlice.actions.setError,
+    importExportSlice.actions.clearError,
+];
+
+function filterAction(action: unknown) {
+    return ! isAnyOf(...actionsToFilter)(action);
+
+}
+
 export function prepare(initialState?: any): PrepareResult {
     const storeListener: Middleware<object, AppState> =
         () => (next) => (action) => {
-            if (instance?.handleStoreChange) //&& filterAction(action))
+            if (instance?.handleStoreChange && filterAction(action)) {
                 instance.handleStoreChange();
+            }
 
             return next(action);
         };
@@ -61,7 +71,7 @@ export function AppComponent({instance,
     return (
         <Provider store={appstore}>
             <LogicContext.Provider value={context}>
-                <App viewOnly={isEdited}/>
+                <App viewOnly={!isEdited}/>
             </LogicContext.Provider>
         </Provider>
     );

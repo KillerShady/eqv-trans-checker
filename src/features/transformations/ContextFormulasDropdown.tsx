@@ -7,7 +7,7 @@ export default function ContextFormulasDropdown() {
 
     const addedContextFormulas = new Set<string>(useSelector(selectContextFormulasNames));
     const {formulas, formulasByType} = useUpdateFormulasContext();
-    console.log(formulas, addedContextFormulas);
+    //console.log(formulas, addedContextFormulas);
     const notAddedFormulas = formulas.filter((f) => ! addedContextFormulas.has(f.name));
 
     const handleAddAllFormulas = () => {

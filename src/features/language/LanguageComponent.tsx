@@ -21,7 +21,7 @@ export default function LanguageComponent() {
     const functionsError = useSelector(selectFunctionsError);
     const symbolsClash = useSelector(selectSymbolsClash);
     const hasContext = useUpdateLanguageContext();
-    console.log("drawing language");
+    //console.log("drawing language");
 
     const dispatch = useDispatch();
 

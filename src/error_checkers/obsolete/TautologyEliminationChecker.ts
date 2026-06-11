@@ -1,4 +1,4 @@
-import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
+/*import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
 import type Expression from "../../model/Expression.ts";
 import {AlwaysTrue, Conjunction} from "../../model";
 
@@ -42,4 +42,4 @@ class TautologyEliminationChecker extends TransformationChecker {
 
 }
 
-export default TautologyEliminationChecker;
+export default TautologyEliminationChecker;*/

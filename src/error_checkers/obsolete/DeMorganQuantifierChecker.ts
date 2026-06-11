@@ -1,4 +1,4 @@
-import type Expression from "../../model/Expression.ts";
+/*import type Expression from "../../model/Expression.ts";
 import TransformationChecker, {TransformationCheckerResult} from "../TransformationChecker.ts";
 import {ExistentialQuant, Negation, UniversalQuant} from "../../model";
 
@@ -40,4 +40,4 @@ class DeMorganQuantifierChecker extends TransformationChecker {
 
 }
 
-export default DeMorganQuantifierChecker;
+export default DeMorganQuantifierChecker;*/

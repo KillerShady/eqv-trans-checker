@@ -14,13 +14,14 @@ import {
     SyntaxError, type SymbolWithArity,
 } from "@fmfi-uk-1-ain-412/js-fol-parser";
 import SkolemizationChecker from "../../error_checkers/SkolemizationChecker.ts";
+import type {NamedFormula} from "../../LogicContext.ts";
 
-interface transformationState {
+interface TransformationState {
     id: number,
     formulas: number[],
 }
 
-interface formulaState {
+interface FormulaState {
     id: number,
     formula: string,
     operation: string,
@@ -28,23 +29,23 @@ interface formulaState {
     name?: string,
 }
 
-interface skolemSymbolsState {
+interface SkolemSymbolsState {
     text: string,
     constants: string[],
     functions: SymbolWithArity[],
 }
 
-export interface transformationsState {
+export interface TransformationsState {
     transSequences: number[];
     transSequenceKey: number;
-    transformations: Record<number, transformationState>;
-    formulas: Record<number, formulaState>;
+    transformations: Record<number, TransformationState>;
+    formulas: Record<number, FormulaState>;
     formulasKey: number;
-    skolemSymbols: Record<number, skolemSymbolsState>;
+    skolemSymbols: Record<number, SkolemSymbolsState>;
     contextFormulaNames: string[];
 }
 
-const initialState: transformationsState = {
+const initialState: TransformationsState = {
     transSequences: [0],
     transSequenceKey: 1,
     transformations: {0: {id: 0, formulas: [0]}},
@@ -161,21 +162,50 @@ export const transformationsSlice = createSlice({
             }
         },
         "contextFormulasUpdated": (state, action) => {
+            const contextFormulas = new Map<string, string>();
+            const formulas: NamedFormula[] = action.payload;
+            for (let i = 0; i < formulas.length; i++) {
+                contextFormulas.set(action.payload[i].name, action.payload[i].formula);
+            }
+
+            if (state.transSequences.length > 0 && action.payload.length > 0) {
+                const transformations = state.transformations[state.transSequences[0]];
+                if (transformations.formulas.length == 1 &&
+                    state.formulas[transformations.formulas[0]].formula === "") {
+
+                    state.transSequences.splice(0, 1);
+                    delete state.formulas[transformations.formulas[0]];
+                    delete state.transformations[state.transSequences[0]];
+                }
+
+            }
+
             for (const transId of state.transSequences) {
                 const formulaId = state.transformations[transId].formulas[0];
                 const formulaName = state.formulas[formulaId].name;
                 if (formulaName !== undefined) {
-                    const formulaText = action.payload[formulaName];
+                    const formulaText = contextFormulas.get(formulaName);
                     if (formulaText !== undefined) {
                         state.formulas[formulaId].formula = formulaText;
                     }
+                    contextFormulas.delete(formulaName);
                 }
+            }
+
+            for (const formulaName of contextFormulas.keys()) {
+                state.transSequences.push(state.transSequenceKey);
+                state.transformations[state.transSequenceKey] = {id: state.transSequenceKey, formulas: [state.formulasKey]};
+                const formulaText = contextFormulas.get(formulaName);
+                state.formulas[state.formulasKey] = {id: state.formulasKey, formula: formulaText ? formulaText : "", operation: 'Operation', name: formulaName};
+                state.transSequenceKey++;
+                state.formulasKey++;
+                state.contextFormulaNames.push(formulaName);
             }
         },
     },
     extraReducers: (builder) => {
         builder.addCase(importAppState, (_state, action: PayloadAction<serializedAppState>) => {
-            const importedState: transformationsState = action.payload.transformations;
+            const importedState: TransformationsState = action.payload.transformations;
 
             const seenTransformations = new Set(importedState.transSequences);
             for (const key in importedState.transformations) {
@@ -303,7 +333,7 @@ export const selectTransformationError = createSelector(
             return {error: new Error("Formula is identical to previous formula!"),
                     validated: true};
         }
-        console.log(result.errors.length);
+        //console.log(result.errors.length);
         return {error: result.errors[result.errors.length - 1],
                 validated: true};
     }

@@ -64,7 +64,7 @@ export function importAppStateFromJSON(importedState: string, dispatch: AppDispa
     }
 }
 
-function updateJSON(json) {
+function updateJSON(json: { mainTask: undefined; transformations: undefined; }) {
     if (json.mainTask !== undefined && json.transformations === undefined) {
         json.transformations = json.mainTask;
         delete json.mainTask;

@@ -1,7 +1,7 @@
 {
   "name": "@fmfi-uk-1-ain-412/eqv-trans-checker",
-  "version": "0.0.1",
-  "homepage": "https://KillerShady.github.io/bachelor-thesis-project",
+  "version": "1.0.0",
+  "homepage": "https://KillerShady.github.io/eqv-trans-checker",
   "files": [
     "dist/**"
   ],
@@ -17,26 +17,28 @@
     "test": "vitest",
     "deploy": "npm run build:demo && gh-pages -d dist"
   },
+  "peerDependencies": {
+    "react": "^17.0.2"
+  },
   "dependencies": {
-    "@fmfi-uk-1-ain-412/js-fol-parser": "^0.8.1",
-    "@fortawesome/free-solid-svg-icons": "^7.1.0",
-    "@fortawesome/react-fontawesome": "^3.1.1",
+    "@fmfi-uk-1-ain-412/js-fol-parser": "^0.8.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@reduxjs/toolkit": "^2.9.2",
     "bootstrap": "^5.3.8",
-    "react": "^19.1.1",
-    "react-bootstrap": "^2.10.10",
-    "react-dom": "^19.1.1",
+    "react-bootstrap": "^2.0.3",
+    "react-dom": "^17.0.2",
     "react-katex": "^3.1.0",
-    "react-redux": "^9.2.0",
+    "react-redux": "^7.2.6",
     "zod": "^4.3.6"
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.0",
-    "@types/react": "^19.1.16",
-    "@types/react-dom": "^19.1.9",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11",
     "@types/react-katex": "^3.0.4",
-    "@vitejs/plugin-react": "^5.0.4",
+    "@vitejs/plugin-react": "^4.4.1",
     "baseline-browser-mapping": "^2.10.19",
     "eslint": "^9.36.0",
     "eslint-plugin-react-hooks": "^5.2.0",

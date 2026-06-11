@@ -5,30 +5,30 @@ import {Conjunction, Equivalence, Implication} from "../model";
 class EquivalenceEliminationChecker extends TransformationChecker {
     checkTransformationApplied(original: Expression, transformed: Expression, childrenResults: TransformationCheckerResult | undefined): TransformationCheckerResult {
         if (this.checkRequisites(original, transformed)) {
-            const result = this.checkForError(original.subLeft, transformed.subLeft.subLeft);
-            result.combine(this.checkForError(original.subLeft, transformed.subRight.subRight));
-            result.combine(this.checkForError(original.subRight, transformed.subLeft.subRight));
-            result.combine(this.checkForError(original.subRight, transformed.subRight.subLeft));
+            const result = this.checkForError((original as Equivalence).subLeft, ((transformed as Conjunction).subLeft as Implication).subLeft);
+            result.combine(this.checkForError((original as Equivalence).subLeft, ((transformed as Conjunction).subRight as Implication).subRight));
+            result.combine(this.checkForError((original as Equivalence).subRight, ((transformed as Conjunction).subLeft as Implication).subRight));
+            result.combine(this.checkForError((original as Equivalence).subRight, ((transformed as Conjunction).subRight as Implication).subLeft));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
 
-            const reversedResult = this.checkForError(original.subLeft, transformed.subLeft.subRight);
-            reversedResult.combine(this.checkForError(original.subLeft, transformed.subRight.subLeft));
-            reversedResult.combine(this.checkForError(original.subRight, transformed.subLeft.subLeft));
-            reversedResult.combine(this.checkForError(original.subRight, transformed.subRight.subRight));
+            const reversedResult = this.checkForError((original as Equivalence).subLeft, ((transformed as Conjunction).subLeft as Implication).subRight);
+            reversedResult.combine(this.checkForError((original as Equivalence).subLeft, ((transformed as Conjunction).subRight as Implication).subLeft));
+            reversedResult.combine(this.checkForError((original as Equivalence).subRight, ((transformed as Conjunction).subLeft as Implication).subLeft));
+            reversedResult.combine(this.checkForError((original as Equivalence).subRight, ((transformed as Conjunction).subRight as Implication).subRight));
             if (reversedResult.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
 
             return result.errors.length < reversedResult.errors.length ? result : reversedResult;
         } else if ((this.checkRequisites(transformed, original))) {
-            const result = this.checkForError(original.subLeft.subLeft, transformed.subLeft);
-            result.combine(this.checkForError(original.subRight.subRight, transformed.subLeft));
-            result.combine(this.checkForError(original.subLeft.subRight, transformed.subRight));
-            result.combine(this.checkForError(original.subRight.subLeft, transformed.subRight));
+            const result = this.checkForError(((original as Conjunction).subLeft as Implication).subLeft, (transformed as Implication).subLeft);
+            result.combine(this.checkForError(((original as Conjunction).subRight as Implication).subRight, (transformed as Implication).subLeft));
+            result.combine(this.checkForError(((original as Conjunction).subLeft as Implication).subRight, (transformed as Implication).subRight));
+            result.combine(this.checkForError(((original as Conjunction).subRight as Implication).subLeft, (transformed as Implication).subRight));
             if (result.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
 
-            const reversedResult = this.checkForError(original.subLeft.subRight, transformed.subLeft);
-            reversedResult.combine(this.checkForError(original.subRight.subLeft, transformed.subLeft));
-            reversedResult.combine(this.checkForError(original.subLeft.subLeft, transformed.subRight));
-            reversedResult.combine(this.checkForError(original.subRight.subRight, transformed.subRight));
+            const reversedResult = this.checkForError(((original as Conjunction).subLeft as Implication).subRight, (transformed as Implication).subLeft);
+            reversedResult.combine(this.checkForError(((original as Conjunction).subRight as Implication).subLeft, (transformed as Implication).subLeft));
+            reversedResult.combine(this.checkForError(((original as Conjunction).subLeft as Implication).subLeft, (transformed as Implication).subRight));
+            reversedResult.combine(this.checkForError(((original as Conjunction).subRight as Implication).subRight, (transformed as Implication).subRight));
             if (reversedResult.isEquivalentOrIdentical()) return TransformationCheckerResult.equivalentResult();
 
             return result.errors.length < reversedResult.errors.length ? result : reversedResult;
