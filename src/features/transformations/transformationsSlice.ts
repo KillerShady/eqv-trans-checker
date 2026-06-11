@@ -107,6 +107,9 @@ export const transformationsSlice = createSlice({
             if (formulas.length === 0) {
                 state.transSequences.splice(state.transSequences.indexOf(action.payload.transformation), 1);
                 delete state.transformations[action.payload.transformation];
+            } else if (state.formulas[formulas[0]].operation === EquivalentTransformationsRecord["CNF"].key) {
+                state.formulas[formulas[0]].operation = "Operation";
+                state.formulas[formulas[0]].formula = "";
             }
 
             const name = state.formulas[action.payload.id].name;
@@ -120,7 +123,12 @@ export const transformationsSlice = createSlice({
             delete state.skolemSymbols[action.payload.id];
         },
         "formulaModified": (state, action) => {
-            state.formulas[action.payload.id].formula = action.payload.formula;
+            if (action.payload.operation === EquivalentTransformationsRecord["CNF"].key ||
+                state.formulas[action.payload.id].operation === EquivalentTransformationsRecord["CNF"].key) {
+                state.formulas[action.payload.id].formula = state.formulas[action.payload.prevFormula].formula;
+            } else {
+                state.formulas[action.payload.id].formula = action.payload.formula;
+            }
             if (state.formulas[action.payload.id].operation === EquivalentTransformationsRecord["Skolem"].key &&
                 action.payload.operation !== EquivalentTransformationsRecord["Skolem"].key) {
                 delete state.skolemSymbols[action.payload.id];
@@ -320,14 +328,17 @@ export const selectTransformationError = createSelector(
      (state, _TransId, _prevId, id) => selectFormulaByID(state, id).operation,
      (state, TransId, _prevId, id) => selectParsedSkolemSymbolsByIDs(state, TransId, id)],
     (original, transformed, operation, skolemSymbols) => {
-        if (!original.parsed || !transformed.parsed) return {validated: false}
+        if (!original.parsed) return {validated: false}
+        if (!transformed.parsed && operation !== "CNF") return {validated: false}
+        const transformedFormula = transformed.parsed ? transformed.parsed : original.parsed;
+
         const checker = EquivalentTransformationsRecord[operation]?.checker;
         if (!checker) return {error: new Error("Operation was not selected!"),
                               validated: true}
         if (checker instanceof SkolemizationChecker) {
             checker.reset(skolemSymbols);
         }
-        const result = checker.checkForError(original.parsed, transformed.parsed);
+        const result = checker.checkForError(original.parsed, transformedFormula);
         if (result.isEquivalent()) return {validated: true};
         if (result.isIdentical()) {
             return {error: new Error("Formula is identical to previous formula!"),

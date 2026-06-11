@@ -83,7 +83,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                           disabled={isContextFormula || isCNF}
                           isValid={isValid}
                           isInvalid={isValid === undefined ? undefined : !isValid}
-                          onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation}))}
+                          onChange={(e) => dispatch(formulaModified({id: id, formula: e.target.value, operation: formula.operation, prevFormula: formula.prevFormula}))}
             />
             {formula.operation === "Skolem" &&
              <Form.Control className="skolem-symbol-input"
@@ -101,7 +101,7 @@ export default function FormulaComponent({ TransId, id }: { TransId: number; id:
                         <span className="text-truncate">{EquivalentTransformationsRecord[formula.operation]?.name ?? formula.operation}</span>
                     </OverlayTrigger>
                                 }
-                                onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e}))}>
+                                onSelect={(e) => dispatch(formulaModified({id: id, formula:formula.formula, operation: e, prevFormula: formula.prevFormula}))}>
                     {Object.keys(EquivalentTransformationsRecord).map((key) => <TransformationSelectionOption key={key} transKey={key} isLast={isFormulaLast} prepend={key === formula.operation ? <FontAwesomeIcon icon={faCheck} size="sm" /> : <span className="selection-icon"></span>} />)}
                 </DropdownButton>
 
